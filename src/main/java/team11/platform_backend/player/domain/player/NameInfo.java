@@ -1,4 +1,4 @@
-package team11.platform_backend.player.domain;
+package team11.platform_backend.player.domain.player;
 
 public record NameInfo(
         String firstName,

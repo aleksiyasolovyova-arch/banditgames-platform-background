@@ -18,6 +18,8 @@ public class Game {
     private final Url gameUrl;
     private GameState gameState;
 
+    //TODO AI player url used to send requests to the ai and determine which games dont have ai
+
     private final List<Rule> rules= new ArrayList<>();
     private final List<AchievementId> achievementIds = new ArrayList<>();
 

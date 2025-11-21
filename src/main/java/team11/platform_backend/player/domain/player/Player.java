@@ -1,4 +1,4 @@
-package team11.platform_backend.player.domain;
+package team11.platform_backend.player.domain.player;
 
 import team11.platform_backend.sharedkernel.valueobjects.Url;
 
@@ -13,6 +13,8 @@ public class Player {
     private final LocalDate joinedDate;
     private final Url profilePictureUrl;
     private final List<AchievementId> unlockedAchievements = new ArrayList<>();
+
+
 
     // for getting (get methods)
     public Player(PlayerId playerId, NameInfo nameInfo, Email email, LocalDate joinedDate, Url profilePictureUrl, List<AchievementId> unlockedAchievements) {
