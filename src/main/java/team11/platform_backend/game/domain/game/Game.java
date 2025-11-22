@@ -12,19 +12,17 @@ public class Game {
     private final GameId gameId;
     private final String gameName;
     private final String gameDescription;
-    private final BigDecimal gamePrice; // optional for later
+    private final BigDecimal gamePrice; 
     private final List<Url> pictureUrls;
     private final String gameCreatorName;
     private final Url gameUrl;
     private GameState gameState;
-
-    //TODO AI player url used to send requests to the ai and determine which games dont have ai
-
     private final List<Rule> rules= new ArrayList<>();
     private final List<AchievementId> achievementIds = new ArrayList<>();
+    private Url aiPlayerUrl;
 
     // for loading (get methods)
-    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules, List<AchievementId> achievementIds) {
+    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules, List<AchievementId>, Url aiPlayerUrl) {
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameDescription = gameDescription;
@@ -35,6 +33,7 @@ public class Game {
         this.gameState = gameState;
         this.rules.addAll(rules);
         this.achievementIds.addAll(achievementIds);
+	this.aiPlayerUrl = aiPlayerUrl
     }
 
     // for creating (post methods)
@@ -49,6 +48,12 @@ public class Game {
         this.gameState = GameState.PENDING;
         this.rules.addAll(rules);
         this.achievementIds.addAll(achievementIds);
+	this.aiPlayerUrl = null;
+    }
+
+    //TODO remove if not necesarry
+    public void changeAiPlayerUrl(Url aiPlayerUrl) {
+	this.aiPlayerUrl = aiPlayerUrl;
     }
 
     public void acceptGame() {

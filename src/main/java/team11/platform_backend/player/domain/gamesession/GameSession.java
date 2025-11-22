@@ -10,8 +10,8 @@ import java.util.List;
 public class GameSession {
     private final GameSessionId gameSessionId;
     private final GameId gameId;
+    // When one of the players is null, it is an AI
     private final PlayerId player1Id;
-    //TODO optional
     private final PlayerId player2Id;
     private final List<LocalDateTime> gameSessionTimes = new ArrayList<>();
     private final LocalDateTime startTime;
@@ -40,7 +40,7 @@ public class GameSession {
         this.gameSessionTimes.addAll(gameSessionTimes);
         this.startTime = LocalDateTime.now();
         this.gameSessionState = GameSessionStatus.IN_PROGRESS;
-        this.gameStates.add(gameState); // maybe not the best way to do this
+        this.gameStates.add(gameState); // Add an initial empty board ( only sent if the ai player starts first ) 
     }
 
     //how to determine who won the game and is it a draw

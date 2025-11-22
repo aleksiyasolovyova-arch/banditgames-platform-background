@@ -1,6 +1,10 @@
 package team11.platform_backend.player.domain;
 
 public class GameLobby {
+
+	private final PlayedId playedId1;
+	private final PlayedId playedId2;
+	private final GameId
     // player 1
     // player 2
     // game id
