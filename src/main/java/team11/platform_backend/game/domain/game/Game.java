@@ -17,8 +17,6 @@ public class Game {
     private final Url gameUrl;
     private GameState gameState;
     private final List<Rule> rules= new ArrayList<>();
-    //TODO remove
-    private final Url aiPlayerUrl;
 
     // for loading (get methods)
     public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules,Url aiPlayerUrl) {
@@ -31,7 +29,6 @@ public class Game {
         this.gameUrl = gameUrl;
         this.gameState = gameState;
         this.rules.addAll(rules);
-	    this.aiPlayerUrl = aiPlayerUrl;
     }
 
     // for creating (post methods)
@@ -45,7 +42,6 @@ public class Game {
         this.gameUrl= gameUrl;
         this.gameState = GameState.PENDING;
         this.rules.addAll(rules);
-	    this.aiPlayerUrl = null;
     }
 
     public void acceptGame() {
@@ -102,7 +98,4 @@ public class Game {
         return rules;
     }
 
-    public Url getAiPlayerUrl() {
-        return aiPlayerUrl;
-    }
 }

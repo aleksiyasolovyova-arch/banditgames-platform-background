@@ -1,15 +1,18 @@
 package team11.platform_backend.gamesession.domain;
 
 public class GameLobby {
+    private final GameLobbyId gameLobbyId;
+    private final GameId gameId;
+    private final PlayerId playerId1;
+    private final PlayerId playerId2;
+    private boolean player1Accepted;
+    private boolean player2Accepted;
 
-	//private final PlayedId playedId1;
-	//private final PlayedId playedId2;
-	//private final GameId
-    // player 1
-    // player 2
-    // game id
-    // player 1 accepted
-    // player 2 accepted
-
-
+    // for creation
+    public GameLobby(GameLobbyId gameLobbyId, GameId gameId, PlayerId playerId1, PlayerId playerId2) {
+        this.gameLobbyId = gameLobbyId;
+        this.gameId = gameId;
+        this.playerId1 = playerId1;
+        this.playerId2 = playerId2;
+    }
 }
