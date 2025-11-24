@@ -1,6 +1,5 @@
 package team11.platform_backend.game.domain.game;
 
-import team11.platform_backend.game.domain.AchievementId;
 import team11.platform_backend.game.domain.game.exeptions.InvalidGameStateException;
 import team11.platform_backend.sharedkernel.valueobjects.Url;
 import java.math.BigDecimal;
@@ -18,11 +17,10 @@ public class Game {
     private final Url gameUrl;
     private GameState gameState;
     private final List<Rule> rules= new ArrayList<>();
-    private final List<AchievementId> achievementIds = new ArrayList<>();
-    private Url aiPlayerUrl;
+    private final Url aiPlayerUrl;
 
     // for loading (get methods)
-    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules, List<AchievementId> achievementIds, Url aiPlayerUrl) {
+    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules,Url aiPlayerUrl) {
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameDescription = gameDescription;
@@ -32,12 +30,11 @@ public class Game {
         this.gameUrl = gameUrl;
         this.gameState = gameState;
         this.rules.addAll(rules);
-        this.achievementIds.addAll(achievementIds);
 	    this.aiPlayerUrl = aiPlayerUrl;
     }
 
     // for creating (post methods)
-    public Game(String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, List<Rule> rules, List<AchievementId> achievementIds) {
+    public Game(String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, List<Rule> rules) {
         this.gameId = GameId.createGameId();
         this.gameName = gameName;
         this.gameDescription = gameDescription;
@@ -47,13 +44,7 @@ public class Game {
         this.gameUrl= gameUrl;
         this.gameState = GameState.PENDING;
         this.rules.addAll(rules);
-        this.achievementIds.addAll(achievementIds);
 	    this.aiPlayerUrl = null;
-    }
-
-    //TODO remove if not necesarry
-    public void changeAiPlayerUrl(Url aiPlayerUrl) {
-	this.aiPlayerUrl = aiPlayerUrl;
     }
 
     public void acceptGame() {
@@ -110,7 +101,7 @@ public class Game {
         return rules;
     }
 
-    public List<AchievementId> getAchievementIds() {
-        return achievementIds;
+    public Url getAiPlayerUrl() {
+        return aiPlayerUrl;
     }
 }

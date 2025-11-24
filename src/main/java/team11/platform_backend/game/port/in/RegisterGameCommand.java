@@ -3,7 +3,7 @@ package team11.platform_backend.game.port.in;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record CreateGameCommand(
+public record RegisterGameCommand(
         String gameName,
         String gameDescription,
         BigDecimal gamePrice,
@@ -11,10 +11,9 @@ public record CreateGameCommand(
         String gameCreatorName,
         String gameUrl,
         List<RuleCommand> rules,
-        List<AchievementCommand> achievements
-        //String aiPlayerUrl
+        String aiPlayerUrl // Optional
 ) {
-    public CreateGameCommand {
+    public RegisterGameCommand {
         // Game Name
         if (gameName == null || gameName.trim().isEmpty()) {
             throw new IllegalArgumentException("Game name cannot be empty");
@@ -59,24 +58,11 @@ public record CreateGameCommand(
         if (rules == null || rules.isEmpty()) {
             throw new IllegalArgumentException("At least one rule must be provided");
         }
-
-        // Achievements
-        if (achievements == null || achievements.isEmpty()) {
-            throw new IllegalArgumentException("At least one achievement must be provided");
-        }
     }
 
     public record RuleCommand(
             String ruleName,
             String ruleDescription,
             List<String> ruleCategories // SETUP, GAME_PLAY, WINNING
-    ) {}
-
-    public record AchievementCommand(
-            String achievementName,
-            String achievementDescription,
-            String pictureUrl,
-            String achievementType, // GAME_PLAYED, GAME_WON, etc.
-            BigDecimal threshold
     ) {}
 }
