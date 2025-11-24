@@ -3,25 +3,37 @@ package team11.platform_backend.game.adapter.in;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import team11.platform_backend.game.adapter.in.mapper.GameMapper;
 import team11.platform_backend.game.adapter.in.request.RegisterGameRequest;
 import team11.platform_backend.game.adapter.in.response.GameDto;
 import team11.platform_backend.game.domain.game.Game;
-import team11.platform_backend.game.port.in.RegisterGamePort;
+import team11.platform_backend.game.domain.game.GameId;
+import team11.platform_backend.game.port.in.*;
+import team11.platform_backend.game.port.out.LoadGamePort;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/games")
 public class GamesController {
 
     private final RegisterGamePort registerGamePort;
+    private final AcceptGamePort acceptGamePort;
+    private final RejectGamePort rejectGamePort;
     private final GameMapper gameMapper;
 
-    public GamesController(RegisterGamePort registerGamePort, GameMapper gameMapper) {
+    public GamesController(RegisterGamePort registerGamePort,
+                           AcceptGamePort acceptGamePort,
+                           RejectGamePort rejectGamePort,
+                           List<LoadGamePort> loadGamePorts,
+                           GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
+        this.acceptGamePort = acceptGamePort;
+        this.rejectGamePort = rejectGamePort;
         this.gameMapper = gameMapper;
     }
 
@@ -34,4 +46,25 @@ public class GamesController {
         GameDto response = gameMapper.toResponse(createdGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PutMapping("/{gameId}/accept")
+    public ResponseEntity<GameDto> acceptGame(
+            @PathVariable UUID gameId) {
+        Game acceptedGame = acceptGamePort.acceptGame(
+                new AcceptGameCommand(gameId)
+        );
+        GameDto response = gameMapper.toResponse(acceptedGame);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{gameId}/reject")
+    public ResponseEntity<GameDto> rejectGame(
+            @PathVariable UUID gameId) {
+        Game rejectedGame = rejectGamePort.rejectGame(
+                new RejectGameCommand(gameId)
+        );
+        GameDto response = gameMapper.toResponse(rejectedGame);
+        return ResponseEntity.ok(response);
+    }
+
 }
