@@ -4,17 +4,12 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import team11.platform_backend.game.adapter.in.mapper.GameMapper;
 import team11.platform_backend.game.adapter.in.request.RegisterGameRequest;
+import team11.platform_backend.game.adapter.in.request.UpdateGameRequest;
 import team11.platform_backend.game.adapter.in.response.GameDto;
 import team11.platform_backend.game.domain.game.Game;
-import team11.platform_backend.game.domain.game.GameId;
 import team11.platform_backend.game.port.in.*;
-import team11.platform_backend.game.port.out.LoadGamePort;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -24,16 +19,18 @@ public class GamesController {
     private final RegisterGamePort registerGamePort;
     private final AcceptGamePort acceptGamePort;
     private final RejectGamePort rejectGamePort;
+    private final UpdateGamePort updateGamePort;
     private final GameMapper gameMapper;
 
     public GamesController(RegisterGamePort registerGamePort,
                            AcceptGamePort acceptGamePort,
                            RejectGamePort rejectGamePort,
-                           List<LoadGamePort> loadGamePorts,
+                           UpdateGamePort updateGamePort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.acceptGamePort = acceptGamePort;
         this.rejectGamePort = rejectGamePort;
+        this.updateGamePort = updateGamePort;
         this.gameMapper = gameMapper;
     }
 
@@ -45,6 +42,17 @@ public class GamesController {
         );
         GameDto response = gameMapper.toResponse(createdGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{gameId}")
+    public ResponseEntity<GameDto> updateGame(
+            @PathVariable UUID gameId,
+            @Valid @RequestBody UpdateGameRequest request) {
+        Game updatedGame = updateGamePort.updateGame(
+                gameMapper.toUpdateCommand(gameId, request)
+        );
+        GameDto response = gameMapper.toResponse(updatedGame);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{gameId}/accept")

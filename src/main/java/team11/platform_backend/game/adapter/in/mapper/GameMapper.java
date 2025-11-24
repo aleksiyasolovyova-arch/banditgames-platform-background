@@ -3,10 +3,14 @@ package team11.platform_backend.game.adapter.in.mapper;
 import org.springframework.stereotype.Component;
 
 import team11.platform_backend.game.adapter.in.request.RegisterGameRequest;
+import team11.platform_backend.game.adapter.in.request.UpdateGameRequest;
 import team11.platform_backend.game.adapter.in.response.GameDto;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.port.in.RegisterGameCommand;
+import team11.platform_backend.game.port.in.UpdateGameCommand;
 import team11.platform_backend.sharedkernel.valueobjects.Url;
+
+import java.util.UUID;
 
 @Component
 public class GameMapper {
@@ -52,6 +56,18 @@ public class GameMapper {
                         ))
                         .toList(),
                 game.getAiPlayerUrl() != null ? game.getAiPlayerUrl().value() : null
+        );
+    }
+
+    public UpdateGameCommand toUpdateCommand(UUID gameId, UpdateGameRequest request) {
+        return new UpdateGameCommand(
+                gameId,
+                request.gameName(),
+                request.gameDescription(),
+                request.gamePrice(),
+                request.pictureUrls(),
+                request.gameUrl(),
+                request.aiPlayerUrl()
         );
     }
 

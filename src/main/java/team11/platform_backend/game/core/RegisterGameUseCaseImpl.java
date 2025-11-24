@@ -51,12 +51,7 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
                 rules
         );
 
-        // 4. Set AI Player URL if provided
-        if (command.aiPlayerUrl() != null && !command.aiPlayerUrl().isBlank()) {
-            game.changeAiPlayerUrl(new Url(command.aiPlayerUrl()));
-        }
-
-        // 5. Save to persistence (follows Restaurant pattern)
+        // 4. Save to persistence (follows Restaurant pattern)
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 
         return game;
