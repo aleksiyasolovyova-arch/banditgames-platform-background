@@ -5,11 +5,13 @@ import team11.platform_backend.game.adapter.out.jpa.AchievementJpaEntity;
 import team11.platform_backend.game.adapter.out.jpa.AchievementJpaRepository;
 import team11.platform_backend.game.adapter.out.mapper.AchievementJpaMapper;
 import team11.platform_backend.game.domain.achievement.Achievement;
+import team11.platform_backend.game.domain.achievement.AchievementId;
 import team11.platform_backend.game.domain.game.GameId;
 import team11.platform_backend.game.port.out.LoadAchievementPort;
 import team11.platform_backend.game.port.out.SaveAchievementPort;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchievementPort {
@@ -35,4 +37,11 @@ public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchieveme
                 .map(achievementJpaMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public Optional<Achievement> findById(AchievementId achievementId) {
+        return achievementJpaRepository.findById(achievementId.achievementId())
+                .map(achievementJpaMapper::toDomain);
+    }
+
 }
