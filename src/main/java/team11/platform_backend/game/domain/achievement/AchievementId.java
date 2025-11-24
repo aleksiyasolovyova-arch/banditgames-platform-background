@@ -1,4 +1,4 @@
-package team11.platform_backend.game.domain;
+package team11.platform_backend.game.domain.achievement;
 
 import java.util.UUID;
 

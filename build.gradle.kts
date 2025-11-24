@@ -34,6 +34,7 @@ dependencies {
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("jakarta.validation:jakarta.validation-api")
 }
 
 dependencyManagement {
