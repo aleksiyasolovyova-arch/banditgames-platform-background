@@ -12,12 +12,12 @@ public class Player {
     private final Email email;
     private final LocalDate joinedDate;
     private final Url profilePictureUrl;
-    private final List<AchievementId> unlockedAchievements = new ArrayList<>();
+    private final List<UnlockedAchievement> unlockedAchievements = new ArrayList<>();
 
 
 
     // for getting (get methods)
-    public Player(PlayerId playerId, NameInfo nameInfo, Email email, LocalDate joinedDate, Url profilePictureUrl, List<AchievementId> unlockedAchievements) {
+    public Player(PlayerId playerId, NameInfo nameInfo, Email email, LocalDate joinedDate, Url profilePictureUrl, List<UnlockedAchievement> unlockedAchievements) {
         this.playerId = playerId;
         this.nameInfo = nameInfo;
         this.email = email;
@@ -55,7 +55,7 @@ public class Player {
         return profilePictureUrl;
     }
 
-    public List<AchievementId> getUnlockedAchievements() {
+    public List<UnlockedAchievement> getUnlockedAchievements() {
         return unlockedAchievements;
     }
 }

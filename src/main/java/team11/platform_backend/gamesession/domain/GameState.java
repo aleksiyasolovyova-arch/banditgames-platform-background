@@ -1,4 +1,4 @@
-package team11.platform_backend.player.domain.gamesession;
+package team11.platform_backend.gamesession.domain;
 
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 

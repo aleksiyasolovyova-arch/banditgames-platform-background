@@ -17,6 +17,7 @@ public class Game {
     private final Url gameUrl;
     private GameState gameState;
     private final List<Rule> rules= new ArrayList<>();
+    //TODO remove
     private final Url aiPlayerUrl;
 
     // for loading (get methods)

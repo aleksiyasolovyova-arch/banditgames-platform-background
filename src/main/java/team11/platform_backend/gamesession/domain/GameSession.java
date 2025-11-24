@@ -1,6 +1,4 @@
-package team11.platform_backend.player.domain.gamesession;
-
-import team11.platform_backend.player.domain.player.PlayerId;
+package team11.platform_backend.gamesession.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class GameSession {
     }
 
     // for creating (post methods)
-    public GameSession( GameId gameId, PlayerId player1Id, PlayerId player2Id, List<LocalDateTime> gameSessionTimes, GameState gameState){
+    public GameSession(GameId gameId, PlayerId player1Id, PlayerId player2Id, List<LocalDateTime> gameSessionTimes, GameState gameState){
         this.gameSessionId = GameSessionId.createGameSessionId();
         this.gameId = gameId;
         this.player1Id = player1Id;
