@@ -1,5 +1,6 @@
 package team11.platform_backend.player.domain.player;
 
+import team11.platform_backend.player.domain.projections.GameId;
 import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.time.LocalDate;
@@ -12,18 +13,18 @@ public class Player {
     private final Email email;
     private final LocalDate joinedDate;
     private final Url profilePictureUrl;
-    private final List<AchievementId> unlockedAchievements = new ArrayList<>();
-
-
+    private final List<UnlockedAchievement> unlockedAchievements = new ArrayList<>();
+    private final List<OwnedGame> ownedGames = new ArrayList<>();
 
     // for getting (get methods)
-    public Player(PlayerId playerId, NameInfo nameInfo, Email email, LocalDate joinedDate, Url profilePictureUrl, List<AchievementId> unlockedAchievements) {
+    public Player(PlayerId playerId, NameInfo nameInfo, Email email, LocalDate joinedDate, Url profilePictureUrl, List<UnlockedAchievement> unlockedAchievements, List<OwnedGame> ownedGames) {
         this.playerId = playerId;
         this.nameInfo = nameInfo;
         this.email = email;
         this.joinedDate = joinedDate;
         this.profilePictureUrl = profilePictureUrl;
         this.unlockedAchievements.addAll(unlockedAchievements);
+        this.ownedGames.addAll(ownedGames);
     }
 
     //for creating (post methods)
@@ -55,7 +56,11 @@ public class Player {
         return profilePictureUrl;
     }
 
-    public List<AchievementId> getUnlockedAchievements() {
+    public List<UnlockedAchievement> getUnlockedAchievements() {
         return unlockedAchievements;
+    }
+
+    public List<OwnedGame> getOwnedGames() {
+        return ownedGames;
     }
 }
