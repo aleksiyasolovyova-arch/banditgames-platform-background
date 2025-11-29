@@ -7,10 +7,12 @@ import java.util.List;
 public class PlayerProjection {
     private final PlayerId playerId;
     private final List<GameId> ownedGames = new ArrayList<>();
+    private final List<PlayerId> friendsPlayerIds = new ArrayList<>();
 
-    public PlayerProjection(PlayerId playerId,  List<GameId> ownedGames) {
+    public PlayerProjection(PlayerId playerId,  List<GameId> ownedGames,  List<PlayerId> friendsPlayerIds) {
         this.playerId = playerId;
         this.ownedGames.addAll(ownedGames);
+        this.friendsPlayerIds.addAll(friendsPlayerIds);
     }
 
     public PlayerId getPlayerId() {
@@ -18,5 +20,8 @@ public class PlayerProjection {
     }
     public List<GameId> getOwnedGames() {
         return ownedGames;
+    }
+    public List<PlayerId> getFriendsPlayerIds() {
+        return friendsPlayerIds;
     }
 }
