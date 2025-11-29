@@ -34,9 +34,7 @@ public record RegisterGameRequest(
 
         @NotEmpty(message = "At least one rule must be provided")
         @Valid
-        List<RuleRequest> rules,
-
-        String aiPlayerUrl // Optional
+        List<RuleRequest> rules
 ) {
 
     public record RuleRequest(

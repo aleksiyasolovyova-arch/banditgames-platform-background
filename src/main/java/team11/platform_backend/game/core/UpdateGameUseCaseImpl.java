@@ -44,11 +44,6 @@ public class UpdateGameUseCaseImpl implements UpdateGamePort{
         // 3. Convert gameUrl to Url value object
         Url gameUrl = new Url(command.gameUrl());
 
-        // 4. Convert aiPlayerUrl to Url value object (can be null)
-        Url aiPlayerUrl = command.aiPlayerUrl() != null && !command.aiPlayerUrl().trim().isEmpty()
-                ? new Url(command.aiPlayerUrl())
-                : null;
-
         // 5. Create new Game instance with updated values using the loading constructor
         //    Keep unchanged: gameId, gameCreatorName, gameState, rules
         //    Update: gameName, gameDescription, gamePrice, pictureUrls, gameUrl, aiPlayerUrl
@@ -61,8 +56,7 @@ public class UpdateGameUseCaseImpl implements UpdateGamePort{
                 existingGame.getGameCreatorName(),
                 gameUrl,
                 existingGame.getGameState(),
-                existingGame.getRules(),
-                aiPlayerUrl
+                existingGame.getRules()
         );
 
         // 6. Persist the new aggregate

@@ -24,7 +24,5 @@ public record UpdateGameRequest(
 
         @NotNull(message = "Game URL cannot be null")
         @NotBlank(message = "Game URL cannot be blank")
-        String gameUrl,
-
-        String aiPlayerUrl
+        String gameUrl
 ) {}

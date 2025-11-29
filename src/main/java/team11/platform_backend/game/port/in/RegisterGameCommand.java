@@ -10,8 +10,7 @@ public record RegisterGameCommand(
         List<String> pictureUrls,
         String gameCreatorName,
         String gameUrl,
-        List<RuleCommand> rules,
-        String aiPlayerUrl // Optional
+        List<RuleCommand> rules
 ) {
     public RegisterGameCommand {
         // Game Name

@@ -20,7 +20,7 @@ public class Game {
     // Add a list of possible acchievements ( list of strings ) :)
 
     // for loading (get methods)
-    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules,Url aiPlayerUrl) {
+    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules) {
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameDescription = gameDescription;

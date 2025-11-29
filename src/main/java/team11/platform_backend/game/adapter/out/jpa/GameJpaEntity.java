@@ -41,9 +41,6 @@ public class GameJpaEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RuleJpaEntity> rules = new ArrayList<>();
 
-    @Column
-    private String aiPlayerUrl;
-
     public GameJpaEntity() {}
 
     // Getters and Setters
@@ -73,8 +70,4 @@ public class GameJpaEntity {
 
     public List<RuleJpaEntity> getRules() { return rules; }
     public void setRules(List<RuleJpaEntity> rules) { this.rules = rules; }
-
-    public String getAiPlayerUrl() { return aiPlayerUrl; }
-    public void setAiPlayerUrl(String aiPlayerUrl) { this.aiPlayerUrl = aiPlayerUrl; }
-
 }

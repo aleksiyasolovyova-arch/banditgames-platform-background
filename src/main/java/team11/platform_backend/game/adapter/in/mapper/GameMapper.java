@@ -29,8 +29,7 @@ public class GameMapper {
                                 r.ruleDescription(),
                                 r.ruleCategories()
                         ))
-                        .toList(),
-                request.aiPlayerUrl()
+                        .toList()
         );
     }
 
@@ -54,8 +53,7 @@ public class GameMapper {
                                         .map(Enum::name)
                                         .toList()
                         ))
-                        .toList(),
-                game.getAiPlayerUrl() != null ? game.getAiPlayerUrl().value() : null
+                        .toList()
         );
     }
 
@@ -66,8 +64,7 @@ public class GameMapper {
                 request.gameDescription(),
                 request.gamePrice(),
                 request.pictureUrls(),
-                request.gameUrl(),
-                request.aiPlayerUrl()
+                request.gameUrl()
         );
     }
 
