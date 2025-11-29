@@ -32,12 +32,10 @@ public class MatchMakingInMemoryAdapter implements MatchmakingQueuePort {
                 // Someone is waiting -> match them and remove from queue
                 PlayerId other = queue.pollFirst();
 
-                // Optional: cleanup empty queue entry
                 if (queue.isEmpty()) {
                     waitingPlayers.remove(gameId, queue);
                 }
 
-                // Decide order; here other = player1, current = player2
                 MatchDto match = new MatchDto(gameId, other, playerId);
                 return Optional.of(match);
             }

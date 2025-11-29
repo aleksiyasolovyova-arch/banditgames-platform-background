@@ -29,7 +29,8 @@ public class GameLobby {
     }
 
     // For creating
-    public GameLobby(GameId gameId, PlayerId playerId1, PlayerId playerId2, boolean player1Accepted, boolean player2Accepted) {
+    // It is private because I want to force other developers to use the static methods of creating a new GameLobby
+    private GameLobby(GameId gameId, PlayerId playerId1, PlayerId playerId2, boolean player1Accepted, boolean player2Accepted) {
         this.gameLobbyId = GameLobbyId.createGameLobbyId();
         this.gameId = gameId;
         this.playerId1 = playerId1;
