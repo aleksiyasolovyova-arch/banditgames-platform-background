@@ -6,7 +6,6 @@ import team11.platform_backend.gamelobby.domain.GameLobby;
 import team11.platform_backend.gamelobby.domain.projections.GameId;
 import team11.platform_backend.gamelobby.domain.projections.PlayerId;
 import team11.platform_backend.gamelobby.port.in.JoinMatchMakingPort;
-import team11.platform_backend.gamelobby.port.out.MatchDto;
 import team11.platform_backend.gamelobby.port.out.MatchmakingQueuePort;
 import team11.platform_backend.gamelobby.port.out.SaveGameLobbyPort;
 

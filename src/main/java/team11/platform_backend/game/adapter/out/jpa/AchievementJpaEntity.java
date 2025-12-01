@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "achievements")
+@Table(name = "achievements", schema = "game_schema")
 public class AchievementJpaEntity {
 
     @Id

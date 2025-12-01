@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "game")
+@Table(name = "game", schema = "game_schema")
 public class GameJpaEntity {
     @Id
     private UUID gameId;
@@ -24,7 +24,7 @@ public class GameJpaEntity {
     private BigDecimal gamePrice;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "game_picture_urls", joinColumns = @JoinColumn(name = "game_id"))
+    @CollectionTable(name = "game_picture_urls", joinColumns = @JoinColumn(name = "game_id"), schema = "game_schema")
     @Column(name = "picture_url")
     private List<String> pictureUrls = new ArrayList<>();
 
