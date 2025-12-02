@@ -29,7 +29,8 @@ public class GameLobby {
     }
 
     // For creating
-    public GameLobby(GameId gameId, PlayerId playerId1, PlayerId playerId2, boolean player1Accepted, boolean player2Accepted) {
+    // It is private because I want to force other developers to use the static methods of creating a new GameLobby
+    private GameLobby(GameId gameId, PlayerId playerId1, PlayerId playerId2, boolean player1Accepted, boolean player2Accepted) {
         this.gameLobbyId = GameLobbyId.createGameLobbyId();
         this.gameId = gameId;
         this.playerId1 = playerId1;
@@ -61,13 +62,15 @@ public class GameLobby {
     }
 
     public static GameLobby createGameLobbyForAI(GameId gameId, PlayerId playerId1) {
-        return new GameLobby(
+        GameLobby gameLobby = new GameLobby(
                 gameId,
                 playerId1,
-                null,
+                PlayerId.ai(),
                 true,
                 true
         );
+        gameLobby.startGame();
+        return gameLobby;
     }
 
     public void acceptByPlayer(PlayerId playerId) {
@@ -82,7 +85,7 @@ public class GameLobby {
         } else {
             throw new IllegalArgumentException("Invalid player id provided");
         }
-        if (player1Accepted && player2Accepted) {
+        if (player1Accepted && player2Accepted && gameResult.equals(GameResult.PENDING)) {
             startGame();
         }
     }
@@ -104,27 +107,30 @@ public class GameLobby {
         }
     }
 
-    // May give error :))
-    public void endGame(PlayerId playerId) {
+    public void endGameWithWinner(PlayerId winnerId) {
         if (!gameResult.equals(GameResult.STARTED)) {
             throw new IllegalArgumentException("To finish a game it must have started!");
         }
-        if (playerId1.equals(playerId)) {
+        if (playerId1.equals(winnerId)) {
             this.gameResult = GameResult.PLAYER_1_WON;
-            this.endTime = LocalDateTime.now();
-        } else if (playerId2.equals(playerId)) {
+        } else if (playerId2.equals(winnerId)) {
             this.gameResult = GameResult.PLAYER_2_WON;
-            this.endTime = LocalDateTime.now();
-        } else if (playerId == null){
-            this.gameResult = GameResult.DRAW;
-            this.endTime = LocalDateTime.now();
         } else {
             throw new IllegalArgumentException("Invalid player id provided");
         }
+        this.endTime = LocalDateTime.now();
+    }
+
+    public void endGameWithDraw() {
+        if (!gameResult.equals(GameResult.STARTED)) {
+            throw new IllegalArgumentException("To finish a game it must have started!");
+        }
+        this.gameResult = GameResult.DRAW;
+        this.endTime = LocalDateTime.now();
     }
 
     public boolean isAgainstAi(){
-        return playerId2 == null;
+        return playerId2.isAI();
     }
 
     public GameLobbyId getGameLobbyId() {

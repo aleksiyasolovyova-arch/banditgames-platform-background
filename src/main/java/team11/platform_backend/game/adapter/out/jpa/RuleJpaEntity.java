@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "rules")
+@Table(name = "rules", schema = "game_schema")
 public class RuleJpaEntity {
 
     @Id
@@ -25,7 +25,7 @@ public class RuleJpaEntity {
     private String ruleDescription;
 
     @ElementCollection(targetClass = RuleCategory.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "rule_categories", joinColumns = @JoinColumn(name = "rule_id"))
+    @CollectionTable(name = "rule_categories", joinColumns = @JoinColumn(name = "rule_id"), schema = "game_schema")
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private Set<RuleCategory> ruleCategories = new HashSet<>();

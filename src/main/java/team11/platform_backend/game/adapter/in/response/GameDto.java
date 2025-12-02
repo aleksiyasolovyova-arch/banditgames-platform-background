@@ -13,8 +13,7 @@ public record GameDto(
         String gameCreatorName,
         String gameUrl,
         String gameState,
-        List<RuleDto> rules,
-        String aiPlayerUrl
+        List<RuleDto> rules
 ) {
     public record RuleDto(
             String ruleName,

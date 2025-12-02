@@ -9,8 +9,7 @@ public record UpdateGameCommand(
         String gameDescription,
         BigDecimal gamePrice,
         List<String> pictureUrls,
-        String gameUrl,
-        String aiPlayerUrl
+        String gameUrl
 ) {
     public UpdateGameCommand {
         // Game ID

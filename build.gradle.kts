@@ -21,13 +21,15 @@ repositories {
 extra["springModulithVersion"] = "1.4.4"
 
 dependencies {
+    // TODO clean this up? bit of a mess without comments explaining which ones we actually need
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.modulith:spring-modulith-events-api")
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("org.springframework.modulith:spring-modulith-events-amqp")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

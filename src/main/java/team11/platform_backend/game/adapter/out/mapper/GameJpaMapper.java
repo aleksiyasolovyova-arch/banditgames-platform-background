@@ -27,7 +27,6 @@ public class GameJpaMapper {
         entity.setGameCreatorName(game.getGameCreatorName());
         entity.setGameUrl(game.getGameUrl().value());
         entity.setGameState(game.getGameState());
-        entity.setAiPlayerUrl(game.getAiPlayerUrl() != null ? game.getAiPlayerUrl().value() : null);
 
         // Map Rules (OneToMany relationship)
         List<RuleJpaEntity> ruleEntities = game.getRules().stream()
@@ -56,8 +55,6 @@ public class GameJpaMapper {
                 ))
                 .toList();
 
-        Url aiPlayerUrl = entity.getAiPlayerUrl() != null ? new Url(entity.getAiPlayerUrl()) : null;
-
         return new Game(
                 new GameId(entity.getGameId()),
                 entity.getGameName(),
@@ -67,8 +64,7 @@ public class GameJpaMapper {
                 entity.getGameCreatorName(),
                 new Url(entity.getGameUrl()),
                 entity.getGameState(),
-                rules,
-                aiPlayerUrl
+                rules
         );
     }
 }
