@@ -24,6 +24,7 @@ public class JoinMatchMakingUseCaseImpl implements JoinMatchMakingPort {
         this.matchmakingQueuePort = matchmakingQueuePort;
     }
 
+    //TODO add checks if playerid has game Id in it s owned games list
     @Override
     public Optional<GameLobby> joinMatchMaking(GameId gameId, PlayerId playerId) {
         return matchmakingQueuePort.savePlayerAndMatch(gameId, playerId)

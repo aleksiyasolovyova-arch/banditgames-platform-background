@@ -23,6 +23,7 @@ public class MatchMakingInMemoryAdapter implements MatchmakingQueuePort {
         this.matchmakingService = matchmakingService;
     }
 
+    // Check out Pair class
     @Override
     public Optional<MatchDto> savePlayerAndMatch(GameId gameId, PlayerId playerId) {
         Deque<PlayerId> queue = waitingPlayers.computeIfAbsent(gameId, id -> new ArrayDeque<>());

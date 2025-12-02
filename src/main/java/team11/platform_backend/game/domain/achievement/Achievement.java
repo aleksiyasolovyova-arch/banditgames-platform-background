@@ -6,6 +6,7 @@ import team11.platform_backend.sharedkernel.valueobjects.Url;
 import java.math.BigDecimal;
 
 //Aggregate
+// Seperate
 public class Achievement {
     private final AchievementId achievementId;
     private final GameId gameId;

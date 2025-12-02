@@ -8,7 +8,7 @@ import team11.platform_backend.gamelobby.port.out.MatchDto;
 import java.util.Deque;
 import java.util.Optional;
 
-
+// This can also be a static method inside of gamelobby instead!
 @Service
 public class MatchmakingService {
     public Optional<MatchDto> addPlayerAndMatch(GameId gameId,
