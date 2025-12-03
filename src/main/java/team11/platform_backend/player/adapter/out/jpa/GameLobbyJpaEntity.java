@@ -6,7 +6,7 @@ import java.util.UUID;
 import team11.platform_backend.player.domain.gamelobby.GameResult;
 
 @Entity
-@Table(name = "game_lobbies", schema = "gamelobby_schema")
+@Table(name = "game_lobbies", schema = "player_schema")
 public class GameLobbyJpaEntity {
 
     @Id
