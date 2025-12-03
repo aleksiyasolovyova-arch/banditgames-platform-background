@@ -1,4 +1,4 @@
-package team11.platform_backend.gamelobby.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

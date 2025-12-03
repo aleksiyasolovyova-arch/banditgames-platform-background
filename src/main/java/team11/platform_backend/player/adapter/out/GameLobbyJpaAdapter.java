@@ -1,14 +1,14 @@
-package team11.platform_backend.gamelobby.adapter.out;
+package team11.platform_backend.player.adapter.out;
 
 import org.springframework.stereotype.Component;
-import team11.platform_backend.gamelobby.adapter.out.jpa.GameLobbyJpaEntity;
-import team11.platform_backend.gamelobby.adapter.out.jpa.GameLobbyJpaMapper;
-import team11.platform_backend.gamelobby.adapter.out.jpa.GameLobbyJpaRepository;
-import team11.platform_backend.gamelobby.domain.GameLobby;
-import team11.platform_backend.gamelobby.domain.GameLobbyId;
-import team11.platform_backend.gamelobby.port.out.LoadGameLobbiesPort;
-import team11.platform_backend.gamelobby.port.out.LoadGameLobbyPort;
-import team11.platform_backend.gamelobby.port.out.SaveGameLobbyPort;
+import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaEntity;
+import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaMapper;
+import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaRepository;
+import team11.platform_backend.player.domain.gamelobby.GameLobby;
+import team11.platform_backend.player.domain.gamelobby.GameLobbyId;
+import team11.platform_backend.player.port.out.LoadGameLobbiesPort;
+import team11.platform_backend.player.port.out.LoadGameLobbyPort;
+import team11.platform_backend.player.port.out.SaveGameLobbyPort;
 
 import java.util.List;
 import java.util.Optional;

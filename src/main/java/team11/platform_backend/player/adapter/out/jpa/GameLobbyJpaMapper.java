@@ -1,11 +1,12 @@
-package team11.platform_backend.gamelobby.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa;
 
 import org.springframework.stereotype.Component;
-import team11.platform_backend.gamelobby.domain.GameLobby;
-import team11.platform_backend.gamelobby.domain.GameLobbyId;
-import team11.platform_backend.gamelobby.domain.GameResult;
-import team11.platform_backend.gamelobby.domain.projections.GameId;
-import team11.platform_backend.gamelobby.domain.projections.PlayerId;
+import team11.platform_backend.player.domain.gamelobby.GameLobby;
+import team11.platform_backend.player.domain.gamelobby.GameLobbyId;
+import team11.platform_backend.player.domain.gamelobby.GameResult;
+import team11.platform_backend.player.domain.player.PlayerId;
+import team11.platform_backend.player.domain.projections.GameId;
+
 
 @Component
 public class GameLobbyJpaMapper {

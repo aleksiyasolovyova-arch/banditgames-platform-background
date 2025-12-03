@@ -1,9 +1,9 @@
-package team11.platform_backend.gamelobby.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import team11.platform_backend.gamelobby.domain.GameResult;
+import team11.platform_backend.player.domain.gamelobby.GameResult;
 
 @Entity
 @Table(name = "game_lobbies", schema = "gamelobby_schema")

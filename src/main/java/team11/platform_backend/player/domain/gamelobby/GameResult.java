@@ -1,4 +1,4 @@
-package team11.platform_backend.gamelobby.domain;
+package team11.platform_backend.player.domain.gamelobby;
 
 public enum GameResult {
     PENDING,

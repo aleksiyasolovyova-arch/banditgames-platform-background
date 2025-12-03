@@ -3,13 +3,13 @@ package team11.platform_backend.player.domain.player;
 import java.time.LocalDateTime;
 
 
-public record UnlockedAchievement(
-        AchievementId achievementId,
+public record UnlockedGameAchievement(
+        String achievementCode,
         LocalDateTime unlockedAt
 ) {
-    public UnlockedAchievement {
-        if (achievementId == null)
-            throw new IllegalArgumentException("achievementId cannot be null");
+    public UnlockedGameAchievement {
+        if (achievementCode.isEmpty())
+            throw new IllegalArgumentException("Achievement code cannot be empty");
         if (unlockedAt == null)
             throw new IllegalArgumentException("unlockedAt cannot be null");
     }

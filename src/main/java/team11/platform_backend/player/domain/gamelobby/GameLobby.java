@@ -1,7 +1,9 @@
-package team11.platform_backend.gamelobby.domain;
+package team11.platform_backend.player.domain.gamelobby;
 
-import team11.platform_backend.gamelobby.domain.projections.GameId;
-import team11.platform_backend.gamelobby.domain.projections.PlayerId;
+
+import team11.platform_backend.player.domain.player.PlayerId;
+import team11.platform_backend.player.domain.projections.GameId;
+
 import java.time.LocalDateTime;
 
 public class GameLobby {
