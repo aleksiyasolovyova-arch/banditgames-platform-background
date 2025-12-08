@@ -13,7 +13,7 @@ import team11.platform_backend.game.domain.game.GameState;
 import team11.platform_backend.game.port.in.UpdateGameCommand;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveGamePort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.math.BigDecimal;
 import java.util.Collections;

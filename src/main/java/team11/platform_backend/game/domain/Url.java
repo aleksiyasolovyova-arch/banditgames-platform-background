@@ -1,4 +1,4 @@
-package team11.platform_backend.sharedkernel.valueobjects;
+package team11.platform_backend.game.domain;
 
 import java.net.URL;
 

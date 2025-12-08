@@ -1,50 +1,52 @@
 package team11.platform_backend.game.domain.achievement;
 
-import team11.platform_backend.game.domain.game.GameId;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.math.BigDecimal;
 
 //Aggregate
-// Seperate
+// Global achievement
 public class Achievement {
     private final AchievementId achievementId;
-    private final GameId gameId;
-    private final String achievementName;
-    private final String achievementDescription;
+    private final String name;
+    private final String description;
     private final Url pictureUrl;
     private final AchievementThreshold achievementThreshold;
 
-    // for getting (get methods)
-    public Achievement(AchievementId achievementId,GameId gameId , String achievementName, String achievementDescription, Url pictureUrl, AchievementThreshold achievementThreshold) {
+    public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, AchievementThreshold achievementThreshold) {
         this.achievementId = achievementId;
-        this.gameId = gameId;
-        this.achievementName = achievementName;
-        this.achievementDescription = achievementDescription;
+        this.name = name;
+        this.description = description;
         this.pictureUrl = pictureUrl;
         this.achievementThreshold = achievementThreshold;
     }
 
-    // for creating (post methods)
-    public Achievement(String achievementName,GameId gameId ,String achievementDescription, Url pictureUrl, AchievementThreshold achievementThreshold) {
-        this.achievementId = AchievementId.createAchievementId();
-        this.gameId = gameId;
-        this.achievementName = achievementName;
-        this.achievementDescription = achievementDescription;
+    // for creating
+    public Achievement(String name ,String description, Url pictureUrl, AchievementThreshold achievementThreshold) {
+        this.achievementId = AchievementId.create();
+        this.name = name;
+        this.description = description;
         this.pictureUrl = pictureUrl;
         this.achievementThreshold = achievementThreshold;
+    }
+
+    public boolean isThresholdMet(BigDecimal score){
+        if(achievementThreshold.achievementType().equals(AchievementType.RECORD_TIME)){
+            return score.compareTo(achievementThreshold.threshold()) <= 0;
+        }
+        return score.compareTo(achievementThreshold.threshold()) >= 0;
     }
 
     public AchievementId getAchievementId() {
         return achievementId;
     }
 
-    public String getAchievementName() {
-        return achievementName;
+    public String getName() {
+        return name;
     }
 
-    public String getAchievementDescription() {
-        return achievementDescription;
+    public String getDescription() {
+        return description;
     }
 
     public Url getPictureUrl() {
@@ -53,16 +55,5 @@ public class Achievement {
 
     public AchievementThreshold getAchievementThreshold() {
         return achievementThreshold;
-    }
-    public GameId getGameId() {
-        return gameId;
-    }
-
-    public boolean isThresholdMet(BigDecimal score){
-        if(achievementThreshold.achievementType().equals(AchievementType.RECORD_TIME)){
-            return score.compareTo(achievementThreshold.threshold()) <= 0;
-        }
-        return score.compareTo(achievementThreshold.threshold()) >= 0;
-
     }
 }

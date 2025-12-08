@@ -1,7 +1,7 @@
 package team11.platform_backend.game.domain.game;
 
 import team11.platform_backend.game.domain.game.exeptions.InvalidGameStateException;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Game {
     private final Url gameUrl;
     private GameState gameState;
     private final List<Rule> rules= new ArrayList<>();
-    // Add a list of possible acchievements ( list of strings ) :)
+    private final List<GameAchievement> achievements = new ArrayList<>();
 
     // for loading (get methods)
     public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules) {

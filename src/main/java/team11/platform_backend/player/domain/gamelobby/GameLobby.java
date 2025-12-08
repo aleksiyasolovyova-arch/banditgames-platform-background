@@ -1,6 +1,7 @@
 package team11.platform_backend.player.domain.gamelobby;
 
 
+import org.springframework.data.util.Pair;
 import team11.platform_backend.player.domain.player.PlayerId;
 import team11.platform_backend.player.domain.projections.GameId;
 
@@ -9,10 +10,13 @@ import java.time.LocalDateTime;
 public class GameLobby {
     private final GameLobbyId gameLobbyId;
     private final GameId gameId;
+    // This can be a Pair
     private final PlayerId playerId1;
     private final PlayerId playerId2;
+    // This can also be a Pair
     private boolean player1Accepted;
     private boolean player2Accepted;
+    // Seperate into GameLobbyState and GameResult enums
     private GameResult gameResult;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

@@ -8,7 +8,7 @@ import team11.platform_backend.game.port.in.UpdateAchievementCommand;
 import team11.platform_backend.game.port.in.UpdateAchievementPort;
 import team11.platform_backend.game.port.out.LoadAchievementPort;
 import team11.platform_backend.game.port.out.SaveAchievementPort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +52,6 @@ public class UpdateAchievementUseCaseImpl implements UpdateAchievementPort{
         //    Update: achievementName, achievementDescription, pictureUrl, achievementThreshold
         Achievement updatedAchievement = new Achievement(
                 existingAchievement.getAchievementId(),
-                existingAchievement.getGameId(),
                 command.achievementName(),
                 command.achievementDescription(),
                 pictureUrl,

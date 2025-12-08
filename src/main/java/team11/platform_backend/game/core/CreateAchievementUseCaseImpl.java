@@ -10,7 +10,7 @@ import team11.platform_backend.game.port.in.CreateAchievementCommand;
 import team11.platform_backend.game.port.in.CreateAchievementPort;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveAchievementPort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.util.List;
 
@@ -44,9 +44,8 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
         );
 
         // 3. Create Achievement aggregate (new, so no ID yet)
-        Achievement achievement = new Achievement(
+        Achievement achievement = Achievement.create(
                 command.achievementName(),
-                gameId,
                 command.achievementDescription(),
                 pictureUrl,
                 threshold

@@ -6,7 +6,7 @@ import team11.platform_backend.game.adapter.out.jpa.RuleJpaEntity;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.domain.game.GameId;
 import team11.platform_backend.game.domain.game.Rule;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.util.ArrayList;
 import java.util.HashSet;

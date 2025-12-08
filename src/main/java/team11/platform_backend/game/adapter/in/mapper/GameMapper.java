@@ -8,7 +8,7 @@ import team11.platform_backend.game.adapter.in.response.GameDto;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.port.in.RegisterGameCommand;
 import team11.platform_backend.game.port.in.UpdateGameCommand;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.util.UUID;
 

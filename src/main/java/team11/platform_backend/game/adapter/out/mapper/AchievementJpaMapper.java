@@ -6,7 +6,7 @@ import team11.platform_backend.game.domain.achievement.AchievementId;
 import team11.platform_backend.game.domain.achievement.Achievement;
 import team11.platform_backend.game.domain.achievement.AchievementThreshold;
 import team11.platform_backend.game.domain.game.GameId;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 @Component
 public class AchievementJpaMapper {
