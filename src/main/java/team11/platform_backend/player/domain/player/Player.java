@@ -1,7 +1,11 @@
 package team11.platform_backend.player.domain.player;
 
+import team11.platform_backend.player.domain.projections.GameId;
+import team11.platform_backend.sharedkernel.valueobjects.Url;
+
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Player {
@@ -12,9 +16,37 @@ public class Player {
     private final Set<OwnedGame> ownedGames = new HashSet<>();
 
     // for getting (get methods)
+    public Player(PlayerId playerId, LocalDate joinedDate, List<UnlockedGameAchievement> unlockedGameAchievements, List<OwnedGame> ownedGames) {
+        this.playerId = playerId;
+        this.joinedDate = joinedDate;
+        this.unlockedGameAchievements.addAll(unlockedGameAchievements);
+        this.ownedGames.addAll(ownedGames);
+    }
+
+    // for creating (post method)
+    public Player(PlayerId playerId) {
+        this.playerId = playerId;
+        this.joinedDate = LocalDate.now();
+    }
+
+    public void addOwnedGame(GameId gameId) {
+        ownedGames.add(new OwnedGame(gameId, false, LocalDate.now()));
+    }
 
 
-    // we also need a constructor for creating
+    public PlayerId getPlayerId() {
+        return playerId;
+    }
 
+    public LocalDate getJoinedDate() {
+        return joinedDate;
+    }
 
+    public Set<UnlockedGameAchievement> getUnlockedGameAchievements() {
+        return unlockedGameAchievements;
+    }
+
+    public Set<OwnedGame> getOwnedGames() {
+        return ownedGames;
+    }
 }
