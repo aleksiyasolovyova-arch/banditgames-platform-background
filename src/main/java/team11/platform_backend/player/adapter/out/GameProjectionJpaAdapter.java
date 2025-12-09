@@ -1,7 +1,7 @@
 package team11.platform_backend.player.adapter.out;
 
 import org.springframework.stereotype.Service;
-import team11.platform_backend.player.adapter.out.jpa.GameProjectionJpaMapper;
+import team11.platform_backend.player.adapter.out.mapper.GameProjectionJpaMapper;
 import team11.platform_backend.player.adapter.out.jpa.GameProjectionJpaRepository;
 import team11.platform_backend.player.domain.projections.GameProjection;
 import team11.platform_backend.player.port.out.LoadGameProjectionsPort;

@@ -1,9 +1,11 @@
 package team11.platform_backend.player.adapter.out.jpa;
 
 import jakarta.persistence.*;
+import team11.platform_backend.player.domain.gamelobby.GameLobbyResult;
+import team11.platform_backend.player.domain.gamelobby.GameLobbyStatus;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
-import team11.platform_backend.player.domain.gamelobby.GameResult;
 
 @Entity
 @Table(name = "game_lobbies", schema = "player_schema")
@@ -23,14 +25,18 @@ public class GameLobbyJpaEntity {
     private UUID playerId2;
 
     @Column(name = "player1_accepted", nullable = false)
-    private boolean player1Accepted;
+    private Boolean player1Accepted;
 
     @Column(name = "player2_accepted", nullable = false)
-    private boolean player2Accepted;
+    private Boolean player2Accepted;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "game_result", nullable = false)
-    private GameResult gameResult;
+    @Column(name = "game_lobby_status", nullable = false)
+    private GameLobbyStatus gameLobbyStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "game_lobby_result", nullable = false)
+    private GameLobbyResult gameLobbyResult;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -38,8 +44,7 @@ public class GameLobbyJpaEntity {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    public GameLobbyJpaEntity() {
-    }
+    public GameLobbyJpaEntity() {}
 
     public UUID getGameLobbyId() {
         return gameLobbyId;
@@ -73,28 +78,36 @@ public class GameLobbyJpaEntity {
         this.playerId2 = playerId2;
     }
 
-    public boolean isPlayer1Accepted() {
+    public Boolean getPlayer1Accepted() {
         return player1Accepted;
     }
 
-    public void setPlayer1Accepted(boolean player1Accepted) {
+    public void setPlayer1Accepted(Boolean player1Accepted) {
         this.player1Accepted = player1Accepted;
     }
 
-    public boolean isPlayer2Accepted() {
+    public Boolean getPlayer2Accepted() {
         return player2Accepted;
     }
 
-    public void setPlayer2Accepted(boolean player2Accepted) {
+    public void setPlayer2Accepted(Boolean player2Accepted) {
         this.player2Accepted = player2Accepted;
     }
 
-    public GameResult getGameResult() {
-        return gameResult;
+    public GameLobbyStatus getGameLobbyStatus() {
+        return gameLobbyStatus;
     }
 
-    public void setGameResult(GameResult gameResult) {
-        this.gameResult = gameResult;
+    public void setGameLobbyStatus(GameLobbyStatus gameLobbyStatus) {
+        this.gameLobbyStatus = gameLobbyStatus;
+    }
+
+    public GameLobbyResult getGameLobbyResult() {
+        return gameLobbyResult;
+    }
+
+    public void setGameLobbyResult(GameLobbyResult gameLobbyResult) {
+        this.gameLobbyResult = gameLobbyResult;
     }
 
     public LocalDateTime getStartTime() {
@@ -113,4 +126,3 @@ public class GameLobbyJpaEntity {
         this.endTime = endTime;
     }
 }
-

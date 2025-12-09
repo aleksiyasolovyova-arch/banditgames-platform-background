@@ -5,7 +5,7 @@ import java.util.UUID;
 public record FriendshipId(
         UUID friendshipId
 ) {
-    public static FriendshipId createFriendshipId() {
+    public static FriendshipId create() {
         return new FriendshipId(UUID.randomUUID());
     }
 }

@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team11.platform_backend.game.core.UpdateGameUseCaseImpl;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.domain.game.GameId;
-import team11.platform_backend.game.domain.game.GameState;
+import team11.platform_backend.game.domain.game.GameRegistrationState;
 import team11.platform_backend.game.port.in.UpdateGameCommand;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveGamePort;
@@ -56,7 +56,7 @@ class UpdateGameUseCaseTest {
                 List.of(new Url("http://old.url/pic1")),
                 "Creator",
                 new Url("http://old.url/game"),
-                GameState.PENDING,
+                GameRegistrationState.PENDING,
                 Collections.emptyList()
         );
 
@@ -86,13 +86,13 @@ class UpdateGameUseCaseTest {
         assertEquals("New Description", savedGame.getGameDescription());
         assertEquals(BigDecimal.valueOf(20.0), savedGame.getGamePrice());
         assertEquals("http://new.url/game", savedGame.getGameUrl().value());
-        assertEquals(2, savedGame.getPictureUrls().size());
-        assertEquals("http://new.url/pic1", savedGame.getPictureUrls().get(0).value());
+        assertEquals(2, savedGame.getPictureUrl().size());
+        assertEquals("http://new.url/pic1", savedGame.getPictureUrl().get(0).value());
 
         // Verify fields that should remain unchanged
         assertEquals(gameId, savedGame.getGameId());
         assertEquals("Creator", savedGame.getGameCreatorName());
-        assertEquals(GameState.PENDING, savedGame.getGameState());
+        assertEquals(GameRegistrationState.PENDING, savedGame.getGameState());
 
         // Verify return value matches saved value
         assertEquals(savedGame, result); // Assuming Game equals/hashCode logic or identity if savedGame is returned by service (service returns the new object created)

@@ -2,7 +2,7 @@ package team11.platform_backend.player.adapter.out;
 
 import org.springframework.stereotype.Component;
 import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaEntity;
-import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaMapper;
+import team11.platform_backend.player.adapter.out.mapper.GameLobbyJpaMapper;
 import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaRepository;
 import team11.platform_backend.player.domain.gamelobby.GameLobby;
 import team11.platform_backend.player.domain.gamelobby.GameLobbyId;

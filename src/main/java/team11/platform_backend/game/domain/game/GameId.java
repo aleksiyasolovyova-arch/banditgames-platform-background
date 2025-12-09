@@ -6,7 +6,7 @@ public record GameId(
         UUID gameId
 ) {
 
-    public static GameId createGameId() {
+    public static GameId create() {
         return new GameId(UUID.randomUUID());
     }
 }

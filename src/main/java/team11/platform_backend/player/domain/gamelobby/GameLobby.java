@@ -10,103 +10,93 @@ import java.time.LocalDateTime;
 public class GameLobby {
     private final GameLobbyId gameLobbyId;
     private final GameId gameId;
-    // This can be a Pair
-    private final PlayerId playerId1;
-    private final PlayerId playerId2;
-    // This can also be a Pair
-    private boolean player1Accepted;
-    private boolean player2Accepted;
-    // Seperate into GameLobbyState and GameResult enums
-    private GameResult gameResult;
+    private final Pair<PlayerId,PlayerId> playerIdPair;
+    private Boolean player1Accepted;
+    private Boolean player2Accepted;
+    private GameLobbyStatus gameLobbyStatus;
+    private GameLobbyResult gameLobbyResult;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    // For loading
-    public GameLobby(GameLobbyId gameLobbyId, GameId gameId, PlayerId playerId1, PlayerId playerId2, LocalDateTime endTime, boolean player1Accepted, boolean player2Accepted, GameResult gameResult, LocalDateTime startTime) {
+    public GameLobby(GameLobbyId gameLobbyId, GameId gameId, Pair<PlayerId, PlayerId> playerIdPair, Boolean player1Accepted, Boolean player2Accepted, GameLobbyStatus gameLobbyStatus, GameLobbyResult gameLobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
         this.gameLobbyId = gameLobbyId;
         this.gameId = gameId;
-        this.playerId1 = playerId1;
-        this.playerId2 = playerId2;
+        this.playerIdPair = playerIdPair;
         this.player1Accepted = player1Accepted;
         this.player2Accepted = player2Accepted;
-        this.gameResult = gameResult;
+        this.gameLobbyStatus = gameLobbyStatus;
+        this.gameLobbyResult = gameLobbyResult;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    // For creating
-    // It is private because I want to force other developers to use the static methods of creating a new GameLobby
-    private GameLobby(GameId gameId, PlayerId playerId1, PlayerId playerId2, boolean player1Accepted, boolean player2Accepted) {
-        this.gameLobbyId = GameLobbyId.createGameLobbyId();
+    private GameLobby(GameId gameId, Pair<PlayerId, PlayerId> playerIdPair, Boolean player1Accepted, Boolean player2Accepted) {
+        this.gameLobbyId = GameLobbyId.create();
         this.gameId = gameId;
-        this.playerId1 = playerId1;
-        this.playerId2 = playerId2;
+        this.playerIdPair = playerIdPair;
         this.player1Accepted = player1Accepted;
         this.player2Accepted = player2Accepted;
-        this.gameResult = GameResult.PENDING;
+        this.gameLobbyStatus = GameLobbyStatus.PENDING;
+        this.gameLobbyResult = GameLobbyResult.NO_RESULT;
+        this.startTime = LocalDateTime.now();
     }
 
 
-    public static GameLobby createGameLobbyForStrangers(GameId gameId, PlayerId playerId1, PlayerId playerId2) {
+    public static GameLobby createGameLobbyForStrangers(GameId gameId, Pair<PlayerId,PlayerId> playerIdPair) {
         return new GameLobby(
                 gameId,
-                playerId1,
-                playerId2,
-                false,
-                false
+                playerIdPair,
+                false,false
         );
     }
 
-    public static GameLobby createGameLobbyForFriends(GameId gameId, PlayerId playerId1, PlayerId playerId2) {
+    public static GameLobby createGameLobbyForFriends(GameId gameId, Pair<PlayerId,PlayerId> playerIdPair) {
         return new GameLobby(
                 gameId,
-                playerId1,
-                playerId2,
-                true,
-                false
+                playerIdPair,
+                true,false
         );
     }
 
-    public static GameLobby createGameLobbyForAI(GameId gameId, PlayerId playerId1) {
+    public static GameLobby createGameLobbyForAI(GameId gameId, PlayerId playerId) {
+        Pair<PlayerId,PlayerId> playerIdPair = Pair.of(playerId,PlayerId.ai());
         GameLobby gameLobby = new GameLobby(
                 gameId,
-                playerId1,
-                PlayerId.ai(),
-                true,
-                true
+                playerIdPair,
+                true,true
         );
         gameLobby.startGame();
         return gameLobby;
     }
 
     public void acceptByPlayer(PlayerId playerId) {
-        if (playerId1.equals(playerId)) {
+        if (playerIdPair.getFirst().equals(playerId)) {
             if (!player1Accepted) {
                 this.player1Accepted = true;
             }
-        } else if (playerId2.equals(playerId)) {
+        } else if (playerIdPair.getSecond().equals(playerId)) {
             if (!player2Accepted) {
                 this.player2Accepted = true;
             }
         } else {
             throw new IllegalArgumentException("Invalid player id provided");
         }
-        if (player1Accepted && player2Accepted && gameResult.equals(GameResult.PENDING)) {
+        if (player1Accepted && player2Accepted && gameLobbyStatus.equals(GameLobbyStatus.PENDING)) {
             startGame();
         }
     }
 
     public void cancelGame(){
-        if (gameResult.equals(GameResult.PENDING) || gameResult.equals(GameResult.STARTED)) {
-            this.gameResult = GameResult.CANCELED;
+        if (gameLobbyStatus.equals(GameLobbyStatus.PENDING) || gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
+            this.gameLobbyStatus = GameLobbyStatus.CANCELED;
         } else {
             throw new IllegalArgumentException("Cannot cancel an already finished game!");
         }
     }
 
     public void startGame() {
-        if (gameResult.equals(GameResult.PENDING) && player1Accepted && player2Accepted) {
-            this.gameResult = GameResult.STARTED;
+        if (gameLobbyStatus.equals(GameLobbyStatus.PENDING) && player1Accepted && player2Accepted) {
+            this.gameLobbyStatus = GameLobbyStatus.STARTED;
             this.startTime = LocalDateTime.now();
         } else {
             throw new IllegalArgumentException("Cannot start unless both players agree to start a pending game!");
@@ -114,13 +104,13 @@ public class GameLobby {
     }
 
     public void endGameWithWinner(PlayerId winnerId) {
-        if (!gameResult.equals(GameResult.STARTED)) {
+        if (!gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             throw new IllegalArgumentException("To finish a game it must have started!");
         }
-        if (playerId1.equals(winnerId)) {
-            this.gameResult = GameResult.PLAYER_1_WON;
-        } else if (playerId2.equals(winnerId)) {
-            this.gameResult = GameResult.PLAYER_2_WON;
+        if (playerIdPair.getFirst().equals(winnerId)) {
+            this.gameLobbyResult = GameLobbyResult.PLAYER_1_WON;
+        } else if (playerIdPair.getSecond().equals(winnerId)) {
+            this.gameLobbyResult = GameLobbyResult.PLAYER_2_WON;
         } else {
             throw new IllegalArgumentException("Invalid player id provided");
         }
@@ -128,15 +118,15 @@ public class GameLobby {
     }
 
     public void endGameWithDraw() {
-        if (!gameResult.equals(GameResult.STARTED)) {
+        if (!gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             throw new IllegalArgumentException("To finish a game it must have started!");
         }
-        this.gameResult = GameResult.DRAW;
+        this.gameLobbyResult = GameLobbyResult.DRAW;
         this.endTime = LocalDateTime.now();
     }
 
     public boolean isAgainstAi(){
-        return playerId2.isAI();
+        return playerIdPair.getSecond().isAI();
     }
 
     public GameLobbyId getGameLobbyId() {
@@ -147,24 +137,24 @@ public class GameLobby {
         return gameId;
     }
 
-    public PlayerId getPlayerId1() {
-        return playerId1;
+    public Pair<PlayerId, PlayerId> getPlayerIdPair() {
+        return playerIdPair;
     }
 
-    public PlayerId getPlayerId2() {
-        return playerId2;
-    }
-
-    public boolean isPlayer1Accepted() {
+    public Boolean getPlayer1Accepted() {
         return player1Accepted;
     }
 
-    public boolean isPlayer2Accepted() {
+    public Boolean getPlayer2Accepted() {
         return player2Accepted;
     }
 
-    public GameResult getGameResult() {
-        return gameResult;
+    public GameLobbyStatus getGameLobbyStatus() {
+        return gameLobbyStatus;
+    }
+
+    public GameLobbyResult getGameLobbyResult() {
+        return gameLobbyResult;
     }
 
     public LocalDateTime getStartTime() {

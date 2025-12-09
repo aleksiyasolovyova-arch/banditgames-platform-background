@@ -39,7 +39,7 @@ public class GameMapper {
                 game.getGameName(),
                 game.getGameDescription(),
                 game.getGamePrice(),
-                game.getPictureUrls().stream()
+                game.getPictureUrl().stream()
                         .map(Url::value)
                         .toList(),
                 game.getGameCreatorName(),

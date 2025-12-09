@@ -8,8 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team11.platform_backend.game.core.RegisterGameUseCaseImpl;
 import team11.platform_backend.game.domain.game.Game;
-import team11.platform_backend.game.domain.game.GameState;
-import team11.platform_backend.game.domain.game.RuleCategory;
+import team11.platform_backend.game.domain.game.GameRegistrationState;
 import team11.platform_backend.game.port.in.RegisterGameCommand;
 import team11.platform_backend.game.port.out.SaveGamePort;
 
@@ -78,11 +77,11 @@ public class RegisterGameUseCaseTest {
         assertEquals(validCommand.gameName(), createdGame.getGameName());
         assertEquals(validCommand.gamePrice(), createdGame.getGamePrice());
         assertEquals(validCommand.gameUrl(), createdGame.getGameUrl().value());
-        assertEquals(GameState.PENDING, createdGame.getGameState(), "New game should start in PENDING state.");
+        assertEquals(GameRegistrationState.PENDING, createdGame.getGameState(), "New game should start in PENDING state.");
 
         // Check value object conversions
-        assertEquals(2, createdGame.getPictureUrls().size());
-        assertEquals("http://example.com/img1.jpg", createdGame.getPictureUrls().get(0).value());
+        assertEquals(2, createdGame.getPictureUrl().size());
+        assertEquals("http://example.com/img1.jpg", createdGame.getPictureUrl().get(0).value());
         assertEquals(1, createdGame.getRules().size());
         assertEquals(validCommand.rules().get(0).ruleName(), createdGame.getRules().get(0).ruleName());
         assertEquals(RuleCategory.WINNING, createdGame.getRules().get(0).ruleCategories().get(0));

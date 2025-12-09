@@ -12,55 +12,43 @@ public class Game {
     private final String gameName;
     private final String gameDescription;
     private final BigDecimal gamePrice; 
-    private final List<Url> pictureUrls;
-    private final String gameCreatorName;
+    private final Url pictureUrl;
     private final Url gameUrl;
-    private GameState gameState;
-    private final List<Rule> rules= new ArrayList<>();
+    private final String gameCreatorName;
+    private GameRegistrationState gameRegistrationState;
+    private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
 
-    // for loading (get methods)
-    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules) {
+    public void acceptGame() {
+        if (this.gameRegistrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot accept game: current state is " + this.gameRegistrationState + ", expected PENDING"
+            );
+        }
+        this.gameRegistrationState = GameRegistrationState.ACCEPTED;
+    }
+
+    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, Url pictureUrl, String gameCreatorName, Url gameUrl, GameRegistrationState gameRegistrationState) {
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameDescription = gameDescription;
         this.gamePrice = gamePrice;
-        this.pictureUrls = pictureUrls;
+        this.pictureUrl = pictureUrl;
         this.gameCreatorName = gameCreatorName;
         this.gameUrl = gameUrl;
-        this.gameState = gameState;
-        this.rules.addAll(rules);
+        this.gameRegistrationState = gameRegistrationState;
     }
 
-    // for creating (post methods)
-    public Game(String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, List<Rule> rules) {
-        this.gameId = GameId.createGameId();
+
+    public Game(String gameName, String gameDescription, BigDecimal gamePrice, Url pictureUrl, String gameCreatorName, Url gameUrl) {
+        this.gameId = GameId.create();
         this.gameName = gameName;
         this.gameDescription = gameDescription;
         this.gamePrice = gamePrice;
-        this.pictureUrls = pictureUrls;
+        this.pictureUrl = pictureUrl;
         this.gameCreatorName = gameCreatorName;
-        this.gameUrl= gameUrl;
-        this.gameState = GameState.PENDING;
-        this.rules.addAll(rules);
-    }
-
-    public void acceptGame() {
-        if (this.gameState != GameState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot accept game: current state is " + this.gameState + ", expected PENDING"
-            );
-        }
-        this.gameState = GameState.ACCEPTED;
-    }
-
-    public void rejectGame() {
-        if (this.gameState != GameState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot reject game: current state is " + this.gameState + ", expected PENDING"
-            );
-        }
-        this.gameState = GameState.REJECTED;
+        this.gameUrl = gameUrl;
+        this.gameRegistrationState = GameRegistrationState.PENDING;
     }
 
     public GameId getGameId() {
@@ -79,8 +67,8 @@ public class Game {
         return gamePrice;
     }
 
-    public List<Url> getPictureUrls() {
-        return pictureUrls;
+    public Url getPictureUrl() {
+        return pictureUrl;
     }
 
     public String getGameCreatorName() {
@@ -91,12 +79,15 @@ public class Game {
         return gameUrl;
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public GameRegistrationState getGameRegistrationState() {
+        return gameRegistrationState;
     }
 
     public List<Rule> getRules() {
         return rules;
     }
 
+    public List<GameAchievement> getAchievements() {
+        return achievements;
+    }
 }

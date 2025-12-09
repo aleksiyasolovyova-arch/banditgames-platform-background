@@ -8,5 +8,4 @@ import java.util.UUID;
 
 @Repository
 public interface AchievementJpaRepository extends JpaRepository<AchievementJpaEntity, UUID> {
-    List<AchievementJpaEntity> findByGameId(UUID gameId);
 }

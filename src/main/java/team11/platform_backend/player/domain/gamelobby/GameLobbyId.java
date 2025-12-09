@@ -5,7 +5,7 @@ import java.util.UUID;
 public record GameLobbyId(
         UUID gameLobbyId
 ) {
-    public static GameLobbyId createGameLobbyId() {
+    public static GameLobbyId create() {
         return new GameLobbyId(UUID.randomUUID());
     }
 }

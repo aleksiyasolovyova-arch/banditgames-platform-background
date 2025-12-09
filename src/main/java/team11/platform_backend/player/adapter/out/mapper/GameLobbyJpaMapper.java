@@ -1,12 +1,12 @@
-package team11.platform_backend.player.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.mapper;
 
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
+import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaEntity;
 import team11.platform_backend.player.domain.gamelobby.GameLobby;
 import team11.platform_backend.player.domain.gamelobby.GameLobbyId;
-import team11.platform_backend.player.domain.gamelobby.GameResult;
 import team11.platform_backend.player.domain.player.PlayerId;
 import team11.platform_backend.player.domain.projections.GameId;
-
 
 @Component
 public class GameLobbyJpaMapper {
@@ -14,16 +14,14 @@ public class GameLobbyJpaMapper {
     public GameLobbyJpaEntity toJpaEntity(GameLobby gameLobby) {
         GameLobbyJpaEntity entity = new GameLobbyJpaEntity();
 
-        // Assuming GameLobbyId/GameId/PlayerId expose uuid()
-        entity.setGameLobbyId(
-                gameLobby.getGameLobbyId() != null ? gameLobby.getGameLobbyId().gameLobbyId() : null
-        );
+        entity.setGameLobbyId(gameLobby.getGameLobbyId().gameLobbyId());
         entity.setGameId(gameLobby.getGameId().gameId());
-        entity.setPlayerId1(gameLobby.getPlayerId1().playerId());
-        entity.setPlayerId2(gameLobby.getPlayerId2().playerId());
-        entity.setPlayer1Accepted(gameLobby.isPlayer1Accepted());
-        entity.setPlayer2Accepted(gameLobby.isPlayer2Accepted());
-        entity.setGameResult(gameLobby.getGameResult());
+        entity.setPlayerId1(gameLobby.getPlayerIdPair().getFirst().playerId());
+        entity.setPlayerId2(gameLobby.getPlayerIdPair().getSecond().playerId());
+        entity.setPlayer1Accepted(gameLobby.getPlayer1Accepted());
+        entity.setPlayer2Accepted(gameLobby.getPlayer2Accepted());
+        entity.setGameLobbyStatus(gameLobby.getGameLobbyStatus());
+        entity.setGameLobbyResult(gameLobby.getGameLobbyResult());
         entity.setStartTime(gameLobby.getStartTime());
         entity.setEndTime(gameLobby.getEndTime());
 
@@ -35,18 +33,18 @@ public class GameLobbyJpaMapper {
         GameId gameId = new GameId(entity.getGameId());
         PlayerId playerId1 = new PlayerId(entity.getPlayerId1());
         PlayerId playerId2 = new PlayerId(entity.getPlayerId2());
-        GameResult gameResult = entity.getGameResult();
+        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId1, playerId2);
 
         return new GameLobby(
                 gameLobbyId,
                 gameId,
-                playerId1,
-                playerId2,
-                entity.getEndTime(),
-                entity.isPlayer1Accepted(),
-                entity.isPlayer2Accepted(),
-                gameResult,
-                entity.getStartTime()
+                playerIdPair,
+                entity.getPlayer1Accepted(),
+                entity.getPlayer2Accepted(),
+                entity.getGameLobbyStatus(),
+                entity.getGameLobbyResult(),
+                entity.getStartTime(),
+                entity.getEndTime()
         );
     }
 }

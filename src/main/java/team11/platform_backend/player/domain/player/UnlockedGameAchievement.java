@@ -1,9 +1,12 @@
 package team11.platform_backend.player.domain.player;
 
+import team11.platform_backend.player.domain.projections.GameId;
+
 import java.time.LocalDateTime;
 
 
 public record UnlockedGameAchievement(
+        GameId gameId,
         String achievementCode,
         LocalDateTime unlockedAt
 ) {

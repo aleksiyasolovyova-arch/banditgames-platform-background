@@ -3,7 +3,7 @@ package team11.platform_backend.player.adapter.out;
 import org.springframework.stereotype.Service;
 import team11.platform_backend.player.adapter.out.jpa.PlayerJpaEntity;
 import team11.platform_backend.player.adapter.out.jpa.PlayerJpaRepository;
-import team11.platform_backend.player.adapter.out.jpa.PlayerJpaMapper;
+import team11.platform_backend.player.adapter.out.mapper.PlayerJpaMapper;
 import team11.platform_backend.player.domain.player.Player;
 import team11.platform_backend.player.port.out.SavePlayerPort;
 

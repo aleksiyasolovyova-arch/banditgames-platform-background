@@ -1,6 +1,7 @@
-package team11.platform_backend.player.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.mapper;
 
 import org.springframework.stereotype.Component;
+import team11.platform_backend.player.adapter.out.jpa.GameProjectionJpaEntity;
 import team11.platform_backend.player.domain.projections.GameId;
 import team11.platform_backend.player.domain.projections.GameProjection;
 
