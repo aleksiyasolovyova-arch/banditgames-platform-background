@@ -29,7 +29,7 @@ public class CreateNewPlayerUseCaseImpl implements CreateNewPlayerPort {
         // remove if paying system implemented
         List<GameProjection> allGames = loadGameProjectionsPort.loadAll());
         for (GameProjection gameProjection : allGames) {
-            newPlayer.addOwnedGame(gameProjection.getGameId());
+            newPlayer.addOwnedGame(gameProjection.gameId());
         }
 
         return savePlayerPort.save(newPlayer);

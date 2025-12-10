@@ -15,7 +15,7 @@ public class GameProjectionJpaMapper {
 
     public GameProjectionJpaEntity toJpaEntity(GameProjection projection) {
         return new GameProjectionJpaEntity(
-                projection.getGameId().gameId()
+                projection.gameId().gameId()
         );
     }
 }
