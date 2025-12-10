@@ -8,7 +8,7 @@ import team11.platform_backend.game.port.in.UpdateGameCommand;
 import team11.platform_backend.game.port.in.UpdateGamePort;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveGamePort;
-import team11.platform_backend.game.domain.Url;
+import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class UpdateGameUseCaseImpl implements UpdateGamePort{
         // 1. Load the existing game aggregate
         GameId gameId = new GameId(command.gameId());
         Game existingGame = loadGamePorts.stream()
-                .map(port -> port.loadBy(gameId))
+                .map(port -> port.findById(gameId))
                 .filter(java.util.Optional::isPresent)
                 .map(java.util.Optional::get)
                 .findFirst()
@@ -46,7 +46,7 @@ public class UpdateGameUseCaseImpl implements UpdateGamePort{
 
         // 5. Create new Game instance with updated values using the loading constructor
         //    Keep unchanged: gameId, gameCreatorName, gameState, rules
-        //    Update: gameName, gameDescription, gamePrice, pictureUrls, gameUrl, aiPlayerUrl
+        //    Update: name, description, price, pictureUrls, gameUrl, aiPlayerUrl
         Game updatedGame = new Game(
                 existingGame.getGameId(),
                 command.gameName(),

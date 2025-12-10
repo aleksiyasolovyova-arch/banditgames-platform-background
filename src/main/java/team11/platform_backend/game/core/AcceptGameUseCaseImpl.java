@@ -25,7 +25,6 @@ public class AcceptGameUseCaseImpl implements AcceptGamePort {
 
     @Override
     public Game acceptGame(AcceptGameCommand command) {
-        // 1. Load the game aggregate
         GameId gameId = new GameId(command.gameId());
         Game game = loadGamePorts.stream()
                 .map(port -> port.loadBy(gameId))
@@ -35,10 +34,8 @@ public class AcceptGameUseCaseImpl implements AcceptGamePort {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Game not found with ID: " + command.gameId()));
 
-        // 2. Execute domain logic (state transition + validation)
         game.acceptGame();
 
-        // 3. Persist the updated aggregate
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 
         return game;

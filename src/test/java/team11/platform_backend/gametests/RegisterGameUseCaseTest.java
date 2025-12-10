@@ -74,8 +74,8 @@ public class RegisterGameUseCaseTest {
 
         // 1. Verify the core business logic (Creation and Aggregation)
         assertNotNull(createdGame.getGameId(), "Game ID should be generated.");
-        assertEquals(validCommand.gameName(), createdGame.getName());
-        assertEquals(validCommand.gamePrice(), createdGame.getPrice());
+        assertEquals(validCommand.name(), createdGame.getName());
+        assertEquals(validCommand.price(), createdGame.getPrice());
         assertEquals(validCommand.gameUrl(), createdGame.getGameUrl().value());
         assertEquals(GameRegistrationState.PENDING, createdGame.getGameState(), "New game should start in PENDING state.");
 
@@ -110,9 +110,9 @@ public class RegisterGameUseCaseTest {
         );
 
         RegisterGameCommand invalidCommand = new RegisterGameCommand(
-                validCommand.gameName(),
-                validCommand.gameDescription(),
-                validCommand.gamePrice(),
+                validCommand.name(),
+                validCommand.description(),
+                validCommand.price(),
                 validCommand.pictureUrls(),
                 validCommand.gameCreatorName(),
                 validCommand.gameUrl(),
@@ -144,9 +144,9 @@ public class RegisterGameUseCaseTest {
         );
 
         RegisterGameCommand invalidCommand = new RegisterGameCommand(
-                validCommand.gameName(),
-                validCommand.gameDescription(),
-                validCommand.gamePrice(),
+                validCommand.name(),
+                validCommand.description(),
+                validCommand.price(),
                 validCommand.pictureUrls(),
                 validCommand.gameCreatorName(),
                 validCommand.gameUrl(),

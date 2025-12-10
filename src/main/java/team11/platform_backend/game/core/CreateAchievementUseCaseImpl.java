@@ -10,7 +10,7 @@ import team11.platform_backend.game.port.in.CreateAchievementCommand;
 import team11.platform_backend.game.port.in.CreateAchievementPort;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveAchievementPort;
-import team11.platform_backend.game.domain.Url;
+import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.util.List;
 
@@ -31,22 +31,23 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
     public Achievement createAchievement(CreateAchievementCommand command) {
         // 1. Verify game exists (business rule validation)
         GameId gameId = new GameId(command.gameId());
-        loadGamePort.loadBy(gameId)
+        loadGamePort.findById(gameId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Game not found with ID: " + command.gameId()));
 
         // 2. Convert command to domain value objects
         Url pictureUrl = new Url(command.pictureUrl());
-        AchievementType achievementType = AchievementType.valueOf(command.achievementType());
+        AchievementType achievementType = AchievementType.valueOf(command.type());
         AchievementThreshold threshold = new AchievementThreshold(
                 achievementType,
                 command.threshold()
         );
 
         // 3. Create Achievement aggregate (new, so no ID yet)
-        Achievement achievement = Achievement.create(
-                command.achievementName(),
-                command.achievementDescription(),
+        Achievement achievement = new Achievement(
+                command.name(),
+                gameId,
+                command.description(),
                 pictureUrl,
                 threshold
         );

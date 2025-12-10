@@ -1,9 +1,6 @@
 package team11.platform_backend.game.domain.achievement;
 
 import team11.platform_backend.game.domain.Url;
-import team11.platform_backend.sharedkernel.events.GameCompletedEvent;
-
-import java.math.BigDecimal;
 
 // Aggregate
 // Global achievement
@@ -12,25 +9,28 @@ public class Achievement {
     private final String name;
     private final String description;
     private final Url pictureUrl;
-    private final Threshold threshold;
+    private final AchievementType type;
+    private final long requiredValue;
 
-    public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, Threshold threshold) {
+    public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         this.achievementId = achievementId;
         this.name = name;
         this.description = description;
         this.pictureUrl = pictureUrl;
-        this.threshold = threshold;
+        this.type = type;
+        this.requiredValue = requiredValue;
     }
-    public Achievement(String name, String description, Url pictureUrl, Threshold threshold) {
+    public Achievement(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         this.achievementId = AchievementId.create();
         this.name = name;
         this.description = description;
         this.pictureUrl = pictureUrl;
-        this.threshold = threshold;
+        this.type = type;
+        this.requiredValue = requiredValue;
     }
 
-    public boolean isThresholdMet(GameCompletedEvent event) {
-        return threshold.isMetBy(event);
+    public boolean isAchievementMet(PlayerStatistics statistics) {
+        return type.isMetBy(requiredValue, statistics);
     }
 
     public AchievementId getAchievementId() {
@@ -49,7 +49,11 @@ public class Achievement {
         return pictureUrl;
     }
 
-    public Threshold getThreshold() {
-        return threshold;
+    public AchievementType getType() {
+        return type;
+    }
+
+    public long getRequiredValue() {
+        return requiredValue;
     }
 }

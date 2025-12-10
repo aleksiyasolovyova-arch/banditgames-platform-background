@@ -8,7 +8,7 @@ import team11.platform_backend.game.adapter.in.response.GameDto;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.port.in.RegisterGameCommand;
 import team11.platform_backend.game.port.in.UpdateGameCommand;
-import team11.platform_backend.game.domain.Url;
+import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.util.UUID;
 
@@ -36,10 +36,10 @@ public class GameMapper {
     public GameDto toResponse(Game game) {
         return new GameDto(
                 game.getGameId().gameId(),
-                game.getName(),
-                game.getDescription(),
-                game.getPrice(),
-                game.getPictureUrl().stream()
+                game.getGameName(),
+                game.getGameDescription(),
+                game.getGamePrice(),
+                game.getPictureUrls().stream()
                         .map(Url::value)
                         .toList(),
                 game.getGameCreatorName(),

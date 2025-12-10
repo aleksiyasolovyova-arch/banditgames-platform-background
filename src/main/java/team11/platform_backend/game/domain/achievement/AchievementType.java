@@ -1,8 +1,35 @@
 package team11.platform_backend.game.domain.achievement;
 
 public enum AchievementType {
-    PLAY_COUNT,
-    WIN_COUNT,
-    FRIEND_COUNT,
-    RECORD_TIME
+    PLAY_COUNT {
+        @Override
+        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
+            Long actual = stats.totalGamesPlayed();
+            return actual != null && actual >= requiredValue;
+        }
+    },
+    WIN_COUNT {
+        @Override
+        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
+            Long actual = stats.totalWins();
+            return actual != null && actual >= requiredValue;
+        }
+    },
+    FRIEND_COUNT {
+        @Override
+        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
+            Long actual = stats.totalFriends();
+            return actual != null && actual >= requiredValue;
+        }
+    },
+    RECORD_TIME {
+        @Override
+        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
+            Long actual = stats.bestRecordTime();
+            Long required = requiredValue;
+            return actual != null && actual.compareTo(required) <= 0;
+        }
+    };
+
+    public abstract boolean isMetBy(long requiredValue, PlayerStatistics stats);
 }

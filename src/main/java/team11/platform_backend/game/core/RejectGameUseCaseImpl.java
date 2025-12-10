@@ -29,7 +29,7 @@ public class RejectGameUseCaseImpl implements RejectGamePort{
         // 1. Load the game aggregate
         GameId gameId = new GameId(command.gameId());
         Game game = loadGamePorts.stream()
-                .map(port -> port.loadBy(gameId))
+                .map(port -> port.findById(gameId))
                 .filter(java.util.Optional::isPresent)
                 .map(java.util.Optional::get)
                 .findFirst()

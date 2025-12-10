@@ -22,15 +22,10 @@ public class AchievementJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AchievementType achievementType;
+    private AchievementType type;
 
-    // For CountThreshold: stores the count value
-    @Column(name = "threshold_value")
-    private Long thresholdCountValue;
-
-    // For TimeThreshold: stores duration in seconds
-    @Column(name = "threshold_duration_seconds")
-    private Long thresholdDurationSeconds;
+    @Column(nullable = false)
+    private long requiredValue;
 
     public AchievementJpaEntity() {}
 
@@ -38,55 +33,47 @@ public class AchievementJpaEntity {
         return achievementId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public AchievementType getAchievementType() {
-        return achievementType;
-    }
-
-    public Long getThresholdCountValue() {
-        return thresholdCountValue;
-    }
-
-    public Long getThresholdDurationSeconds() {
-        return thresholdDurationSeconds;
-    }
-
     public void setAchievementId(UUID achievementId) {
         this.achievementId = achievementId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
     }
 
-    public void setAchievementType(AchievementType achievementType) {
-        this.achievementType = achievementType;
+    public AchievementType getType() {
+        return type;
     }
 
-    public void setThresholdCountValue(Long thresholdCountValue) {
-        this.thresholdCountValue = thresholdCountValue;
+    public void setType(AchievementType type) {
+        this.type = type;
     }
 
-    public void setThresholdDurationSeconds(Long thresholdDurationSeconds) {
-        this.thresholdDurationSeconds = thresholdDurationSeconds;
+    public long getRequiredValue() {
+        return requiredValue;
+    }
+
+    public void setRequiredValue(long requiredValue) {
+        this.requiredValue = requiredValue;
     }
 }

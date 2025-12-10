@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public record UpdateAchievementCommand(
         UUID achievementId,
-        String achievementName,
-        String achievementDescription,
+        String name,
+        String description,
         String pictureUrl,
-        AchievementType achievementType,
-        BigDecimal threshold
+        String type,
+        long requiredValue
 )  {
     public UpdateAchievementCommand {
         // Achievement ID
@@ -20,22 +20,20 @@ public record UpdateAchievementCommand(
         }
 
         // Achievement Name
-        if (achievementName == null || achievementName.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Achievement name cannot be empty");
         }
-
-        achievementName = achievementName.trim();
-        if (achievementName.length() > 100) {
+        name = name.trim();
+        if (name.length() > 100) {
             throw new IllegalArgumentException("Achievement name cannot exceed 100 characters");
         }
 
         // Achievement Description
-        if (achievementDescription == null || achievementDescription.trim().isEmpty()) {
+        if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Achievement description cannot be empty");
         }
-
-        if (achievementDescription.length() > 500) {
-            throw new IllegalArgumentException("Achievement description cannot exceed 500 characters");
+        if (description.length() > 255) {
+            throw new IllegalArgumentException("Achievement description cannot exceed 255 characters");
         }
 
         // Picture URL
@@ -44,17 +42,13 @@ public record UpdateAchievementCommand(
         }
 
         // Achievement Type
-        if (achievementType == null) {
-            throw new IllegalArgumentException("Achievement type cannot be null");
+        if (type == null || type.trim().isEmpty()) {
+            throw new IllegalArgumentException("Achievement type cannot be empty");
         }
 
         // Threshold
-        if (threshold == null) {
-            throw new IllegalArgumentException("Threshold cannot be null");
-        }
-
-        if (threshold.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Threshold must be greater than zero");
+        if (requiredValue < 0 || requiredValue > 100) {
+            throw new IllegalArgumentException("Achievement required value must be between 0 and 100");
         }
     }
 }

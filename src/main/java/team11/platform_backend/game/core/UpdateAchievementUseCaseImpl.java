@@ -49,7 +49,7 @@ public class UpdateAchievementUseCaseImpl implements UpdateAchievementPort{
 
         // 4. Create new Achievement instance with updated values using the loading constructor
         //    Keep unchanged: achievementId, gameId
-        //    Update: achievementName, achievementDescription, pictureUrl, achievementThreshold
+        //    Update: name, description, pictureUrl, achievementThreshold
         Achievement updatedAchievement = new Achievement(
                 existingAchievement.getAchievementId(),
                 command.achievementName(),

@@ -4,53 +4,54 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record RegisterGameCommand(
-        String gameName,
-        String gameDescription,
-        BigDecimal gamePrice,
-        List<String> pictureUrls,
-        String gameCreatorName,
+        String name,
+        String description,
+        BigDecimal price,
+        String pictureUrl,
         String gameUrl,
-        List<RuleCommand> rules
+        String gameCreatorName,
+        List<String> rules,
+        List<GameAchievementCommand> achievements
 ) {
     public RegisterGameCommand {
         // Game Name
-        if (gameName == null || gameName.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Game name cannot be empty");
         }
-        gameName = gameName.trim();
-        if (gameName.length() > 100) {
+        name = name.trim();
+        if (name.length() > 100) {
             throw new IllegalArgumentException("Game name cannot exceed 100 characters");
         }
 
         // Game Description
-        if (gameDescription == null || gameDescription.trim().isEmpty()) {
+        if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Game description cannot be empty");
         }
-        if (gameDescription.length() > 500) {
+        if (description.length() > 500) {
             throw new IllegalArgumentException("Game description cannot exceed 500 characters");
         }
 
         // Game Price
-        if (gamePrice == null) {
+        if (price == null) {
             throw new IllegalArgumentException("Game price cannot be null");
         }
-        if (gamePrice.compareTo(BigDecimal.ZERO) < 0) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Game price cannot be negative");
         }
 
         // Picture URLs
-        if (pictureUrls == null || pictureUrls.isEmpty()) {
-            throw new IllegalArgumentException("At least one picture URL must be provided");
-        }
-
-        // Game Creator Name
-        if (gameCreatorName == null || gameCreatorName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Game creator name cannot be empty");
+        if (pictureUrl == null || pictureUrl.trim().isEmpty()) {
+            throw new IllegalArgumentException("Picture URL cannot be empty");
         }
 
         // Game URL
         if (gameUrl == null || gameUrl.trim().isEmpty()) {
             throw new IllegalArgumentException("Game URL cannot be empty");
+        }
+
+        // Game Creator Name
+        if (gameCreatorName == null || gameCreatorName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Game creator name cannot be empty");
         }
 
         // Rules
@@ -59,9 +60,8 @@ public record RegisterGameCommand(
         }
     }
 
-    public record RuleCommand(
-            String ruleName,
-            String ruleDescription,
-            List<String> ruleCategories // SETUP, GAME_PLAY, WINNING
+    public record GameAchievementCommand(
+            String code,
+            String description
     ) {}
 }
