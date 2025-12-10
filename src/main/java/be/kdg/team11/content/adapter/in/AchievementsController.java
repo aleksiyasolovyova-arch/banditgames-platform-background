@@ -5,12 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import be.kdg.team11.content.adapter.in.mapper.AchievementMapper;
 import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
-import be.kdg.team11.content.adapter.in.request.UpdateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("achievements")
