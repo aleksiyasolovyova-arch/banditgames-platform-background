@@ -9,46 +9,56 @@ import java.util.List;
 public record RegisterGameRequest(
         @NotNull(message = "Game name cannot be null")
         @NotBlank(message = "Game name cannot be blank")
-        @Size(max = 100, message = "Game name cannot exceed 100 characters")
-        String gameName,
+        @Size(min = 1, max = 255, message = "Game name must be between 1 and 255 characters")
+        String name,
 
         @NotNull(message = "Game description cannot be null")
         @NotBlank(message = "Game description cannot be blank")
-        @Size(max = 500, message = "Game description cannot exceed 500 characters")
-        String gameDescription,
+        @Size(min = 1, max = 500, message = "Game description must be between 1 and 500 characters")
+        String description,
 
         @NotNull(message = "Game price cannot be null")
         @DecimalMin(value = "0.0", inclusive = true, message = "Game price cannot be negative")
-        BigDecimal gamePrice,
+        BigDecimal price,
 
-        @NotEmpty(message = "At least one picture URL must be provided")
-        List<String> pictureUrls,
-
-        @NotNull(message = "Game creator name cannot be null")
-        @NotBlank(message = "Game creator name cannot be blank")
-        String gameCreatorName,
+        @NotNull(message = "Picture URL cannot be null")
+        @NotBlank(message = "Picture URL cannot be blank")
+        String pictureUrl,
 
         @NotNull(message = "Game URL cannot be null")
         @NotBlank(message = "Game URL cannot be blank")
         String gameUrl,
 
+        @NotNull(message = "Game creator name cannot be null")
+        @NotBlank(message = "Game creator name cannot be blank")
+        @Size(min = 1, max = 100, message = "Creator name must be between 1 and 100 characters")
+        String gameCreatorName,
+
         @NotEmpty(message = "At least one rule must be provided")
         @Valid
-        List<RuleRequest> rules
+        List<RuleRequest> rules,
+
+        @NotEmpty(message = "At least one achievement must be provided")
+        @Valid
+        List<GameAchievementRequest> achievements
 ) {
 
     public record RuleRequest(
-            @NotNull(message = "Rule name cannot be null")
-            @NotBlank(message = "Rule name cannot be blank")
-            @Size(min = 1, max = 255, message = "Rule name must be between 1 and 255 characters")
-            String ruleName,
-
             @NotNull(message = "Rule description cannot be null")
             @NotBlank(message = "Rule description cannot be blank")
             @Size(min = 1, max = 255, message = "Rule description must be between 1 and 255 characters")
-            String ruleDescription,
+            String description
+    ) {}
 
-            @NotEmpty(message = "At least one rule category must be provided")
-            List<String> ruleCategories // SETUP, GAME_PLAY, WINNING
+    public record GameAchievementRequest(
+            @NotNull(message = "Achievement code cannot be null")
+            @NotBlank(message = "Achievement code cannot be blank")
+            @Size(min = 1, max = 100, message = "Achievement code must be between 1 and 100 characters")
+            String code,
+
+            @NotNull(message = "Achievement description cannot be null")
+            @NotBlank(message = "Achievement description cannot be blank")
+            @Size(min = 1, max = 500, message = "Achievement description must be between 1 and 500 characters")
+            String description
     ) {}
 }

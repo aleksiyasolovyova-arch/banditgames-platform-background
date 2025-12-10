@@ -6,18 +6,21 @@ import java.util.UUID;
 
 public record GameDto(
         UUID gameId,
-        String gameName,
-        String gameDescription,
-        BigDecimal gamePrice,
-        List<String> pictureUrls,
-        String gameCreatorName,
+        String name,
+        String description,
+        BigDecimal price,
+        String pictureUrl,
         String gameUrl,
-        String gameState,
-        List<RuleDto> rules
+        String gameCreatorName,
+        String registrationState,
+        List<RuleDto> rules,
+        List<GameAchievementDto> achievements
 ) {
     public record RuleDto(
-            String ruleName,
-            String ruleDescription,
-            List<String> ruleCategories
+            String description
+    ) {}
+    public record GameAchievementDto(
+            String code,
+            String description
     ) {}
 }
