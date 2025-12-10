@@ -1,7 +1,10 @@
 package team11.platform_backend.player.adapter.out.mapper;
 
 import org.springframework.stereotype.Component;
-import team11.platform_backend.player.adapter.out.jpa.*;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
+import team11.platform_backend.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import team11.platform_backend.player.domain.player.*;
 import team11.platform_backend.player.domain.projections.GameId;
 
@@ -26,7 +29,7 @@ public class PlayerJpaMapper {
         Set<UnlockedGameAchievement> unlockedGameAchievements = entity.getUnlockedGameAchievements().stream()
                 .map(embeddable -> new UnlockedGameAchievement(
                         new GameId(embeddable.getGameId()),
-                        embeddable.getAchievementCode(),
+                        embeddable.getCode(),
                         embeddable.getUnlockedAt()
                 ))
                 .collect(Collectors.toSet());
@@ -70,7 +73,7 @@ public class PlayerJpaMapper {
                 .map(achievement -> {
                     UnlockedGameAchievementEmbeddable embeddable = new UnlockedGameAchievementEmbeddable();
                     embeddable.setGameId(achievement.gameId().gameId());
-                    embeddable.setAchievementCode(achievement.achievementCode());
+                    embeddable.setCode(achievement.code());
                     embeddable.setUnlockedAt(achievement.unlockedAt());
                     return embeddable;
                 }

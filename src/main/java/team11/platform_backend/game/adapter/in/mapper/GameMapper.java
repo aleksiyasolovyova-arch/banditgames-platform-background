@@ -36,9 +36,9 @@ public class GameMapper {
     public GameDto toResponse(Game game) {
         return new GameDto(
                 game.getGameId().gameId(),
-                game.getGameName(),
-                game.getGameDescription(),
-                game.getGamePrice(),
+                game.getName(),
+                game.getDescription(),
+                game.getPrice(),
                 game.getPictureUrl().stream()
                         .map(Url::value)
                         .toList(),

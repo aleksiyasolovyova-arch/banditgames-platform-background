@@ -2,7 +2,6 @@ package team11.platform_backend.player.core;
 
 import org.springframework.stereotype.Service;
 import team11.platform_backend.player.domain.player.Player;
-import team11.platform_backend.player.domain.player.PlayerId;
 import team11.platform_backend.player.domain.projections.GameProjection;
 import team11.platform_backend.player.port.in.CreateNewPlayerCommand;
 import team11.platform_backend.player.port.in.CreateNewPlayerPort;
@@ -28,7 +27,7 @@ public class CreateNewPlayerUseCaseImpl implements CreateNewPlayerPort {
 
         // Load all games and assign to player
         // remove if paying system implemented
-        List<GameProjection> allGames = loadGameProjectionsPort.loadAllGameProjections());
+        List<GameProjection> allGames = loadGameProjectionsPort.loadAll());
         for (GameProjection gameProjection : allGames) {
             newPlayer.addOwnedGame(gameProjection.getGameId());
         }

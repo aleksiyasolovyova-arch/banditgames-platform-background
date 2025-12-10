@@ -1,7 +1,7 @@
 package team11.platform_backend.player.adapter.out;
 
 import org.springframework.stereotype.Component;
-import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaEntity;
+import team11.platform_backend.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
 import team11.platform_backend.player.adapter.out.mapper.GameLobbyJpaMapper;
 import team11.platform_backend.player.adapter.out.jpa.GameLobbyJpaRepository;
 import team11.platform_backend.player.domain.gamelobby.GameLobby;
@@ -27,14 +27,14 @@ public class GameLobbyJpaAdapter implements SaveGameLobbyPort, LoadGameLobbyPort
     }
 
     @Override
-    public List<GameLobby> loadAllGameLobbies() {
+    public List<GameLobby> loadAll() {
         return gameLobbyJpaRepository.findAll().stream()
                 .map(gameLobbyJpaMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public Optional<GameLobby> loadById(GameLobbyId gameLobbyId) {
+    public Optional<GameLobby> loadBy(GameLobbyId gameLobbyId) {
         return gameLobbyJpaRepository.findById(gameLobbyId.gameLobbyId())
                 .map(gameLobbyJpaMapper::toDomain);
     }

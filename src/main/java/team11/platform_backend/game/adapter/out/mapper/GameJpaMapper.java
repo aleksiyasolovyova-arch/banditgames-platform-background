@@ -10,7 +10,6 @@ import team11.platform_backend.game.domain.game.Rule;
 import team11.platform_backend.game.domain.Url;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class GameJpaMapper {
@@ -18,13 +17,13 @@ public class GameJpaMapper {
     public GameJpaEntity toJpaEntity(Game game) {
         GameJpaEntity entity = new GameJpaEntity();
         entity.setGameId(game.getGameId().gameId());
-        entity.setGameName(game.getGameName());
-        entity.setGameDescription(game.getGameDescription());
-        entity.setGamePrice(game.getGamePrice());
-        entity.setPictureUrls(game.getPictureUrl().value());
+        entity.setName(game.getName());
+        entity.setDescription(game.getDescription());
+        entity.setPrice(game.getPrice());
+        entity.setPictureUrl(game.getPictureUrl().value());
         entity.setGameCreatorName(game.getGameCreatorName());
         entity.setGameUrl(game.getGameUrl().value());
-        entity.setGameRegistrationState(game.getGameRegistrationState());
+        entity.setRegistrationState(game.getRegistrationState());
 
         List<String> ruleDescriptions = game.getRules().stream()
                 .map(Rule::description)
@@ -58,13 +57,13 @@ public class GameJpaMapper {
 
         Game game = new Game(
                 new GameId(entity.getGameId()),
-                entity.getGameName(),
-                entity.getGameDescription(),
-                entity.getGamePrice(),
-                new Url(entity.getPictureUrls()),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrice(),
+                new Url(entity.getPictureUrl()),
                 entity.getGameCreatorName(),
                 new Url(entity.getGameUrl()),
-                entity.getGameRegistrationState()
+                entity.getRegistrationState()
         );
 
         rules.forEach(rule -> game.getRules().add(rule));

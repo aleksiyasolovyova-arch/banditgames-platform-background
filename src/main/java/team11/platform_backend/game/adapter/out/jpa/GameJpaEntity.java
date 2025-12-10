@@ -15,16 +15,16 @@ public class GameJpaEntity {
     private UUID gameId;
 
     @Column(nullable = false, length = 100)
-    private String gameName;
+    private String name;
 
     @Column(nullable = false, length = 500)
-    private String gameDescription;
+    private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal gamePrice;
+    private BigDecimal price;
 
     @Column(nullable = false)
-    private String pictureUrls;
+    private String pictureUrl;
 
     @Column(nullable = false)
     private String gameUrl;
@@ -34,7 +34,7 @@ public class GameJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameRegistrationState gameRegistrationState;
+    private GameRegistrationState registrationState;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "game_rules", schema = "game_schema",
@@ -53,20 +53,20 @@ public class GameJpaEntity {
         return gameId;
     }
 
-    public String getGameName() {
-        return gameName;
+    public String getName() {
+        return name;
     }
 
-    public String getGameDescription() {
-        return gameDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public BigDecimal getGamePrice() {
-        return gamePrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public String getPictureUrls() {
-        return pictureUrls;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     public String getGameUrl() {
@@ -77,8 +77,8 @@ public class GameJpaEntity {
         return gameCreatorName;
     }
 
-    public GameRegistrationState getGameRegistrationState() {
-        return gameRegistrationState;
+    public GameRegistrationState getRegistrationState() {
+        return registrationState;
     }
 
     public List<String> getRules() {
@@ -93,20 +93,20 @@ public class GameJpaEntity {
         this.gameId = gameId;
     }
 
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setGameDescription(String gameDescription) {
-        this.gameDescription = gameDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setGamePrice(BigDecimal gamePrice) {
-        this.gamePrice = gamePrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public void setPictureUrls(String pictureUrls) {
-        this.pictureUrls = pictureUrls;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public void setGameUrl(String gameUrl) {
@@ -117,8 +117,8 @@ public class GameJpaEntity {
         this.gameCreatorName = gameCreatorName;
     }
 
-    public void setGameRegistrationState(GameRegistrationState gameRegistrationState) {
-        this.gameRegistrationState = gameRegistrationState;
+    public void setRegistrationState(GameRegistrationState registrationState) {
+        this.registrationState = registrationState;
     }
 
     public void setRules(List<String> rules) {

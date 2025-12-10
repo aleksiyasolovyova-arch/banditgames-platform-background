@@ -29,7 +29,7 @@ public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
     }
 
     @Override
-    public Optional<Game> findById(GameId gameId) {
+    public Optional<Game> loadBy(GameId gameId) {
         return gameJpaRepository.findById(gameId.gameId())
                 .map(gameJpaMapper::toDomain);
     }

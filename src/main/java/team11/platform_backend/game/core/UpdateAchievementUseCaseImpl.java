@@ -31,7 +31,7 @@ public class UpdateAchievementUseCaseImpl implements UpdateAchievementPort{
         // 1. Load the existing achievement aggregate
         AchievementId achievementId = new AchievementId(command.achievementId());
         Achievement existingAchievement = loadAchievementPorts.stream()
-                .map(port -> port.findById(achievementId))
+                .map(port -> port.loadBy(achievementId))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst()

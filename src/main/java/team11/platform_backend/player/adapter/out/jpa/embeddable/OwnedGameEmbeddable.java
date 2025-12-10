@@ -1,4 +1,4 @@
-package team11.platform_backend.player.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

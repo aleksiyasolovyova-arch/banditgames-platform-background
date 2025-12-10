@@ -21,7 +21,7 @@ public class GameProjectionJpaAdapter implements LoadGameProjectionsPort {
     }
 
     @Override
-    public List<GameProjection> loadAllGameProjections() {
+    public List<GameProjection> loadAll() {
         return gameProjectionJpaRepository.findAll()
                 .stream()
                 .map(gameProjectionJpaMapper::toDomain)

@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 public record UnlockedGameAchievement(
         GameId gameId,
-        String achievementCode,
+        String code,
         LocalDateTime unlockedAt
 ) {
     public UnlockedGameAchievement {
-        if (achievementCode.isEmpty())
+        if (code.isEmpty())
             throw new IllegalArgumentException("Achievement code cannot be empty");
         if (unlockedAt == null)
             throw new IllegalArgumentException("unlockedAt cannot be null");

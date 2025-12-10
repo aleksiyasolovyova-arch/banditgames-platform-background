@@ -31,7 +31,7 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
     public Achievement createAchievement(CreateAchievementCommand command) {
         // 1. Verify game exists (business rule validation)
         GameId gameId = new GameId(command.gameId());
-        loadGamePort.findById(gameId)
+        loadGamePort.loadBy(gameId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Game not found with ID: " + command.gameId()));
 

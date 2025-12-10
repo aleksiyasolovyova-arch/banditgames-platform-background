@@ -5,21 +5,16 @@ import java.net.URL;
 public record Url(
         String value
 ) {
-    public Url(String value) {
+    public Url {
         if (value == null || !isValidUrl(value)) {
             throw new IllegalArgumentException("Invalid URL format");
         }
 
-        this.value = value;
     }
 
+    // TODO Improve validation of Urls
     private boolean isValidUrl(String url) {
-        try {
-            new URL(url).toURI();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return true;
     }
 
 }

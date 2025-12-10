@@ -1,6 +1,10 @@
-package team11.platform_backend.player.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa.entity;
 
 import jakarta.persistence.*;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
+import team11.platform_backend.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;

@@ -3,7 +3,6 @@ package team11.platform_backend.player.domain.player;
 import team11.platform_backend.player.domain.projections.GameId;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Player {
@@ -21,7 +20,6 @@ public class Player {
         this.ownedGames.addAll(ownedGames);
     }
 
-    // for creating (post method)
     public Player(PlayerId playerId) {
         this.playerId = playerId;
         this.joinedDate = LocalDate.now();

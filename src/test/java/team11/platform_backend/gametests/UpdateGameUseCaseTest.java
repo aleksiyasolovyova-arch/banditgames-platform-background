@@ -70,7 +70,7 @@ class UpdateGameUseCaseTest {
                 "http://new.url/game"
         );
 
-        when(loadGamePort.findById(gameId)).thenReturn(Optional.of(existingGame));
+        when(loadGamePort.loadBy(gameId)).thenReturn(Optional.of(existingGame));
 
         // When
         Game result = updateGameUseCase.updateGame(command);
@@ -82,9 +82,9 @@ class UpdateGameUseCaseTest {
         Game savedGame = gameCaptor.getValue();
 
         // Verify updated fields
-        assertEquals("New Name", savedGame.getGameName());
-        assertEquals("New Description", savedGame.getGameDescription());
-        assertEquals(BigDecimal.valueOf(20.0), savedGame.getGamePrice());
+        assertEquals("New Name", savedGame.getName());
+        assertEquals("New Description", savedGame.getDescription());
+        assertEquals(BigDecimal.valueOf(20.0), savedGame.getPrice());
         assertEquals("http://new.url/game", savedGame.getGameUrl().value());
         assertEquals(2, savedGame.getPictureUrl().size());
         assertEquals("http://new.url/pic1", savedGame.getPictureUrl().get(0).value());
@@ -113,7 +113,7 @@ class UpdateGameUseCaseTest {
                 "gameUrl"
         );
 
-        when(loadGamePort.findById(gameId)).thenReturn(Optional.empty());
+        when(loadGamePort.loadBy(gameId)).thenReturn(Optional.empty());
 
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,

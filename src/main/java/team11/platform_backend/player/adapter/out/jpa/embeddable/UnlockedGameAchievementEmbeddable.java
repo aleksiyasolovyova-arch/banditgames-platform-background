@@ -1,4 +1,4 @@
-package team11.platform_backend.player.adapter.out.jpa;
+package team11.platform_backend.player.adapter.out.jpa.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -12,7 +12,7 @@ public class UnlockedGameAchievementEmbeddable {
     private UUID gameId;
 
     @Column(nullable = false, length = 100)
-    private String achievementCode;
+    private String code;
 
     @Column(nullable = false)
     private LocalDateTime unlockedAt;
@@ -27,12 +27,12 @@ public class UnlockedGameAchievementEmbeddable {
         this.gameId = gameId;
     }
 
-    public String getAchievementCode() {
-        return achievementCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setAchievementCode(String achievementCode) {
-        this.achievementCode = achievementCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public LocalDateTime getUnlockedAt() {
