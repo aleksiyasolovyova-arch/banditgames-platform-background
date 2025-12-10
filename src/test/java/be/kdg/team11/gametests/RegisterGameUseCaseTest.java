@@ -6,11 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import be.kdg.team11.game.core.RegisterGameUseCaseImpl;
-import be.kdg.team11.game.domain.game.Game;
-import be.kdg.team11.game.domain.game.GameRegistrationState;
-import be.kdg.team11.game.port.in.RegisterGameCommand;
-import be.kdg.team11.game.port.out.SaveGamePort;
+import be.kdg.team11.content.core.RegisterGameUseCaseImpl;
+import be.kdg.team11.content.domain.game.Game;
+import be.kdg.team11.content.domain.game.GameRegistrationState;
+import be.kdg.team11.content.port.in.RegisterGameCommand;
+import be.kdg.team11.content.port.out.SaveGamePort;
 
 import java.math.BigDecimal;
 import java.util.List;
