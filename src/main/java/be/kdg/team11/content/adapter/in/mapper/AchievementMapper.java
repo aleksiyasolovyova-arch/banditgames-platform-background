@@ -5,7 +5,6 @@ import be.kdg.team11.content.adapter.in.request.UpdateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementCommand;
-import be.kdg.team11.content.port.in.UpdateAchievementCommand;
 
 import java.util.UUID;
 

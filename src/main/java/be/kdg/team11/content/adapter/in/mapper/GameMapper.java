@@ -7,7 +7,7 @@ import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.RegisterGameCommand;
-import be.kdg.team11.content.port.in.UpdateGameCommand;
+import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
 import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.util.UUID;
@@ -57,8 +57,8 @@ public class GameMapper {
         );
     }
 
-    public UpdateGameCommand toUpdateCommand(UUID gameId, UpdateGameRequest request) {
-        return new UpdateGameCommand(
+    public ModifyGameUrlsCommand toUpdateCommand(UUID gameId, UpdateGameRequest request) {
+        return new ModifyGameUrlsCommand(
                 gameId,
                 request.gameName(),
                 request.gameDescription(),

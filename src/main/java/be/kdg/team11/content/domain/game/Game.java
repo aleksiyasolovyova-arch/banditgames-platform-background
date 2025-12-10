@@ -11,8 +11,8 @@ public class Game {
     private final String name;
     private final String description;
     private final BigDecimal price;
-    private final Url pictureUrl;
-    private final Url gameUrl;
+    private Url pictureUrl;
+    private Url gameUrl;
     private final String gameCreatorName;
     private GameRegistrationState registrationState;
     private final List<Rule> rules = new ArrayList<>();
@@ -53,6 +53,11 @@ public class Game {
                 rules,
                 achievements
         );
+    }
+
+    public void modifyUrls(Url pictureUrl, Url gameUrl){
+        this.pictureUrl = pictureUrl;
+        this.gameUrl = gameUrl;
     }
 
     public GameId getGameId() {

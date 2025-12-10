@@ -10,7 +10,7 @@ import be.kdg.team11.content.core.UpdateGameUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.GameRegistrationState;
-import be.kdg.team11.content.port.in.UpdateGameCommand;
+import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
 import be.kdg.team11.content.domain.Url;
@@ -61,7 +61,7 @@ class UpdateGameUseCaseTest {
         );
 
         // Update command
-        UpdateGameCommand command = new UpdateGameCommand(
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
                 gameUuid,
                 "New Name",
                 "New Description",
@@ -73,7 +73,7 @@ class UpdateGameUseCaseTest {
         when(loadGamePort.loadBy(gameId)).thenReturn(Optional.of(existingGame));
 
         // When
-        Game result = updateGameUseCase.updateGame(command);
+        Game result = updateGameUseCase.modifyGameUrls(command);
 
         // Then
         ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
@@ -104,7 +104,7 @@ class UpdateGameUseCaseTest {
         UUID gameUuid = UUID.randomUUID();
         GameId gameId = new GameId(gameUuid);
 
-        UpdateGameCommand command = new UpdateGameCommand(
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
                 gameUuid,
                 "Name",
                 "Desc",
@@ -117,7 +117,7 @@ class UpdateGameUseCaseTest {
 
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> updateGameUseCase.updateGame(command));
+                () -> updateGameUseCase.modifyGameUrls(command));
 
         assertEquals("Game not found with ID: " + gameUuid, exception.getMessage());
         verify(saveGamePort, never()).save(any());

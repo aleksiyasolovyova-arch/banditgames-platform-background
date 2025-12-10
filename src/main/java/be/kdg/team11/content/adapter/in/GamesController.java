@@ -20,18 +20,18 @@ public class GamesController {
     private final RegisterGamePort registerGamePort;
     private final AcceptGamePort acceptGamePort;
     private final RejectGamePort rejectGamePort;
-    private final UpdateGamePort updateGamePort;
+    private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final GameMapper gameMapper;
 
     public GamesController(RegisterGamePort registerGamePort,
                            AcceptGamePort acceptGamePort,
                            RejectGamePort rejectGamePort,
-                           UpdateGamePort updateGamePort,
+                           ModifyGameUrlsPort modifyGameUrlsPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.acceptGamePort = acceptGamePort;
         this.rejectGamePort = rejectGamePort;
-        this.updateGamePort = updateGamePort;
+        this.modifyGameUrlsPort = modifyGameUrlsPort;
         this.gameMapper = gameMapper;
     }
 
@@ -49,7 +49,7 @@ public class GamesController {
     public ResponseEntity<GameDto> updateGame(
             @PathVariable UUID gameId,
             @Valid @RequestBody UpdateGameRequest request) {
-        Game updatedGame = updateGamePort.updateGame(
+        Game updatedGame = modifyGameUrlsPort.modifyGameUrls(
                 gameMapper.toUpdateCommand(gameId, request)
         );
         GameDto response = gameMapper.toResponse(updatedGame);

@@ -9,7 +9,6 @@ import be.kdg.team11.content.adapter.in.request.UpdateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
-import be.kdg.team11.content.port.in.UpdateAchievementPort;
 
 import java.util.UUID;
 
