@@ -1,29 +1,24 @@
 package team11.platform_backend.player.domain.friendship;
 
-import team11.platform_backend.game.domain.game.exeptions.InvalidGameStateException;
+import org.springframework.data.util.Pair;
 import team11.platform_backend.player.domain.friendship.exeptions.InvalidFriendshipStateException;
 import team11.platform_backend.player.domain.player.PlayerId;
 
 //Aggregate
 public class Friendship {
     private final FriendshipId friendshipId;
-    private final PlayerId player1Id;
-    private final PlayerId player2Id;
+    private final Pair<PlayerId,PlayerId> playerIdPair;
     private FriendshipState friendshipState;
 
-    // for getting (get methods)
-    public Friendship(FriendshipId friendshipId, PlayerId player1Id, PlayerId player2Id, FriendshipState friendshipState) {
+    public Friendship(FriendshipId friendshipId, Pair<PlayerId, PlayerId> playerIdPair, FriendshipState friendshipState) {
         this.friendshipId = friendshipId;
-        this.player1Id = player1Id;
-        this.player2Id = player2Id;
+        this.playerIdPair = playerIdPair;
         this.friendshipState = friendshipState;
     }
 
-    //for creating (post methods)
-    public Friendship(PlayerId player1Id, PlayerId player2Id) {
-        this.friendshipId = FriendshipId.createFriendshipId();
-        this.player1Id = player1Id;
-        this.player2Id = player2Id;
+    public Friendship(Pair<PlayerId, PlayerId> playerIdPair) {
+        this.friendshipId = FriendshipId.create();
+        this.playerIdPair = playerIdPair;
         this.friendshipState = FriendshipState.PENDING;
     }
 
@@ -36,17 +31,12 @@ public class Friendship {
         this.friendshipState = FriendshipState.ACCEPTED;
     }
 
-
     public FriendshipId getFriendshipId() {
         return friendshipId;
     }
 
-    public PlayerId getPlayer1Id() {
-        return player1Id;
-    }
-
-    public PlayerId getPlayer2Id() {
-        return player2Id;
+    public Pair<PlayerId, PlayerId> getPlayerIdPair() {
+        return playerIdPair;
     }
 
     public FriendshipState getFriendshipState() {

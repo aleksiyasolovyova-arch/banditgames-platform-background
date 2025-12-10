@@ -1,86 +1,73 @@
 package team11.platform_backend.game.domain.game;
 
 import team11.platform_backend.game.domain.game.exeptions.InvalidGameStateException;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-//Aggregate
 public class Game {
     private final GameId gameId;
-    private final String gameName;
-    private final String gameDescription;
-    private final BigDecimal gamePrice; 
-    private final List<Url> pictureUrls;
-    private final String gameCreatorName;
+    private final String name;
+    private final String description;
+    private final BigDecimal price;
+    private final Url pictureUrl;
     private final Url gameUrl;
-    private GameState gameState;
-    private final List<Rule> rules= new ArrayList<>();
-    // Add a list of possible acchievements ( list of strings ) :)
-
-    // for loading (get methods)
-    public Game(GameId gameId, String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, GameState gameState, List<Rule> rules) {
-        this.gameId = gameId;
-        this.gameName = gameName;
-        this.gameDescription = gameDescription;
-        this.gamePrice = gamePrice;
-        this.pictureUrls = pictureUrls;
-        this.gameCreatorName = gameCreatorName;
-        this.gameUrl = gameUrl;
-        this.gameState = gameState;
-        this.rules.addAll(rules);
-    }
-
-    // for creating (post methods)
-    public Game(String gameName, String gameDescription, BigDecimal gamePrice, List<Url> pictureUrls, String gameCreatorName, Url gameUrl, List<Rule> rules) {
-        this.gameId = GameId.createGameId();
-        this.gameName = gameName;
-        this.gameDescription = gameDescription;
-        this.gamePrice = gamePrice;
-        this.pictureUrls = pictureUrls;
-        this.gameCreatorName = gameCreatorName;
-        this.gameUrl= gameUrl;
-        this.gameState = GameState.PENDING;
-        this.rules.addAll(rules);
-    }
+    private final String gameCreatorName;
+    private GameRegistrationState registrationState;
+    private final List<Rule> rules = new ArrayList<>();
+    private final List<GameAchievement> achievements = new ArrayList<>();
 
     public void acceptGame() {
-        if (this.gameState != GameState.PENDING) {
+        if (this.registrationState != GameRegistrationState.PENDING) {
             throw new InvalidGameStateException(
-                    "Cannot accept game: current state is " + this.gameState + ", expected PENDING"
+                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
             );
         }
-        this.gameState = GameState.ACCEPTED;
+        this.registrationState = GameRegistrationState.ACCEPTED;
     }
 
-    public void rejectGame() {
-        if (this.gameState != GameState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot reject game: current state is " + this.gameState + ", expected PENDING"
-            );
-        }
-        this.gameState = GameState.REJECTED;
+    public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, String gameCreatorName, Url gameUrl, GameRegistrationState registrationState) {
+        this.gameId = gameId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.pictureUrl = pictureUrl;
+        this.gameCreatorName = gameCreatorName;
+        this.gameUrl = gameUrl;
+        this.registrationState = registrationState;
+    }
+
+
+    public Game(String name, String description, BigDecimal price, Url pictureUrl, String gameCreatorName, Url gameUrl) {
+        this.gameId = GameId.create();
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.pictureUrl = pictureUrl;
+        this.gameCreatorName = gameCreatorName;
+        this.gameUrl = gameUrl;
+        this.registrationState = GameRegistrationState.PENDING;
     }
 
     public GameId getGameId() {
         return gameId;
     }
 
-    public String getGameName() {
-        return gameName;
+    public String getName() {
+        return name;
     }
 
-    public String getGameDescription() {
-        return gameDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public BigDecimal getGamePrice() {
-        return gamePrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public List<Url> getPictureUrls() {
-        return pictureUrls;
+    public Url getPictureUrl() {
+        return pictureUrl;
     }
 
     public String getGameCreatorName() {
@@ -91,12 +78,15 @@ public class Game {
         return gameUrl;
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public GameRegistrationState getRegistrationState() {
+        return registrationState;
     }
 
     public List<Rule> getRules() {
         return rules;
     }
 
+    public List<GameAchievement> getAchievements() {
+        return achievements;
+    }
 }

@@ -32,14 +32,7 @@ public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchieveme
     }
 
     @Override
-    public List<Achievement> findByGameId(GameId gameId) {
-        return achievementJpaRepository.findByGameId(gameId.gameId()).stream()
-                .map(achievementJpaMapper::toDomain)
-                .toList();
-    }
-
-    @Override
-    public Optional<Achievement> findById(AchievementId achievementId) {
+    public Optional<Achievement> loadBy(AchievementId achievementId) {
         return achievementJpaRepository.findById(achievementId.achievementId())
                 .map(achievementJpaMapper::toDomain);
     }

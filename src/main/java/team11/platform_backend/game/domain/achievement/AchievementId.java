@@ -5,7 +5,7 @@ import java.util.UUID;
 public record AchievementId(
         UUID achievementId
 ) {
-    public static AchievementId createAchievementId() {
+    public static AchievementId create() {
         return new AchievementId(UUID.randomUUID());
     }
 }

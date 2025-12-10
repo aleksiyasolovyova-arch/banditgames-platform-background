@@ -9,11 +9,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team11.platform_backend.game.core.UpdateGameUseCaseImpl;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.domain.game.GameId;
-import team11.platform_backend.game.domain.game.GameState;
+import team11.platform_backend.game.domain.game.GameRegistrationState;
 import team11.platform_backend.game.port.in.UpdateGameCommand;
 import team11.platform_backend.game.port.out.LoadGamePort;
 import team11.platform_backend.game.port.out.SaveGamePort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -56,7 +56,7 @@ class UpdateGameUseCaseTest {
                 List.of(new Url("http://old.url/pic1")),
                 "Creator",
                 new Url("http://old.url/game"),
-                GameState.PENDING,
+                GameRegistrationState.PENDING,
                 Collections.emptyList()
         );
 
@@ -70,7 +70,7 @@ class UpdateGameUseCaseTest {
                 "http://new.url/game"
         );
 
-        when(loadGamePort.findById(gameId)).thenReturn(Optional.of(existingGame));
+        when(loadGamePort.loadBy(gameId)).thenReturn(Optional.of(existingGame));
 
         // When
         Game result = updateGameUseCase.updateGame(command);
@@ -82,17 +82,17 @@ class UpdateGameUseCaseTest {
         Game savedGame = gameCaptor.getValue();
 
         // Verify updated fields
-        assertEquals("New Name", savedGame.getGameName());
-        assertEquals("New Description", savedGame.getGameDescription());
-        assertEquals(BigDecimal.valueOf(20.0), savedGame.getGamePrice());
+        assertEquals("New Name", savedGame.getName());
+        assertEquals("New Description", savedGame.getDescription());
+        assertEquals(BigDecimal.valueOf(20.0), savedGame.getPrice());
         assertEquals("http://new.url/game", savedGame.getGameUrl().value());
-        assertEquals(2, savedGame.getPictureUrls().size());
-        assertEquals("http://new.url/pic1", savedGame.getPictureUrls().get(0).value());
+        assertEquals(2, savedGame.getPictureUrl().size());
+        assertEquals("http://new.url/pic1", savedGame.getPictureUrl().get(0).value());
 
         // Verify fields that should remain unchanged
         assertEquals(gameId, savedGame.getGameId());
         assertEquals("Creator", savedGame.getGameCreatorName());
-        assertEquals(GameState.PENDING, savedGame.getGameState());
+        assertEquals(GameRegistrationState.PENDING, savedGame.getGameState());
 
         // Verify return value matches saved value
         assertEquals(savedGame, result); // Assuming Game equals/hashCode logic or identity if savedGame is returned by service (service returns the new object created)
@@ -113,7 +113,7 @@ class UpdateGameUseCaseTest {
                 "gameUrl"
         );
 
-        when(loadGamePort.findById(gameId)).thenReturn(Optional.empty());
+        when(loadGamePort.loadBy(gameId)).thenReturn(Optional.empty());
 
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,

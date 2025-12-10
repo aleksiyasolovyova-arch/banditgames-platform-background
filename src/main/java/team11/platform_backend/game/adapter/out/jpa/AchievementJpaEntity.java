@@ -2,8 +2,6 @@ package team11.platform_backend.game.adapter.out.jpa;
 
 import jakarta.persistence.*;
 import team11.platform_backend.game.domain.achievement.AchievementType;
-
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -13,14 +11,11 @@ public class AchievementJpaEntity {
     @Id
     private UUID achievementId;
 
-    @Column(nullable = false)
-    private UUID gameId; // Foreign key to Game
-
     @Column(nullable = false, length = 100)
-    private String achievementName;
+    private String name;
 
     @Column(nullable = false, length = 255)
-    private String achievementDescription;
+    private String description;
 
     @Column(nullable = false)
     private String pictureUrl;
@@ -29,31 +24,69 @@ public class AchievementJpaEntity {
     @Column(nullable = false)
     private AchievementType achievementType;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal threshold;
+    // For CountThreshold: stores the count value
+    @Column(name = "threshold_value")
+    private Long thresholdCountValue;
 
-    // Constructors
+    // For TimeThreshold: stores duration in seconds
+    @Column(name = "threshold_duration_seconds")
+    private Long thresholdDurationSeconds;
+
     public AchievementJpaEntity() {}
 
-    // Getters and Setters
-    public UUID getAchievementId() { return achievementId; }
-    public void setAchievementId(UUID achievementId) { this.achievementId = achievementId; }
+    public UUID getAchievementId() {
+        return achievementId;
+    }
 
-    public UUID getGameId() { return gameId; }
-    public void setGameId(UUID gameId) { this.gameId = gameId; }
+    public String getName() {
+        return name;
+    }
 
-    public String getAchievementName() { return achievementName; }
-    public void setAchievementName(String achievementName) { this.achievementName = achievementName; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getAchievementDescription() { return achievementDescription; }
-    public void setAchievementDescription(String achievementDescription) { this.achievementDescription = achievementDescription; }
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
 
-    public String getPictureUrl() { return pictureUrl; }
-    public void setPictureUrl(String pictureUrl) { this.pictureUrl = pictureUrl; }
+    public AchievementType getAchievementType() {
+        return achievementType;
+    }
 
-    public AchievementType getAchievementType() { return achievementType; }
-    public void setAchievementType(AchievementType achievementType) { this.achievementType = achievementType; }
+    public Long getThresholdCountValue() {
+        return thresholdCountValue;
+    }
 
-    public BigDecimal getThreshold() { return threshold; }
-    public void setThreshold(BigDecimal threshold) { this.threshold = threshold; }
+    public Long getThresholdDurationSeconds() {
+        return thresholdDurationSeconds;
+    }
+
+    public void setAchievementId(UUID achievementId) {
+        this.achievementId = achievementId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public void setAchievementType(AchievementType achievementType) {
+        this.achievementType = achievementType;
+    }
+
+    public void setThresholdCountValue(Long thresholdCountValue) {
+        this.thresholdCountValue = thresholdCountValue;
+    }
+
+    public void setThresholdDurationSeconds(Long thresholdDurationSeconds) {
+        this.thresholdDurationSeconds = thresholdDurationSeconds;
+    }
 }

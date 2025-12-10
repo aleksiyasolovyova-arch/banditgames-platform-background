@@ -4,11 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import team11.platform_backend.game.domain.game.Game;
 import team11.platform_backend.game.domain.game.Rule;
-import team11.platform_backend.game.domain.game.RuleCategory;
 import team11.platform_backend.game.port.in.RegisterGameCommand;
 import team11.platform_backend.game.port.in.RegisterGamePort;
 import team11.platform_backend.game.port.out.SaveGamePort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import team11.platform_backend.game.domain.Url;
 
 import java.util.List;
 

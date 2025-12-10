@@ -23,15 +23,13 @@ public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
 
     @Override
     public Game save(Game game) {
-        // Convert domain → JPA entity
         GameJpaEntity entity = gameJpaMapper.toJpaEntity(game);
         GameJpaEntity saved = gameJpaRepository.save(entity);
-        // Convert back to domain
         return gameJpaMapper.toDomain(saved);
     }
 
     @Override
-    public Optional<Game> findById(GameId gameId) {
+    public Optional<Game> loadBy(GameId gameId) {
         return gameJpaRepository.findById(gameId.gameId())
                 .map(gameJpaMapper::toDomain);
     }

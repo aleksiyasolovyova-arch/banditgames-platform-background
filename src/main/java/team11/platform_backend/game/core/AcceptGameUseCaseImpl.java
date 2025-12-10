@@ -28,7 +28,7 @@ public class AcceptGameUseCaseImpl implements AcceptGamePort {
         // 1. Load the game aggregate
         GameId gameId = new GameId(command.gameId());
         Game game = loadGamePorts.stream()
-                .map(port -> port.findById(gameId))
+                .map(port -> port.loadBy(gameId))
                 .filter(java.util.Optional::isPresent)
                 .map(java.util.Optional::get)
                 .findFirst()

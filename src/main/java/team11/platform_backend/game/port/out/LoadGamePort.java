@@ -6,5 +6,5 @@ import team11.platform_backend.game.domain.game.GameId;
 import java.util.Optional;
 
 public interface LoadGamePort {
-    Optional<Game> findById(GameId gameId);
+    Optional<Game> loadBy(GameId gameId);
 }
