@@ -17,14 +17,11 @@ import java.util.UUID;
 public class AchievementsController {
     private final CreateAchievementPort createAchievementPort;
     private final AchievementMapper achievementMapper;
-    private final UpdateAchievementPort updateAchievementPort;
 
     public AchievementsController(CreateAchievementPort createAchievementPort,
-                                  AchievementMapper achievementMapper,
-                                  UpdateAchievementPort updateAchievementPort) {
+                                  AchievementMapper achievementMapper) {
         this.createAchievementPort = createAchievementPort;
         this.achievementMapper = achievementMapper;
-        this.updateAchievementPort = updateAchievementPort;
     }
 
     @PostMapping
@@ -37,14 +34,4 @@ public class AchievementsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{achievementId}")
-    public ResponseEntity<AchievementDto> updateAchievement(
-            @PathVariable UUID achievementId,
-            @Valid @RequestBody UpdateAchievementRequest request) {
-        Achievement updatedAchievement = updateAchievementPort.updateAchievement(
-                achievementMapper.toUpdateCommand(achievementId, request)
-        );
-        AchievementDto response = achievementMapper.toResponse(updatedAchievement);
-        return ResponseEntity.ok(response);
-    }
 }

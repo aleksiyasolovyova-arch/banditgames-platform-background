@@ -10,7 +10,6 @@ import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
 import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
-import team11.platform_backend.game.port.in.*;
 import java.util.UUID;
 
 @RestController
@@ -66,14 +65,14 @@ public class GamesController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{gameId}/reject")
-    public ResponseEntity<GameDto> rejectGame(
-            @PathVariable UUID gameId) {
-        Game rejectedGame = rejectGamePort.rejectGame(
-                new RejectGameCommand(gameId)
-        );
-        GameDto response = gameMapper.toResponse(rejectedGame);
-        return ResponseEntity.ok(response);
-    }
+//    @PutMapping("/{gameId}/reject")
+//    public ResponseEntity<GameDto> rejectGame(
+//            @PathVariable UUID gameId) {
+//        Game rejectedGame = rejectGamePort.rejectGame(
+//                new RejectGameCommand(gameId)
+//        );
+//        GameDto response = gameMapper.toResponse(rejectedGame);
+//        return ResponseEntity.ok(response);
+//    }
 
 }

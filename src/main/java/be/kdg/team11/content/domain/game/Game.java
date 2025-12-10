@@ -1,12 +1,18 @@
 package be.kdg.team11.content.domain.game;
 
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.domain.Url;
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-public class Game {
+/**
+ * Aggregate Root for the Game subdomain.
+ * Represents a publishable game in the platform.
+ */
+ public class Game {
     private final GameId gameId;
     private final String name;
     private final String description;
@@ -41,6 +47,7 @@ public class Game {
     }
 
     public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
+        validateGameInputs(name, description, price, pictureUrl, gameUrl, gameCreatorName);
         return new Game(
                 GameId.create(),
                 name,
@@ -55,9 +62,59 @@ public class Game {
         );
     }
 
+/**
+ * Updates game URLs for maintenance purposes.
+ * Allows updating icon/screenshot and playable game links without recreating the aggregate.
+ * */
     public void modifyUrls(Url pictureUrl, Url gameUrl){
+        if (pictureUrl == null) {
+            throw new InvalidGameUrlException("New picture URL cannot be null");
+        }
+
+        if (gameUrl == null) {
+            throw new InvalidGameUrlException("New game URL cannot be null");
+        }
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
+    }
+
+    private static void validateGameInputs(
+            String name,
+            String description,
+            BigDecimal price,
+            Url pictureUrl,
+            Url gameUrl,
+            String gameCreatorName
+    ) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidGameDataException("Game name cannot be null or empty");
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new InvalidGameDataException("Game description cannot be null or empty");
+        }
+
+        if (price == null) {
+            throw new InvalidGameDataException("Game price cannot be null");
+        }
+
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidGameDataException(
+                    "Game price cannot be negative, received: " + price
+            );
+        }
+
+        if (pictureUrl == null) {
+            throw new InvalidGameUrlException("Game picture URL cannot be null");
+        }
+
+        if (gameUrl == null) {
+            throw new InvalidGameUrlException("Game playable URL cannot be null");
+        }
+
+        if (gameCreatorName == null || gameCreatorName.isBlank()) {
+            throw new InvalidGameDataException("Game creator name cannot be null or empty");
+        }
     }
 
     public GameId getGameId() {

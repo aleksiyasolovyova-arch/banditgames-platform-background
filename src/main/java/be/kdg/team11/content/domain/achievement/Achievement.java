@@ -1,10 +1,14 @@
 package be.kdg.team11.content.domain.achievement;
 
 import be.kdg.team11.content.domain.Url;
+import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
+import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
 
-// Aggregate
-// Global achievement
-public class Achievement {
+/**
+ * Aggregate Root for the Achievement subdomain.
+ * Represents a global achievement that can be earned by any player.
+ */
+ public class Achievement {
     private final AchievementId achievementId;
     private final String name;
     private final String description;
@@ -22,6 +26,7 @@ public class Achievement {
     }
 
     public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+        validateInputs(name, description, pictureUrl, type, requiredValue);
         return new Achievement(
                 AchievementId.create(),
                 name,
@@ -32,8 +37,56 @@ public class Achievement {
         );
     }
 
-    public boolean isAchievementMet(PlayerStatistics statistics) {
-        return type.isMetBy(requiredValue, statistics);
+/**
+ * Evaluates if a player has met the criteria for this specific achievement.
+ * Delegates to the achievement type to determine if the required value is met.
+ */
+ public boolean isAchievementMet(PlayerStatistics statistics) {
+     if (statistics == null) {
+         throw new InvalidAchievementException(
+                 "Player statistics cannot be null when evaluating achievement"
+         );
+     }
+
+     return type.isMetBy(requiredValue, statistics);
+    }
+
+    private static void validateInputs(
+            String name,
+            String description,
+            Url pictureUrl,
+            AchievementType type,
+            long requiredValue
+    ) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidAchievementException(
+                    "Achievement name cannot be null or empty"
+            );
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new InvalidAchievementException(
+                    "Achievement description cannot be null or empty"
+            );
+        }
+
+        if (pictureUrl == null) {
+            throw new InvalidAchievementException(
+                    "Achievement picture URL cannot be null"
+            );
+        }
+
+        if (type == null) {
+            throw new InvalidAchievementTypeException(
+                    "Achievement type cannot be null"
+            );
+        }
+
+        if (requiredValue < 0) {
+            throw new InvalidAchievementTypeException(
+                    "Required value cannot be negative, received: " + requiredValue
+            );
+        }
     }
 
     public AchievementId getAchievementId() {
