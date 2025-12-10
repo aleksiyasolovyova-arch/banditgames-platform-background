@@ -20,13 +20,16 @@ public class Achievement {
         this.type = type;
         this.requiredValue = requiredValue;
     }
-    public Achievement(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
-        this.achievementId = AchievementId.create();
-        this.name = name;
-        this.description = description;
-        this.pictureUrl = pictureUrl;
-        this.type = type;
-        this.requiredValue = requiredValue;
+
+    public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+        return new Achievement(
+                AchievementId.create(),
+                name,
+                description,
+                pictureUrl,
+                type,
+                requiredValue
+        );
     }
 
     public boolean isAchievementMet(PlayerStatistics statistics) {

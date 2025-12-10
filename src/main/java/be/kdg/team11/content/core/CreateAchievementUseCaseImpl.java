@@ -26,7 +26,7 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
         Url pictureUrl = new Url(command.pictureUrl());
         AchievementType type = AchievementType.valueOf(command.type());
 
-        Achievement achievement = new Achievement(
+        Achievement achievement = Achievement.create(
                 command.name(),
                 command.description(),
                 pictureUrl,
