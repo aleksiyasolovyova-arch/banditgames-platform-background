@@ -27,27 +27,32 @@ public class Game {
         this.registrationState = GameRegistrationState.ACCEPTED;
     }
 
-    public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, String gameCreatorName, Url gameUrl, GameRegistrationState registrationState) {
+    public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, GameRegistrationState registrationState, List<Rule> rules, List<GameAchievement> achievements) {
         this.gameId = gameId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.pictureUrl = pictureUrl;
-        this.gameCreatorName = gameCreatorName;
         this.gameUrl = gameUrl;
+        this.gameCreatorName = gameCreatorName;
         this.registrationState = registrationState;
+        this.rules.addAll(rules);
+        this.achievements.addAll(achievements);
     }
 
-
-    public Game(String name, String description, BigDecimal price, Url pictureUrl, String gameCreatorName, Url gameUrl) {
-        this.gameId = GameId.create();
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.pictureUrl = pictureUrl;
-        this.gameCreatorName = gameCreatorName;
-        this.gameUrl = gameUrl;
-        this.registrationState = GameRegistrationState.PENDING;
+    public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
+        return new Game(
+                GameId.create(),
+                name,
+                description,
+                price,
+                pictureUrl,
+                gameUrl,
+                gameCreatorName,
+                GameRegistrationState.PENDING,
+                rules,
+                achievements
+        );
     }
 
     public GameId getGameId() {

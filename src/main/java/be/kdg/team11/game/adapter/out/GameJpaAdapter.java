@@ -1,5 +1,6 @@
 package be.kdg.team11.game.adapter.out;
 
+import be.kdg.team11.game.port.out.DeleteGamePort;
 import org.springframework.stereotype.Component;
 import be.kdg.team11.game.adapter.out.jpa.GameJpaEntity;
 import be.kdg.team11.game.adapter.out.jpa.GameJpaRepository;
@@ -12,7 +13,7 @@ import be.kdg.team11.game.port.out.SaveGamePort;
 import java.util.Optional;
 
 @Component
-public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
+public class GameJpaAdapter implements SaveGamePort, LoadGamePort, DeleteGamePort {
     private final GameJpaRepository gameJpaRepository;
     private final GameJpaMapper gameJpaMapper;
 
@@ -32,5 +33,10 @@ public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
     public Optional<Game> loadBy(GameId gameId) {
         return gameJpaRepository.findById(gameId.gameId())
                 .map(gameJpaMapper::toDomain);
+    }
+
+    @Override
+    public void delete(Game game) {
+        gameJpaRepository.delete(gameJpaMapper.toJpaEntity(game));
     }
 }

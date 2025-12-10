@@ -1,14 +1,14 @@
 package be.kdg.team11.game.core;
 
+import be.kdg.team11.game.domain.Url;
+import be.kdg.team11.game.domain.game.GameAchievement;
+import be.kdg.team11.game.domain.game.Rule;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import be.kdg.team11.game.domain.game.Game;
-import be.kdg.team11.game.domain.game.Rule;
-import team11.platform_backend.game.domain.game.RuleCategory;
 import be.kdg.team11.game.port.in.RegisterGameCommand;
 import be.kdg.team11.game.port.in.RegisterGamePort;
 import be.kdg.team11.game.port.out.SaveGamePort;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
 
 import java.util.List;
 
@@ -24,34 +24,22 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
 
     @Override
     public Game createGame(RegisterGameCommand command) {
-        // 1. Convert pictureUrls to Url value objects
-        List<Url> pictureUrls = command.pictureUrls().stream()
-                .map(Url::new)
-                .toList();
+        Url pictureUrl = new Url(command.pictureUrl());
+        Url gameUrl = new Url(command.gameUrl());
+        List<Rule> rules = command.rules().stream().map(Rule::new).toList();
+        List<GameAchievement> achievements = command.achievements().stream().map(achievement -> new GameAchievement(achievement.code(), achievement.description())).toList();
 
-        // 2. Convert RuleCommand to Rule value objects
-        List<Rule> rules = command.rules().stream()
-                .map(ruleCmd -> new Rule(
-                        ruleCmd.ruleName(),
-                        ruleCmd.ruleDescription(),
-                        ruleCmd.ruleCategories().stream()
-                                .map(RuleCategory::valueOf)
-                                .toList()
-                ))
-                .toList();
-
-        // 3. Create Game aggregate
-        Game game = new Game(
+        Game game = Game.register(
                 command.name(),
                 command.description(),
                 command.price(),
-                pictureUrls,
+                pictureUrl,
+                gameUrl,
                 command.gameCreatorName(),
-                new Url(command.gameUrl()),
-                rules
+                rules,
+                achievements
         );
 
-        // 4. Save to persistence (follows Restaurant pattern)
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 
         return game;

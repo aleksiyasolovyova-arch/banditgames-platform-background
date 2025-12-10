@@ -1,6 +1,8 @@
 package be.kdg.team11.game.core;
 
+import be.kdg.team11.game.port.out.DeleteGamePort;
 import jakarta.transaction.Transactional;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import be.kdg.team11.game.domain.game.Game;
 import be.kdg.team11.game.domain.game.GameId;
@@ -10,38 +12,30 @@ import be.kdg.team11.game.port.out.LoadGamePort;
 import be.kdg.team11.game.port.out.SaveGamePort;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class RejectGameUseCaseImpl implements RejectGamePort{
 
-    private final List<LoadGamePort> loadGamePorts;
-    private final List<SaveGamePort> saveGamePorts;
+    private final LoadGamePort loadGamePort;
+    private final DeleteGamePort deleteGamePort;
 
-    public RejectGameUseCaseImpl(List<LoadGamePort> loadGamePorts,
-                                 List<SaveGamePort> saveGamePorts) {
-        this.loadGamePorts = loadGamePorts;
-        this.saveGamePorts = saveGamePorts;
+    public RejectGameUseCaseImpl(LoadGamePort loadGamePort,
+                                 DeleteGamePort deleteGamePort) {
+        this.loadGamePort = loadGamePort;
+        this.deleteGamePort = deleteGamePort;
     }
 
     @Override
-    public Game rejectGame(RejectGameCommand command) {
-        // 1. Load the game aggregate
+    public void rejectGame(RejectGameCommand command) {
         GameId gameId = new GameId(command.gameId());
-        Game game = loadGamePorts.stream()
-                .map(port -> port.findById(gameId))
-                .filter(java.util.Optional::isPresent)
-                .map(java.util.Optional::get)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Game not found with ID: " + command.gameId()));
-
-        // 2. Execute domain logic (state transition + validation)
-        game.rejectGame();
-
-        // 3. Persist the updated aggregate
-        saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
-
-        return game;
+        Optional<Game> optionalGame = loadGamePort.loadBy(gameId);
+        if (optionalGame.isEmpty()) {
+            throw new RuntimeException("Game with id " + gameId + " not found");
+        }
+        Game game = optionalGame.get();
+        //TODO Ask for feedback about deleting when rejecting
+        deleteGamePort.delete(game);
     }
 }
