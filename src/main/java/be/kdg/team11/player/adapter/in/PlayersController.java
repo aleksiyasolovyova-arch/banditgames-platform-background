@@ -1,14 +1,14 @@
 package be.kdg.team11.player.adapter.in;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import be.kdg.team11.player.adapter.in.request.CreatePlayerRequestDto;
 import be.kdg.team11.player.adapter.in.response.PlayerResponseDto;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.in.CreateNewPlayerCommand;
 import be.kdg.team11.player.port.in.CreateNewPlayerPort;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/players")

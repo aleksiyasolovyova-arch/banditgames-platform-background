@@ -1,12 +1,11 @@
 package be.kdg.team11.player.core;
 
-import org.springframework.stereotype.Service;
 import be.kdg.team11.player.domain.player.Player;
-import be.kdg.team11.player.domain.projections.GameProjection;
 import be.kdg.team11.player.port.in.CreateNewPlayerCommand;
 import be.kdg.team11.player.port.in.CreateNewPlayerPort;
 import be.kdg.team11.player.port.out.LoadGameProjectionsPort;
 import be.kdg.team11.player.port.out.SavePlayerPort;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -1,14 +1,14 @@
 package be.kdg.team11.content.core;
 
 import be.kdg.team11.content.domain.Url;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
 import be.kdg.team11.content.port.in.ModifyGameUrlsPort;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class ModifyGameUrlsUseCaseImpl implements ModifyGameUrlsPort {
     private final List<SaveGamePort> saveGamePorts;
 
     public ModifyGameUrlsUseCaseImpl(LoadGamePort loadGamePort,
-                                 List<SaveGamePort> saveGamePorts) {
+                                     List<SaveGamePort> saveGamePorts) {
         this.loadGamePort = loadGamePort;
         this.saveGamePorts = saveGamePorts;
     }

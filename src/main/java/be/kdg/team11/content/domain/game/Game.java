@@ -1,18 +1,19 @@
 package be.kdg.team11.content.domain.game;
 
+import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Aggregate Root for the Game subdomain.
  * Represents a publishable game in the platform.
  */
- public class Game {
+public class Game {
     private final GameId gameId;
     private final String name;
     private final String description;
@@ -24,13 +25,22 @@ import java.util.List;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
 
-    public void acceptGame() {
+    public void accept() {
         if (this.registrationState != GameRegistrationState.PENDING) {
             throw new InvalidGameStateException(
                     "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
             );
         }
         this.registrationState = GameRegistrationState.ACCEPTED;
+    }
+
+    public void reject() {
+        if (this.registrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
+            );
+        }
+        this.registrationState = GameRegistrationState.REJECTED;
     }
 
     public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, GameRegistrationState registrationState, List<Rule> rules, List<GameAchievement> achievements) {
@@ -62,11 +72,12 @@ import java.util.List;
         );
     }
 
-/**
- * Updates game URLs for maintenance purposes.
- * Allows updating icon/screenshot and playable game links without recreating the aggregate.
- * */
-    public void modifyUrls(Url pictureUrl, Url gameUrl){
+    /**
+     * Updates game URLs for maintenance purposes.
+     * Allows updating icon/screenshot and playable game links without recreating the aggregate.
+     *
+     */
+    public void modifyUrls(Url pictureUrl, Url gameUrl) {
         if (pictureUrl == null) {
             throw new InvalidGameUrlException("New picture URL cannot be null");
         }

@@ -1,6 +1,5 @@
 package be.kdg.team11.content.adapter.out;
 
-import org.springframework.stereotype.Component;
 import be.kdg.team11.content.adapter.out.jpa.AchievementJpaEntity;
 import be.kdg.team11.content.adapter.out.jpa.AchievementJpaRepository;
 import be.kdg.team11.content.adapter.out.mapper.AchievementJpaMapper;
@@ -8,6 +7,7 @@ import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.domain.achievement.AchievementId;
 import be.kdg.team11.content.port.out.LoadAchievementPort;
 import be.kdg.team11.content.port.out.SaveAchievementPort;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 

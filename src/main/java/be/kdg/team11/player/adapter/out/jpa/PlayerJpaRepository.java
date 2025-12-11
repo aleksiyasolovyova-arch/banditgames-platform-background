@@ -1,8 +1,8 @@
 package be.kdg.team11.player.adapter.out.jpa;
 
+import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 
 import java.util.UUID;
 

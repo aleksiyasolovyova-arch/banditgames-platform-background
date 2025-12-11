@@ -1,70 +1,77 @@
 package be.kdg.team11.content.adapter.out.mapper;
 
-import org.springframework.stereotype.Component;
+import be.kdg.team11.content.adapter.out.jpa.GameAchievementEmbeddable;
 import be.kdg.team11.content.adapter.out.jpa.GameJpaEntity;
-import team11.platform_backend.game.adapter.out.jpa.RuleJpaEntity;
+import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
+import be.kdg.team11.content.domain.game.GameAchievement;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.Rule;
-import team11.platform_backend.sharedkernel.valueobjects.Url;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class GameJpaMapper {
+
     public GameJpaEntity toJpaEntity(Game game) {
         GameJpaEntity entity = new GameJpaEntity();
         entity.setGameId(game.getGameId().gameId());
-        entity.setGameName(game.getGameName());
-        entity.setGameDescription(game.getGameDescription());
-        entity.setGamePrice(game.getGamePrice());
-        entity.setPictureUrls(game.getPictureUrls().stream()
-                .map(Url::value)
-                .collect(Collectors.toList()));
-        entity.setGameCreatorName(game.getGameCreatorName());
+        entity.setName(game.getName());
+        entity.setDescription(game.getDescription());
+        entity.setPrice(game.getPrice());
+        entity.setPictureUrl(game.getPictureUrl().value());
         entity.setGameUrl(game.getGameUrl().value());
-        entity.setGameState(game.getGameState());
+        entity.setGameCreatorName(game.getGameCreatorName());
+        entity.setRegistrationState(game.getRegistrationState());
 
-        // Map Rules (OneToMany relationship)
-        List<RuleJpaEntity> ruleEntities = game.getRules().stream()
-                .map(rule -> new RuleJpaEntity(
-                        entity,
-                        rule.ruleName(),
-                        rule.ruleDescription(),
-                        new HashSet<>(rule.ruleCategories())
-                ))
-                .toList();
-        entity.setRules(ruleEntities);
+        // Map Rules (simple strings)
+        List<String> ruleDescriptions = game.getRules().stream()
+                .map(Rule::description)
+                .collect(Collectors.toList());
+        entity.setRules(ruleDescriptions);
+
+        // Map Achievements (embeddables)
+        List<GameAchievementEmbeddable> achievementEmbeddables = game.getAchievements().stream()
+                .map(achievement -> {
+                    GameAchievementEmbeddable embeddable =
+                            new GameAchievementEmbeddable();
+                    embeddable.setCode(achievement.code());
+                    embeddable.setDescription(achievement.description());
+                    return embeddable;
+                })
+                .collect(Collectors.toList());
+        entity.setAchievementEmbeddables(achievementEmbeddables);
 
         return entity;
     }
 
     public Game toDomain(GameJpaEntity entity) {
-        List<Url> pictureUrls = entity.getPictureUrls().stream()
-                .map(Url::new)
+        // Map Rules (from strings to Rule value objects)
+        List<Rule> rules = entity.getRules().stream()
+                .map(Rule::new)
                 .collect(Collectors.toList());
 
-        List<Rule> rules = entity.getRules().stream()
-                .map(ruleEntity -> new Rule(
-                        ruleEntity.getRuleName(),
-                        ruleEntity.getRuleDescription(),
-                        new ArrayList<>(ruleEntity.getRuleCategories())
+        // Map Achievements (from embeddables to GameAchievement value objects)
+        List<GameAchievement> achievements = entity.getAchievementEmbeddables().stream()
+                .map(embeddable -> new GameAchievement(
+                        embeddable.getCode(),
+                        embeddable.getDescription()
                 ))
-                .toList();
+                .collect(Collectors.toList());
 
         return new Game(
                 new GameId(entity.getGameId()),
-                entity.getGameName(),
-                entity.getGameDescription(),
-                entity.getGamePrice(),
-                pictureUrls,
-                entity.getGameCreatorName(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrice(),
+                new Url(entity.getPictureUrl()),
                 new Url(entity.getGameUrl()),
-                entity.getGameState(),
-                rules
+                entity.getGameCreatorName(),
+                entity.getRegistrationState(),
+                rules,
+                achievements
         );
     }
 }

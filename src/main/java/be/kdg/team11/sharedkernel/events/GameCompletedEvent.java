@@ -10,5 +10,6 @@ public record GameCompletedEvent(
         long totalWins,
         long totalFriends,
         Duration bestRecordTime
-) implements DomainEvent {}
+) implements DomainEvent {
+}
 

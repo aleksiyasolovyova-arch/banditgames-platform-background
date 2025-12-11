@@ -1,15 +1,14 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
-import org.springframework.stereotype.Component;
 import be.kdg.team11.player.adapter.out.jpa.entity.GameProjectionJpaEntity;
-import be.kdg.team11.player.domain.projections.GameId;
-import be.kdg.team11.player.domain.projections.GameProjection;
+import be.kdg.team11.player.domain.projections.AvailableGame;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GameProjectionJpaMapper {
     public GameProjection toDomain(GameProjectionJpaEntity entity) {
         return new GameProjection(
-                new GameId(entity.getGameId())
+                new AvailableGame(entity.getGameId())
         );
     }
 

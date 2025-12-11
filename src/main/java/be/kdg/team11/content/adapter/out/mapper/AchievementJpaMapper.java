@@ -1,10 +1,10 @@
 package be.kdg.team11.content.adapter.out.mapper;
 
-import org.springframework.stereotype.Component;
 import be.kdg.team11.content.adapter.out.jpa.AchievementJpaEntity;
 import be.kdg.team11.content.domain.Url;
-import be.kdg.team11.content.domain.achievement.AchievementId;
 import be.kdg.team11.content.domain.achievement.Achievement;
+import be.kdg.team11.content.domain.achievement.AchievementId;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AchievementJpaMapper {

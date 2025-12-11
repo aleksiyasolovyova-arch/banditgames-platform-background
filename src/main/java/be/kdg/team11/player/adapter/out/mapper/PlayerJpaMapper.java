@@ -1,13 +1,11 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
-import be.kdg.team11.player.domain.player.*;
-import org.springframework.stereotype.Component;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
-import team11.platform_backend.player.domain.player.*;
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.player.*;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ public class PlayerJpaMapper {
         // Map unlocked game achievements
         Set<UnlockedGameAchievement> unlockedGameAchievements = entity.getUnlockedGameAchievements().stream()
                 .map(embeddable -> new UnlockedGameAchievement(
-                        new GameId(embeddable.getGameId()),
+                        new AvailableGame(embeddable.getGameId()),
                         embeddable.getCode(),
                         embeddable.getUnlockedAt()
                 ))
@@ -38,7 +36,7 @@ public class PlayerJpaMapper {
         // Map owned games
         Set<OwnedGame> ownedGames = entity.getOwnedGames().stream()
                 .map(embeddable -> new OwnedGame(
-                        new GameId(embeddable.getGameId()),
+                        new AvailableGame(embeddable.getGameId()),
                         embeddable.isFavourite(),
                         embeddable.getDateBought()
                 ))
@@ -72,12 +70,12 @@ public class PlayerJpaMapper {
         // Map unlocked game achievements
         Set<UnlockedGameAchievementEmbeddable> gameAchievements = player.getUnlockedGameAchievements().stream()
                 .map(achievement -> {
-                    UnlockedGameAchievementEmbeddable embeddable = new UnlockedGameAchievementEmbeddable();
-                    embeddable.setGameId(achievement.gameId().gameId());
-                    embeddable.setCode(achievement.code());
-                    embeddable.setUnlockedAt(achievement.unlockedAt());
-                    return embeddable;
-                }
+                            UnlockedGameAchievementEmbeddable embeddable = new UnlockedGameAchievementEmbeddable();
+                            embeddable.setGameId(achievement.gameId().gameId());
+                            embeddable.setCode(achievement.code());
+                            embeddable.setUnlockedAt(achievement.unlockedAt());
+                            return embeddable;
+                        }
                 )
                 .collect(Collectors.toSet());
         entity.setUnlockedGameAchievements(gameAchievements);

@@ -2,6 +2,7 @@ package be.kdg.team11.player.adapter.out.jpa.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +18,8 @@ public class UnlockedGameAchievementEmbeddable {
     @Column(nullable = false)
     private LocalDateTime unlockedAt;
 
-    public UnlockedGameAchievementEmbeddable() {}
+    public UnlockedGameAchievementEmbeddable() {
+    }
 
     public UUID getGameId() {
         return gameId;

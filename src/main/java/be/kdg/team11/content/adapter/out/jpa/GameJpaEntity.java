@@ -1,7 +1,7 @@
 package be.kdg.team11.content.adapter.out.jpa;
 
+import be.kdg.team11.content.domain.game.GameRegistrationState;
 import jakarta.persistence.*;
-import team11.platform_backend.game.domain.game.GameState;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,65 +9,129 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "game", schema = "game_schema")
+@Table(name = "game", schema = "content_schema")
 public class GameJpaEntity {
     @Id
     private UUID gameId;
 
     @Column(nullable = false, length = 100)
-    private String gameName;
+    private String name;
 
     @Column(nullable = false, length = 500)
-    private String gameDescription;
+    private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal gamePrice;
+    private BigDecimal price;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "game_picture_urls", joinColumns = @JoinColumn(name = "game_id"), schema = "game_schema")
     @Column(name = "picture_url")
-    private List<String> pictureUrls = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String gameCreatorName;
+    private String pictureUrl;
 
     @Column(nullable = false)
     private String gameUrl;
 
+    @Column(nullable = false)
+    private String gameCreatorName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameState gameState;
+    private GameRegistrationState registrationState;
 
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<RuleJpaEntity> rules = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "game_rules",
+            schema = "content_schema",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    @Column(name = "rule", nullable = false)
+    private List<String> rules = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(
+            name = "game_achievements",
+            schema = "content_schema",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<GameAchievementEmbeddable> achievementEmbeddables = new ArrayList<>();
 
     public GameJpaEntity() {}
 
-    // Getters and Setters
-    public UUID getGameId() { return gameId; }
-    public void setGameId(UUID gameId) { this.gameId = gameId; }
+    public UUID getGameId() {
+        return gameId;
+    }
 
-    public String getGameName() { return gameName; }
-    public void setGameName(String gameName) { this.gameName = gameName; }
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
+    }
 
-    public String getGameDescription() { return gameDescription; }
-    public void setGameDescription(String gameDescription) { this.gameDescription = gameDescription; }
+    public String getName() {
+        return name;
+    }
 
-    public BigDecimal getGamePrice() { return gamePrice; }
-    public void setGamePrice(BigDecimal gamePrice) { this.gamePrice = gamePrice; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public List<String> getPictureUrls() { return pictureUrls; }
-    public void setPictureUrls(List<String> pictureUrls) { this.pictureUrls = pictureUrls; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getGameCreatorName() { return gameCreatorName; }
-    public void setGameCreatorName(String gameCreatorName) { this.gameCreatorName = gameCreatorName; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getGameUrl() { return gameUrl; }
-    public void setGameUrl(String gameUrl) { this.gameUrl = gameUrl; }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-    public GameState getGameState() { return gameState; }
-    public void setGameState(GameState gameState) { this.gameState = gameState; }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
-    public List<RuleJpaEntity> getRules() { return rules; }
-    public void setRules(List<RuleJpaEntity> rules) { this.rules = rules; }
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getGameUrl() {
+        return gameUrl;
+    }
+
+    public void setGameUrl(String gameUrl) {
+        this.gameUrl = gameUrl;
+    }
+
+    public String getGameCreatorName() {
+        return gameCreatorName;
+    }
+
+    public void setGameCreatorName(String gameCreatorName) {
+        this.gameCreatorName = gameCreatorName;
+    }
+
+    public GameRegistrationState getRegistrationState() {
+        return registrationState;
+    }
+
+    public void setRegistrationState(GameRegistrationState registrationState) {
+        this.registrationState = registrationState;
+    }
+
+    public List<String> getRules() {
+        return rules;
+    }
+
+    public void setRules(List<String> rules) {
+        this.rules = rules;
+    }
+
+    public List<GameAchievementEmbeddable> getAchievementEmbeddables() {
+        return achievementEmbeddables;
+    }
+
+    public void setAchievementEmbeddables(List<GameAchievementEmbeddable> achievementEmbeddables) {
+        this.achievementEmbeddables = achievementEmbeddables;
+    }
 }

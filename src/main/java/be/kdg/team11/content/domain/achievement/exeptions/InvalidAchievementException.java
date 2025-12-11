@@ -5,7 +5,7 @@ package be.kdg.team11.content.domain.achievement.exeptions;
  * Examples: null name, invalid required value, missing picture URL
  */
 
-public class InvalidAchievementException extends AchievementException{
+public class InvalidAchievementException extends AchievementException {
     public InvalidAchievementException(String message) {
         super(message);
     }

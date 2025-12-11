@@ -1,6 +1,5 @@
 package be.kdg.team11.content.port.in;
-import java.math.BigDecimal;
-import java.util.List;
+
 import java.util.UUID;
 
 public record ModifyGameUrlsCommand(

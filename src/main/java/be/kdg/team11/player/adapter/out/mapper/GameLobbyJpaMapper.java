@@ -1,12 +1,12 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
-import org.springframework.data.util.Pair;
-import org.springframework.stereotype.Component;
 import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
 import be.kdg.team11.player.domain.gamelobby.GameLobby;
 import be.kdg.team11.player.domain.gamelobby.GameLobbyId;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.projections.AvailableGame;
+import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GameLobbyJpaMapper {
@@ -30,7 +30,7 @@ public class GameLobbyJpaMapper {
 
     public GameLobby toDomain(GameLobbyJpaEntity entity) {
         GameLobbyId gameLobbyId = new GameLobbyId(entity.getGameLobbyId());
-        GameId gameId = new GameId(entity.getGameId());
+        AvailableGame gameId = new AvailableGame(entity.getGameId());
         PlayerId playerId1 = new PlayerId(entity.getPlayerId1());
         PlayerId playerId2 = new PlayerId(entity.getPlayerId2());
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId1, playerId2);

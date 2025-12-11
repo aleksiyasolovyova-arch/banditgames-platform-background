@@ -2,6 +2,7 @@ package be.kdg.team11.player.adapter.out.jpa.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -17,7 +18,8 @@ public class OwnedGameEmbeddable {
     @Column(nullable = false)
     private LocalDate dateBought;
 
-    public OwnedGameEmbeddable() {}
+    public OwnedGameEmbeddable() {
+    }
 
     public UUID getGameId() {
         return gameId;

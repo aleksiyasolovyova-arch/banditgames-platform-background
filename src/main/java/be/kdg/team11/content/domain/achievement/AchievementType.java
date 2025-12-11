@@ -5,7 +5,7 @@ import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementType
 /**
  * Enum representing different types of achievements a player can earn.
  * Each type defines specific criteria for achievement completion based on player statistics.
- *
+ * <p>
  * Supports:
  * - PLAY_COUNT: Unlocked after playing N games
  * - WIN_COUNT: Unlocked after winning N games

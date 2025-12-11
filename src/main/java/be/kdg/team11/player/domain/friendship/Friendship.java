@@ -1,13 +1,13 @@
 package be.kdg.team11.player.domain.friendship;
 
-import org.springframework.data.util.Pair;
 import be.kdg.team11.player.domain.friendship.exeptions.InvalidFriendshipStateException;
 import be.kdg.team11.player.domain.player.PlayerId;
+import org.springframework.data.util.Pair;
 
 //Aggregate
 public class Friendship {
     private final FriendshipId friendshipId;
-    private final Pair<PlayerId,PlayerId> playerIdPair;
+    private final Pair<PlayerId, PlayerId> playerIdPair;
     private FriendshipState friendshipState;
 
     public Friendship(FriendshipId friendshipId, Pair<PlayerId, PlayerId> playerIdPair, FriendshipState friendshipState) {

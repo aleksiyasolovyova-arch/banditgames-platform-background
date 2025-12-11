@@ -1,9 +1,9 @@
 package be.kdg.team11.player.adapter.out.jpa.entity;
 
-import jakarta.persistence.*;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -36,7 +36,8 @@ public class PlayerJpaEntity {
             joinColumns = @JoinColumn(name = "player_id"))
     private Set<OwnedGameEmbeddable> ownedGames = new HashSet<>();
 
-    public PlayerJpaEntity() {}
+    public PlayerJpaEntity() {
+    }
 
     public UUID getPlayerId() {
         return playerId;

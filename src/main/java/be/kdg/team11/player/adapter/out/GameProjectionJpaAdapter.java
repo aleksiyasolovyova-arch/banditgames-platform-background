@@ -1,10 +1,9 @@
 package be.kdg.team11.player.adapter.out;
 
-import org.springframework.stereotype.Service;
-import be.kdg.team11.player.adapter.out.mapper.GameProjectionJpaMapper;
 import be.kdg.team11.player.adapter.out.jpa.GameProjectionJpaRepository;
-import be.kdg.team11.player.domain.projections.GameProjection;
+import be.kdg.team11.player.adapter.out.mapper.GameProjectionJpaMapper;
 import be.kdg.team11.player.port.out.LoadGameProjectionsPort;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;

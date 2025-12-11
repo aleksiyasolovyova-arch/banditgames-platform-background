@@ -1,11 +1,12 @@
 package be.kdg.team11.content.adapter.out.jpa;
 
-import jakarta.persistence.*;
 import be.kdg.team11.content.domain.achievement.AchievementType;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Entity
-@Table(name = "achievements", schema = "game_schema")
+@Table(name = "achievements", schema = "content_schema")
 public class AchievementJpaEntity {
 
     @Id
@@ -27,7 +28,8 @@ public class AchievementJpaEntity {
     @Column(nullable = false)
     private long requiredValue;
 
-    public AchievementJpaEntity() {}
+    public AchievementJpaEntity() {
+    }
 
     public UUID getAchievementId() {
         return achievementId;

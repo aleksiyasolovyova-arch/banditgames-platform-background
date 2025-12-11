@@ -6,9 +6,9 @@ import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
  * Value Object representing a game rule.
  * Immutable rule text that describes how a game should be played.
  */
- public record Rule(
+public record Rule(
         String description
-){
+) {
     private static final int MAX_DESCRIPTION_LENGTH = 255;
     private static final int MIN_DESCRIPTION_LENGTH = 5;
 

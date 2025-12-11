@@ -1,12 +1,12 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDateTime;
 
 
 public record UnlockedGameAchievement(
-        GameId gameId,
+        GameReference gameReference,
         String code,
         LocalDateTime unlockedAt
 ) {

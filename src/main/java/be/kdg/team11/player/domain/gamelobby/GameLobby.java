@@ -1,16 +1,16 @@
 package be.kdg.team11.player.domain.gamelobby;
 
 
-import org.springframework.data.util.Pair;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.projections.GameReference;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
 
 public class GameLobby {
     private final GameLobbyId gameLobbyId;
-    private final GameId gameId;
-    private final Pair<PlayerId,PlayerId> playerIdPair;
+    private final GameReference gameReference;
+    private final Pair<PlayerId, PlayerId> playerIdPair;
     private Boolean player1Accepted;
     private Boolean player2Accepted;
     private GameLobbyStatus gameLobbyStatus;
@@ -18,9 +18,9 @@ public class GameLobby {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public GameLobby(GameLobbyId gameLobbyId, GameId gameId, Pair<PlayerId, PlayerId> playerIdPair, Boolean player1Accepted, Boolean player2Accepted, GameLobbyStatus gameLobbyStatus, GameLobbyResult gameLobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
+    public GameLobby(GameLobbyId gameLobbyId, GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair, Boolean player1Accepted, Boolean player2Accepted, GameLobbyStatus gameLobbyStatus, GameLobbyResult gameLobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
         this.gameLobbyId = gameLobbyId;
-        this.gameId = gameId;
+        this.gameReference = gameReference;
         this.playerIdPair = playerIdPair;
         this.player1Accepted = player1Accepted;
         this.player2Accepted = player2Accepted;
@@ -30,40 +30,44 @@ public class GameLobby {
         this.endTime = endTime;
     }
 
-    private GameLobby(GameId gameId, Pair<PlayerId, PlayerId> playerIdPair, Boolean player1Accepted, Boolean player2Accepted) {
-        this.gameLobbyId = GameLobbyId.create();
-        this.gameId = gameId;
-        this.playerIdPair = playerIdPair;
-        this.player1Accepted = player1Accepted;
-        this.player2Accepted = player2Accepted;
-        this.gameLobbyStatus = GameLobbyStatus.PENDING;
-        this.gameLobbyResult = GameLobbyResult.NO_RESULT;
-        this.startTime = LocalDateTime.now();
-    }
 
-
-    public static GameLobby createGameLobbyForStrangers(GameId gameId, Pair<PlayerId,PlayerId> playerIdPair) {
+    public static GameLobby createGameLobbyForStrangers(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
         return new GameLobby(
-                gameId,
+                GameLobbyId.create(),
+                gameReference,
                 playerIdPair,
-                false,false
+                false, false,
+                GameLobbyStatus.PENDING,
+                GameLobbyResult.NO_RESULT,
+                LocalDateTime.now(),
+                null
         );
     }
 
-    public static GameLobby createGameLobbyForFriends(GameId gameId, Pair<PlayerId,PlayerId> playerIdPair) {
+    public static GameLobby createGameLobbyForFriends(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
         return new GameLobby(
-                gameId,
+                GameLobbyId.create(),
+                gameReference,
                 playerIdPair,
-                true,false
+                true, false,
+                GameLobbyStatus.PENDING,
+                GameLobbyResult.NO_RESULT,
+                LocalDateTime.now(),
+                null
         );
     }
 
-    public static GameLobby createGameLobbyForAI(GameId gameId, PlayerId playerId) {
-        Pair<PlayerId,PlayerId> playerIdPair = Pair.of(playerId,PlayerId.ai());
+    public static GameLobby createGameLobbyForAI(GameReference gameReference, PlayerId playerId) {
+        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId, PlayerId.ai());
         GameLobby gameLobby = new GameLobby(
-                gameId,
+                GameLobbyId.create(),
+                gameReference,
                 playerIdPair,
-                true,true
+                true, true,
+                GameLobbyStatus.PENDING,
+                GameLobbyResult.NO_RESULT,
+                LocalDateTime.now(),
+                null
         );
         gameLobby.startGame();
         return gameLobby;
@@ -86,7 +90,7 @@ public class GameLobby {
         }
     }
 
-    public void cancelGame(){
+    public void cancelGame() {
         if (gameLobbyStatus.equals(GameLobbyStatus.PENDING) || gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             this.gameLobbyStatus = GameLobbyStatus.CANCELED;
         } else {
@@ -125,7 +129,7 @@ public class GameLobby {
         this.endTime = LocalDateTime.now();
     }
 
-    public boolean isAgainstAi(){
+    public boolean isAgainstAi() {
         return playerIdPair.getSecond().isAI();
     }
 
@@ -133,8 +137,8 @@ public class GameLobby {
         return gameLobbyId;
     }
 
-    public GameId getGameId() {
-        return gameId;
+    public GameReference getGameId() {
+        return gameReference;
     }
 
     public Pair<PlayerId, PlayerId> getPlayerIdPair() {

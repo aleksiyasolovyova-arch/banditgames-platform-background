@@ -55,7 +55,7 @@ class AcceptGameUseCaseTest {
 
         // Then
         verify(loadGamePort).loadBy(gameId);
-        verify(game).acceptGame();
+        verify(game).accept();
         verify(saveGamePort).save(game);
     }
 
@@ -70,7 +70,7 @@ class AcceptGameUseCaseTest {
 
         // When & Then
         assertThrows(IllegalArgumentException.class, () -> acceptGameUseCase.acceptGame(command));
-        verify(game, never()).acceptGame();
+        verify(game, never()).accept();
         verify(saveGamePort, never()).save(any());
     }
 
@@ -85,7 +85,7 @@ class AcceptGameUseCaseTest {
 
         // Simulate the domain logic throwing an exception (e.g., if state is not PENDING)
         doThrow(new InvalidGameStateException("Cannot accept game: current state is ACCEPTED, expected PENDING"))
-                .when(game).acceptGame();
+                .when(game).accept();
 
         // When & Then
         assertThrows(InvalidGameStateException.class, () -> acceptGameUseCase.acceptGame(command));

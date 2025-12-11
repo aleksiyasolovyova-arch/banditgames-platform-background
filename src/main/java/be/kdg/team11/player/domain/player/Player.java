@@ -1,6 +1,7 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.projections.GameReference;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,8 +26,8 @@ public class Player {
         this.joinedDate = LocalDate.now();
     }
 
-    public void addOwnedGame(GameId gameId) {
-        ownedGames.add(new OwnedGame(gameId, false, LocalDate.now()));
+    public void addOwnedGame(GameReference gameReference) {
+        ownedGames.add(new OwnedGame(gameReference, false, LocalDate.now()));
     }
 
     public PlayerId getPlayerId() {

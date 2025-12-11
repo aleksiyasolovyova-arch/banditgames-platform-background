@@ -7,16 +7,16 @@ public record PlayerId(
 ) {
     private static final String AI_ID = "00000000-0000-0000-0000-000000a1face";
 
-
-    public static PlayerId ai(){
+    public static PlayerId ai() {
         return new PlayerId(UUID.fromString(AI_ID));
     }
 
-    public boolean isAI(){
+    public static PlayerId create() {
+        return new PlayerId(UUID.randomUUID());
+    }
+
+    public boolean isAI() {
         return playerId.equals(UUID.fromString(AI_ID));
     }
 
-    public static PlayerId createPlayerId() {
-        return new PlayerId(UUID.randomUUID());
-    }
 }

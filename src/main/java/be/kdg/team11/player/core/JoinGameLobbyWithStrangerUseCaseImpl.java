@@ -1,12 +1,12 @@
 package be.kdg.team11.player.core;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import be.kdg.team11.player.domain.gamelobby.GameLobby;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.domain.projections.GameId;
+import be.kdg.team11.player.domain.projections.AvailableGame;
 import be.kdg.team11.player.port.in.JoinGameLobbyWithStrangerPort;
 import be.kdg.team11.player.port.out.SaveGameLobbyPort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -17,17 +17,17 @@ import java.util.concurrent.atomic.AtomicReference;
 @Transactional
 public class JoinGameLobbyWithStrangerUseCaseImpl implements JoinGameLobbyWithStrangerPort {
     // Concurrent hash map locks per game id, so two computes on the same Game id will be done sequentially but two computes on two different game ids will be done in parallel
-    private final Map<GameId, PlayerId> matchmakingQueue = new ConcurrentHashMap<>();
+    private final Map<AvailableGame, PlayerId> matchmakingQueue = new ConcurrentHashMap<>();
     private final SaveGameLobbyPort saveGameLobbyPort;
 
     public JoinGameLobbyWithStrangerUseCaseImpl(
             SaveGameLobbyPort saveGameLobbyPort
-    ){
+    ) {
         this.saveGameLobbyPort = saveGameLobbyPort;
     }
 
     @Override
-    public Optional<GameLobby> joinGameLobbyWithStranger(GameId gameId, PlayerId playerId) {
+    public Optional<GameLobby> joinGameLobbyWithStranger(AvailableGame gameId, PlayerId playerId) {
         // AtomicReference to reference the game lobby we may create
         AtomicReference<GameLobby> createdLobby = new AtomicReference<>();
 

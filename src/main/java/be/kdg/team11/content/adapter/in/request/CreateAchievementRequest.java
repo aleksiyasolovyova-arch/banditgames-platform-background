@@ -3,9 +3,6 @@ package be.kdg.team11.content.adapter.in.request;
 import be.kdg.team11.content.domain.achievement.AchievementType;
 import jakarta.validation.constraints.*;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 public record CreateAchievementRequest(
         @NotNull(message = "Achievement name cannot be null")
         @NotBlank(message = "Achievement name cannot be blank")

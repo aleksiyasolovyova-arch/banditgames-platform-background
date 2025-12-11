@@ -1,14 +1,14 @@
 package be.kdg.team11.content.adapter.out;
 
-import be.kdg.team11.content.port.out.DeleteGamePort;
-import org.springframework.stereotype.Component;
 import be.kdg.team11.content.adapter.out.jpa.GameJpaEntity;
 import be.kdg.team11.content.adapter.out.jpa.GameJpaRepository;
 import be.kdg.team11.content.adapter.out.mapper.GameJpaMapper;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
+import be.kdg.team11.content.port.out.DeleteGamePort;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 

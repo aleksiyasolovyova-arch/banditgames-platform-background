@@ -12,7 +12,7 @@ import java.util.UUID;
  * Note: Statistics can be null if the player hasn't yet engaged in that activity.
  * For example, a new player may have null totalWins until they complete their first game.
  */
- public record PlayerStatistics(
+public record PlayerStatistics(
         Long totalGamesPlayed,
         Long totalWins,
         Long totalFriends,
@@ -21,11 +21,11 @@ import java.util.UUID;
 ) {
     // For each event type add a mapper method
 
-/**
- * Compact constructor - validates that playerId is present.
- * Other statistics can be null (player hasn't engaged in that activity yet).
- */
- public PlayerStatistics {
+    /**
+     * Compact constructor - validates that playerId is present.
+     * Other statistics can be null (player hasn't engaged in that activity yet).
+     */
+    public PlayerStatistics {
         if (playerId == null) {
             throw new InvalidAchievementException("Player ID cannot be null in statistics");
         }

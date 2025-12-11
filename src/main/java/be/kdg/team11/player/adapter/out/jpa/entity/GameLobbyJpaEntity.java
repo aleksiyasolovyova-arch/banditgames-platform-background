@@ -1,8 +1,8 @@
 package be.kdg.team11.player.adapter.out.jpa.entity;
 
-import jakarta.persistence.*;
 import be.kdg.team11.player.domain.gamelobby.GameLobbyResult;
 import be.kdg.team11.player.domain.gamelobby.GameLobbyStatus;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -44,7 +44,8 @@ public class GameLobbyJpaEntity {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    public GameLobbyJpaEntity() {}
+    public GameLobbyJpaEntity() {
+    }
 
     public UUID getGameLobbyId() {
         return gameLobbyId;

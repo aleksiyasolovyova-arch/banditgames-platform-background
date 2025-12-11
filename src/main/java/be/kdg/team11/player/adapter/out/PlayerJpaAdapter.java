@@ -1,14 +1,14 @@
 package be.kdg.team11.player.adapter.out;
 
-import org.springframework.stereotype.Service;
-import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import be.kdg.team11.player.adapter.out.jpa.PlayerJpaRepository;
+import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.PlayerJpaMapper;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.out.SavePlayerPort;
+import org.springframework.stereotype.Service;
 
 @Service
-public class PlayerJpaAdapter implements SavePlayerPort{
+public class PlayerJpaAdapter implements SavePlayerPort {
     private final PlayerJpaRepository playerJpaRepository;
     private final PlayerJpaMapper playerJpaMapper;
 
@@ -16,6 +16,7 @@ public class PlayerJpaAdapter implements SavePlayerPort{
         this.playerJpaRepository = playerJpaRepository;
         this.playerJpaMapper = playerJpaMapper;
     }
+
     @Override
     public Player save(Player player) {
         PlayerJpaEntity entity = playerJpaMapper.toJpaEntity(player);

@@ -63,5 +63,6 @@ public record RegisterGameCommand(
     public record GameAchievementCommand(
             String code,
             String description
-    ) {}
+    ) {
+    }
 }

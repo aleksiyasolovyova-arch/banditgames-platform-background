@@ -68,7 +68,7 @@ public class RegisterGameUseCaseTest {
         when(searchIndexAdapter.save(any(Game.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        Game createdGame = registerGameUseCase.createGame(validCommand);
+        Game createdGame = registerGameUseCase.registerGame(validCommand);
 
         // Assert
 
@@ -122,7 +122,7 @@ public class RegisterGameUseCaseTest {
         // Act & Assert
         // Expect an IllegalArgumentException when RuleCategory.valueOf() fails
         assertThrows(IllegalArgumentException.class, () -> {
-            registerGameUseCase.createGame(invalidCommand);
+            registerGameUseCase.registerGame(invalidCommand);
         }, "Should throw IllegalArgumentException when RuleCategory enum mapping fails.");
 
         // Verify that no SaveGamePort was called if the use case failed early
@@ -156,7 +156,7 @@ public class RegisterGameUseCaseTest {
         // Act & Assert
         // The Rule constructor should throw an IllegalArgumentException
         assertThrows(IllegalArgumentException.class, () -> {
-            registerGameUseCase.createGame(invalidCommand);
+            registerGameUseCase.registerGame(invalidCommand);
         }, "Should throw IllegalArgumentException when Rule value object validation fails.");
 
         // Verify that no SaveGamePort was called

@@ -8,7 +8,7 @@ import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementType
  * Aggregate Root for the Achievement subdomain.
  * Represents a global achievement that can be earned by any player.
  */
- public class Achievement {
+public class Achievement {
     private final AchievementId achievementId;
     private final String name;
     private final String description;
@@ -25,7 +25,7 @@ import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementType
         this.requiredValue = requiredValue;
     }
 
-    public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+    public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         validateInputs(name, description, pictureUrl, type, requiredValue);
         return new Achievement(
                 AchievementId.create(),
@@ -37,18 +37,18 @@ import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementType
         );
     }
 
-/**
- * Evaluates if a player has met the criteria for this specific achievement.
- * Delegates to the achievement type to determine if the required value is met.
- */
- public boolean isAchievementMet(PlayerStatistics statistics) {
-     if (statistics == null) {
-         throw new InvalidAchievementException(
-                 "Player statistics cannot be null when evaluating achievement"
-         );
-     }
+    /**
+     * Evaluates if a player has met the criteria for this specific achievement.
+     * Delegates to the achievement type to determine if the required value is met.
+     */
+    public boolean isAchievementMet(PlayerStatistics statistics) {
+        if (statistics == null) {
+            throw new InvalidAchievementException(
+                    "Player statistics cannot be null when evaluating achievement"
+            );
+        }
 
-     return type.isMetBy(requiredValue, statistics);
+        return type.isMetBy(requiredValue, statistics);
     }
 
     private static void validateInputs(
@@ -83,7 +83,7 @@ import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementType
         }
 
         if (requiredValue < 0) {
-            throw new InvalidAchievementTypeException(
+            throw new InvalidAchievementException(
                     "Required value cannot be negative, received: " + requiredValue
             );
         }
