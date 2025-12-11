@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Modulith
 @EnableScheduling
-@SpringBootApplication(scanBasePackages = "be.kdg.team11.content")
 public class PlatformBackendApplication {
 
     public static void main(String[] args) {
