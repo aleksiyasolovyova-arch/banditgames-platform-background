@@ -43,7 +43,7 @@ public class JoinGameLobbyWithStrangerUseCaseImpl implements JoinGameLobbyWithSt
             }
 
             // Create lobby with both players
-            GameLobby lobby = GameLobby.createGameLobbyForStrangers(gameId, waitingPlayer, playerId);
+            GameLobby lobby = GameLobby.createForStrangers(gameId, waitingPlayer, playerId);
             saveGameLobbyPort.save(lobby);
 
             // Store in atomic reference to return later

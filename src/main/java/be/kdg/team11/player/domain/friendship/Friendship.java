@@ -16,19 +16,30 @@ public class Friendship {
         this.friendshipState = friendshipState;
     }
 
-    public Friendship(Pair<PlayerId, PlayerId> playerIdPair) {
-        this.friendshipId = FriendshipId.create();
-        this.playerIdPair = playerIdPair;
-        this.friendshipState = FriendshipState.PENDING;
+    public static Friendship create(Pair<PlayerId,PlayerId> playerIdPair){
+        return new Friendship(
+                FriendshipId.create(),
+                playerIdPair,
+                FriendshipState.PENDING
+        );
     }
 
-    public void acceptFriendship() {
+    public void accept() {
         if (this.friendshipState != FriendshipState.PENDING) {
             throw new InvalidFriendshipStateException(
                     "Cannot accept friendship: current state is " + this.friendshipState + ", expected PENDING"
             );
         }
         this.friendshipState = FriendshipState.ACCEPTED;
+    }
+
+    public void reject() {
+        if (this.friendshipState != FriendshipState.PENDING) {
+            throw new InvalidFriendshipStateException(
+                    "Cannot reject friendship: current state is " + this.friendshipState + ", expected PENDING"
+            );
+        }
+        this.friendshipState = FriendshipState.REJECTED;
     }
 
     public FriendshipId getFriendshipId() {

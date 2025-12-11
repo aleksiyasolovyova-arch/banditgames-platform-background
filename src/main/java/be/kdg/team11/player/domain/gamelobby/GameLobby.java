@@ -7,6 +7,8 @@ import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
 
+//TODO Radu doesn't like how we find the first / second players
+
 public class GameLobby {
     private final GameLobbyId gameLobbyId;
     private final GameReference gameReference;
@@ -31,7 +33,7 @@ public class GameLobby {
     }
 
 
-    public static GameLobby createGameLobbyForStrangers(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
+    public static GameLobby createForStrangers(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
         return new GameLobby(
                 GameLobbyId.create(),
                 gameReference,
@@ -44,7 +46,7 @@ public class GameLobby {
         );
     }
 
-    public static GameLobby createGameLobbyForFriends(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
+    public static GameLobby createForFriends(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
         return new GameLobby(
                 GameLobbyId.create(),
                 gameReference,
@@ -57,7 +59,7 @@ public class GameLobby {
         );
     }
 
-    public static GameLobby createGameLobbyForAI(GameReference gameReference, PlayerId playerId) {
+    public static GameLobby createForAI(GameReference gameReference, PlayerId playerId) {
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId, PlayerId.ai());
         GameLobby gameLobby = new GameLobby(
                 GameLobbyId.create(),
@@ -69,11 +71,11 @@ public class GameLobby {
                 LocalDateTime.now(),
                 null
         );
-        gameLobby.startGame();
+        gameLobby.start();
         return gameLobby;
     }
 
-    public void acceptByPlayer(PlayerId playerId) {
+    public void acceptBy(PlayerId playerId) {
         if (playerIdPair.getFirst().equals(playerId)) {
             if (!player1Accepted) {
                 this.player1Accepted = true;
@@ -86,11 +88,11 @@ public class GameLobby {
             throw new IllegalArgumentException("Invalid player id provided");
         }
         if (player1Accepted && player2Accepted && gameLobbyStatus.equals(GameLobbyStatus.PENDING)) {
-            startGame();
+            start();
         }
     }
 
-    public void cancelGame() {
+    public void cancel() {
         if (gameLobbyStatus.equals(GameLobbyStatus.PENDING) || gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             this.gameLobbyStatus = GameLobbyStatus.CANCELED;
         } else {
@@ -98,7 +100,7 @@ public class GameLobby {
         }
     }
 
-    public void startGame() {
+    public void start() {
         if (gameLobbyStatus.equals(GameLobbyStatus.PENDING) && player1Accepted && player2Accepted) {
             this.gameLobbyStatus = GameLobbyStatus.STARTED;
             this.startTime = LocalDateTime.now();
@@ -107,10 +109,11 @@ public class GameLobby {
         }
     }
 
-    public void endGameWithWinner(PlayerId winnerId) {
+    public void end(PlayerId winnerId) {
         if (!gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             throw new IllegalArgumentException("To finish a game it must have started!");
         }
+        this.gameLobbyStatus = GameLobbyStatus.FINISHED;
         if (playerIdPair.getFirst().equals(winnerId)) {
             this.gameLobbyResult = GameLobbyResult.PLAYER_1_WON;
         } else if (playerIdPair.getSecond().equals(winnerId)) {
@@ -121,12 +124,25 @@ public class GameLobby {
         this.endTime = LocalDateTime.now();
     }
 
-    public void endGameWithDraw() {
+    public void end() {
         if (!gameLobbyStatus.equals(GameLobbyStatus.STARTED)) {
             throw new IllegalArgumentException("To finish a game it must have started!");
         }
+        this.gameLobbyStatus = GameLobbyStatus.FINISHED;
         this.gameLobbyResult = GameLobbyResult.DRAW;
         this.endTime = LocalDateTime.now();
+    }
+
+    public boolean isParticipant(PlayerId playerId) {
+        return playerIdPair.getFirst().equals(playerId) ||
+                playerIdPair.getSecond().equals(playerId);
+    }
+
+    public boolean isPlayer1 (PlayerId playerId) {
+        if (!isParticipant(playerId)) {
+            throw new IllegalArgumentException("Player is not participant of this game!");
+        }
+        return playerIdPair.getFirst().equals(playerId);
     }
 
     public boolean isAgainstAi() {
