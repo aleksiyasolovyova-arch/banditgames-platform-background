@@ -66,7 +66,7 @@ public class GamesController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{gameId}/")
+    @DeleteMapping("/{gameId}")
     public ResponseEntity<Void> rejectGame(
             @PathVariable UUID gameId) {
         rejectGamePort.rejectGame(
