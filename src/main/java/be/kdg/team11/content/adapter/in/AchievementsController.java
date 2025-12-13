@@ -21,6 +21,29 @@ public class AchievementsController {
         this.achievementMapper = achievementMapper;
     }
 
+    /**
+     * Creates a new achievement definition.
+     * FULL PATH: /achievements (POST)
+     * REQUEST BODY (CreateAchievementRequest):
+     * - achievementName (String, required): Name of the achievement (1-100 chars)
+     * - description (String, required): Achievement description (5-500 chars)
+     * - pictureUrl (String, required): URL to achievement badge/image
+     * - achievementType (AchievementType, required): Type of achievement (enum)
+     * - requiredValue (long, required): Threshold value to unlock achievement (non-negative)
+     * -
+     * RESPONSE BODY (AchievementDto):
+     * - achievementId (UUID): Unique identifier for the created achievement
+     * - name (String): Achievement name
+     * - description (String): Achievement description
+     * - pictureUrl (String): URL to achievement image
+     * - achievementType (String): Achievement type
+     * - requiredValue (long): Required value to unlock
+     * -
+     * HTTP Status Codes:
+     * - 201 Created: Achievement successfully created
+     * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 500 Internal Server Error: Unexpected server error
+     */
     @PostMapping
     public ResponseEntity<AchievementDto> createAchievement(
             @Valid @RequestBody CreateAchievementRequest request) {
