@@ -21,7 +21,7 @@ repositories {
 extra["springModulithVersion"] = "1.4.4"
 
 dependencies {
-    // TODO clean this up? bit of a mess without comments explaining which ones we actually need
+    //TODO clean this up? bit of a mess without comments explaining which ones we actually need
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
