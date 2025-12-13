@@ -1,7 +1,7 @@
 package be.kdg.team11.player.port.out;
 
-import be.kdg.team11.player.domain.gamelobby.GameLobby;
+import be.kdg.team11.player.domain.lobby.Lobby;
 
 public interface SaveGameLobbyPort {
-    GameLobby save(GameLobby gameLobby);
+    Lobby save(Lobby lobby);
 }

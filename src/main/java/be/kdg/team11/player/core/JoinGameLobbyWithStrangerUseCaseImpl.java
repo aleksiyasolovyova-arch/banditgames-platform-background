@@ -1,6 +1,6 @@
 package be.kdg.team11.player.core;
 
-import be.kdg.team11.player.domain.gamelobby.GameLobby;
+import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.projections.AvailableGame;
 import be.kdg.team11.player.port.in.JoinGameLobbyWithStrangerPort;
@@ -27,9 +27,9 @@ public class JoinGameLobbyWithStrangerUseCaseImpl implements JoinGameLobbyWithSt
     }
 
     @Override
-    public Optional<GameLobby> joinGameLobbyWithStranger(AvailableGame gameId, PlayerId playerId) {
+    public Optional<Lobby> joinGameLobbyWithStranger(AvailableGame gameId, PlayerId playerId) {
         // AtomicReference to reference the game lobby we may create
-        AtomicReference<GameLobby> createdLobby = new AtomicReference<>();
+        AtomicReference<Lobby> createdLobby = new AtomicReference<>();
 
         matchmakingQueue.compute(gameId, (key, waitingPlayer) -> {
             if (waitingPlayer == null) {
@@ -43,7 +43,7 @@ public class JoinGameLobbyWithStrangerUseCaseImpl implements JoinGameLobbyWithSt
             }
 
             // Create lobby with both players
-            GameLobby lobby = GameLobby.createForStrangers(gameId, waitingPlayer, playerId);
+            Lobby lobby = Lobby.createForStrangers(gameId, waitingPlayer, playerId);
             saveGameLobbyPort.save(lobby);
 
             // Store in atomic reference to return later

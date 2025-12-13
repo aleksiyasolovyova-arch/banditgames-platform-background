@@ -1,7 +1,7 @@
 package be.kdg.team11.player.adapter.out.jpa.entity;
 
-import be.kdg.team11.player.domain.gamelobby.GameLobbyResult;
-import be.kdg.team11.player.domain.gamelobby.GameLobbyStatus;
+import be.kdg.team11.player.domain.lobby.LobbyResult;
+import be.kdg.team11.player.domain.lobby.LobbyStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -32,11 +32,11 @@ public class GameLobbyJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_lobby_status", nullable = false)
-    private GameLobbyStatus gameLobbyStatus;
+    private LobbyStatus lobbyStatus;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_lobby_result", nullable = false)
-    private GameLobbyResult gameLobbyResult;
+    private LobbyResult lobbyResult;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -95,20 +95,20 @@ public class GameLobbyJpaEntity {
         this.player2Accepted = player2Accepted;
     }
 
-    public GameLobbyStatus getGameLobbyStatus() {
-        return gameLobbyStatus;
+    public LobbyStatus getGameLobbyStatus() {
+        return lobbyStatus;
     }
 
-    public void setGameLobbyStatus(GameLobbyStatus gameLobbyStatus) {
-        this.gameLobbyStatus = gameLobbyStatus;
+    public void setGameLobbyStatus(LobbyStatus lobbyStatus) {
+        this.lobbyStatus = lobbyStatus;
     }
 
-    public GameLobbyResult getGameLobbyResult() {
-        return gameLobbyResult;
+    public LobbyResult getGameLobbyResult() {
+        return lobbyResult;
     }
 
-    public void setGameLobbyResult(GameLobbyResult gameLobbyResult) {
-        this.gameLobbyResult = gameLobbyResult;
+    public void setGameLobbyResult(LobbyResult lobbyResult) {
+        this.lobbyResult = lobbyResult;
     }
 
     public LocalDateTime getStartTime() {

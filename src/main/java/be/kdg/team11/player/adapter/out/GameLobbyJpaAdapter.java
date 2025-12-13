@@ -3,8 +3,8 @@ package be.kdg.team11.player.adapter.out;
 import be.kdg.team11.player.adapter.out.jpa.GameLobbyJpaRepository;
 import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.GameLobbyJpaMapper;
-import be.kdg.team11.player.domain.gamelobby.GameLobby;
-import be.kdg.team11.player.domain.gamelobby.GameLobbyId;
+import be.kdg.team11.player.domain.lobby.Lobby;
+import be.kdg.team11.player.domain.lobby.LobbyId;
 import be.kdg.team11.player.port.out.LoadGameLobbiesPort;
 import be.kdg.team11.player.port.out.LoadGameLobbyPort;
 import be.kdg.team11.player.port.out.SaveGameLobbyPort;
@@ -27,21 +27,21 @@ public class GameLobbyJpaAdapter implements SaveGameLobbyPort, LoadGameLobbyPort
     }
 
     @Override
-    public List<GameLobby> loadAll() {
+    public List<Lobby> loadAll() {
         return gameLobbyJpaRepository.findAll().stream()
                 .map(gameLobbyJpaMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public Optional<GameLobby> loadBy(GameLobbyId gameLobbyId) {
-        return gameLobbyJpaRepository.findById(gameLobbyId.gameLobbyId())
+    public Optional<Lobby> loadBy(LobbyId lobbyId) {
+        return gameLobbyJpaRepository.findById(lobbyId.gameLobbyId())
                 .map(gameLobbyJpaMapper::toDomain);
     }
 
     @Override
-    public GameLobby save(GameLobby gameLobby) {
-        GameLobbyJpaEntity entity = gameLobbyJpaMapper.toJpaEntity(gameLobby);
+    public Lobby save(Lobby lobby) {
+        GameLobbyJpaEntity entity = gameLobbyJpaMapper.toJpaEntity(lobby);
         GameLobbyJpaEntity saved = gameLobbyJpaRepository.save(entity);
         return gameLobbyJpaMapper.toDomain(saved);
     }

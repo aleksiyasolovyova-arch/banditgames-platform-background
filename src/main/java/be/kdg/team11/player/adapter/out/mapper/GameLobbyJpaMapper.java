@@ -1,8 +1,8 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
 import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
-import be.kdg.team11.player.domain.gamelobby.GameLobby;
-import be.kdg.team11.player.domain.gamelobby.GameLobbyId;
+import be.kdg.team11.player.domain.lobby.Lobby;
+import be.kdg.team11.player.domain.lobby.LobbyId;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.projections.AvailableGame;
 import org.springframework.data.util.Pair;
@@ -11,32 +11,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameLobbyJpaMapper {
 
-    public GameLobbyJpaEntity toJpaEntity(GameLobby gameLobby) {
+    public GameLobbyJpaEntity toJpaEntity(Lobby lobby) {
         GameLobbyJpaEntity entity = new GameLobbyJpaEntity();
 
-        entity.setGameLobbyId(gameLobby.getGameLobbyId().gameLobbyId());
-        entity.setGameId(gameLobby.getGameId().gameId());
-        entity.setPlayerId1(gameLobby.getPlayerIdPair().getFirst().playerId());
-        entity.setPlayerId2(gameLobby.getPlayerIdPair().getSecond().playerId());
-        entity.setPlayer1Accepted(gameLobby.getPlayer1Accepted());
-        entity.setPlayer2Accepted(gameLobby.getPlayer2Accepted());
-        entity.setGameLobbyStatus(gameLobby.getGameLobbyStatus());
-        entity.setGameLobbyResult(gameLobby.getGameLobbyResult());
-        entity.setStartTime(gameLobby.getStartTime());
-        entity.setEndTime(gameLobby.getEndTime());
+        entity.setGameLobbyId(lobby.getLobbyId().gameLobbyId());
+        entity.setGameId(lobby.getGameId().gameId());
+        entity.setPlayerId1(lobby.getSlotPair().getFirst().playerId());
+        entity.setPlayerId2(lobby.getSlotPair().getSecond().playerId());
+        entity.setPlayer1Accepted(lobby.getPlayer1Accepted());
+        entity.setPlayer2Accepted(lobby.getPlayer2Accepted());
+        entity.setGameLobbyStatus(lobby.getGameLobbyStatus());
+        entity.setGameLobbyResult(lobby.getLobbyResult());
+        entity.setStartTime(lobby.getStartTime());
+        entity.setEndTime(lobby.getEndTime());
 
         return entity;
     }
 
-    public GameLobby toDomain(GameLobbyJpaEntity entity) {
-        GameLobbyId gameLobbyId = new GameLobbyId(entity.getGameLobbyId());
+    public Lobby toDomain(GameLobbyJpaEntity entity) {
+        LobbyId lobbyId = new LobbyId(entity.getGameLobbyId());
         AvailableGame gameId = new AvailableGame(entity.getGameId());
         PlayerId playerId1 = new PlayerId(entity.getPlayerId1());
         PlayerId playerId2 = new PlayerId(entity.getPlayerId2());
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId1, playerId2);
 
-        return new GameLobby(
-                gameLobbyId,
+        return new Lobby(
+                lobbyId,
                 gameId,
                 playerIdPair,
                 entity.getPlayer1Accepted(),
