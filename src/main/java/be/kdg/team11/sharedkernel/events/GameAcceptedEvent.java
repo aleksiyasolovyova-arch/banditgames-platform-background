@@ -1,0 +1,18 @@
+package be.kdg.team11.sharedkernel.events;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record GameAcceptedEvent(
+        UUID uuid,
+        LocalDateTime eventPit,
+        UUID gameId
+) implements DomainEvent {
+    public GameAcceptedEvent(UUID gameId) {
+        this(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                gameId
+        );
+    }
+}

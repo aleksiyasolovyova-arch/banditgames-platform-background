@@ -9,6 +9,7 @@ import be.kdg.team11.content.port.in.RejectGameCommand;
 import be.kdg.team11.content.port.in.RejectGamePort;
 import be.kdg.team11.content.port.out.LoadGamePort;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,12 +17,12 @@ import java.util.Optional;
 public class RejectGameUseCaseImpl implements RejectGamePort{
 
     private final LoadGamePort loadGamePort;
-    private final DeleteGamePort deleteGamePort;
+    private final List<DeleteGamePort> deleteGamePorts;
 
     public RejectGameUseCaseImpl(LoadGamePort loadGamePort,
-                                 DeleteGamePort deleteGamePort) {
+                                 List<DeleteGamePort> deleteGamePort) {
         this.loadGamePort = loadGamePort;
-        this.deleteGamePort = deleteGamePort;
+        this.deleteGamePorts = deleteGamePort;
     }
 
     @Override
@@ -30,8 +31,10 @@ public class RejectGameUseCaseImpl implements RejectGamePort{
         Game game = loadGamePort.loadBy(gameId)
                 .orElseThrow(() -> GameId.notFound(gameId));
 
+        game.reject();
         //TODO Ask for feedback about deleting when rejecting
-        deleteGamePort.delete(game);
+        deleteGamePorts.forEach(deleteGamePort -> deleteGamePort.delete(game));
+
         return game;
     }
 }

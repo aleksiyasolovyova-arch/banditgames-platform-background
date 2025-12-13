@@ -37,7 +37,7 @@ public class GamesController {
     @PostMapping
     public ResponseEntity<GameDto> createGame(
             @Valid @RequestBody RegisterGameRequest request) {
-        Game createdGame = registerGamePort.registerGame(
+        Game createdGame = registerGamePort.register(
                 gameMapper.toCommand(request)
         );
         GameDto response = gameMapper.toResponse(createdGame);

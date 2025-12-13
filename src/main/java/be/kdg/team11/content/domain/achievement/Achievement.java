@@ -3,6 +3,11 @@ package be.kdg.team11.content.domain.achievement;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
+import be.kdg.team11.sharedkernel.events.AchievementCreatedEvent;
+import be.kdg.team11.sharedkernel.events.DomainEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Aggregate Root for the Achievement subdomain.
@@ -16,6 +21,8 @@ public class Achievement {
     private final AchievementType type;
     private final long requiredValue;
 
+    private final List<DomainEvent> eventStore = new ArrayList<>();
+
     public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         this.achievementId = achievementId;
         this.name = name;
@@ -25,13 +32,15 @@ public class Achievement {
         this.requiredValue = requiredValue;
     }
 
+
     public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         validateAchievementName(name);
         validateAchievementDescription(description);
         validateAchievementPictureUrl(pictureUrl);
         validateAchievementType(type);
         validateAchievementRequiredValue(requiredValue);
-        return new Achievement(
+
+        Achievement achievement = new Achievement(
                 AchievementId.create(),
                 name,
                 description,
@@ -39,6 +48,17 @@ public class Achievement {
                 type,
                 requiredValue
         );
+
+        AchievementCreatedEvent event = new AchievementCreatedEvent(
+                achievement.achievementId.achievementId(),
+                name,
+                description,
+                pictureUrl.toString(),
+                requiredValue
+        );
+        achievement.eventStore.add(event);
+
+        return achievement;
     }
 
     /**
@@ -54,6 +74,7 @@ public class Achievement {
 
         return type.isMetBy(requiredValue, statistics);
     }
+
 
     private static void validateAchievementName(String name) {
         if (name == null || name.isBlank()) {
@@ -126,5 +147,9 @@ public class Achievement {
 
     public long getRequiredValue() {
         return requiredValue;
+    }
+
+    public List<DomainEvent> getEventStore() {
+        return eventStore;
     }
 }

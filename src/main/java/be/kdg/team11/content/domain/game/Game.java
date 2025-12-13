@@ -4,13 +4,16 @@ import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
+import be.kdg.team11.sharedkernel.events.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * Aggregate Root for the Game subdomain.
- * Represents a publishable game in the platform.
+ * Represents a publishable game on the platform.
  */
  public class Game {
     private final GameId gameId;
@@ -24,25 +27,21 @@ import java.util.List;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
 
-    public void accept() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
-            );
-        }
-        this.registrationState = GameRegistrationState.ACCEPTED;
-    }
+    private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    public void reject() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
-            );
-        }
-        this.registrationState = GameRegistrationState.REJECTED;
-    }
 
-    public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, GameRegistrationState registrationState, List<Rule> rules, List<GameAchievement> achievements) {
+    private Game(
+            GameId gameId,
+            String name,
+            String description,
+            BigDecimal price,
+            Url pictureUrl,
+            Url gameUrl,
+            String gameCreatorName,
+            GameRegistrationState registrationState,
+            List<Rule> rules,
+            List<GameAchievement> achievements
+    ) {
         this.gameId = gameId;
         this.name = name;
         this.description = description;
@@ -62,7 +61,8 @@ import java.util.List;
         validateGamePictureUrl(pictureUrl);
         validateGameUrl(gameUrl);
         validateGameCreatorName(gameCreatorName);
-        return new Game(
+
+        Game game = new Game(
                 GameId.create(),
                 name,
                 description,
@@ -74,6 +74,54 @@ import java.util.List;
                 rules,
                 achievements
         );
+
+        List<GameRegisteredEvent.RuleRecord> ruleRecords = rules.stream()
+                .map(rule -> GameRegisteredEvent.RuleRecord.of(rule.description()))
+                .toList();
+
+        List<GameRegisteredEvent.GameAchievementRecord> achievementRecords = achievements.stream()
+                .map(achievement -> GameRegisteredEvent.GameAchievementRecord.of(
+                        achievement.code(),
+                        achievement.description()
+                ))
+                .toList();
+
+        GameRegisteredEvent event = new GameRegisteredEvent(
+                game.gameId.gameId(),
+                name,
+                description,
+                price,
+                pictureUrl.toString(),
+                gameUrl.toString(),
+                gameCreatorName,
+                ruleRecords,
+                achievementRecords
+        );
+        game.eventStore.add(event);
+
+        return game;
+    }
+
+    public void accept() {
+        if (this.registrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
+            );
+        }
+        GameAcceptedEvent event = new GameAcceptedEvent(this.gameId.gameId());
+        this.registrationState = GameRegistrationState.ACCEPTED;
+        this.eventStore.add(event);
+    }
+
+    public void reject() {
+        if (this.registrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
+            );
+        }
+        GameRejectedEvent event = new GameRejectedEvent(this.gameId.gameId());
+        this.registrationState = GameRegistrationState.REJECTED;
+        this.eventStore.add(event);
     }
 
 /**
@@ -83,9 +131,19 @@ import java.util.List;
     public void modifyUrls(Url pictureUrl, Url gameUrl){
         validateGamePictureUrl(pictureUrl);
         validateGameUrl(gameUrl);
+
+        GameUrlsModifiedEvent event = new GameUrlsModifiedEvent(
+                this.gameId.gameId(),
+                pictureUrl.toString(),
+                gameUrl.toString()
+        );
+
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
+
+       this.eventStore.add(event);
     }
+
 
     private static void validateGameName(String name) {
         if (name == null || name.isBlank()) {
@@ -172,5 +230,9 @@ import java.util.List;
 
     public List<GameAchievement> getAchievements() {
         return achievements;
+    }
+
+    public List<DomainEvent> getEventStore() {
+        return eventStore;
     }
 }

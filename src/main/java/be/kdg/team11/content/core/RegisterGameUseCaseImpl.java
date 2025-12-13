@@ -24,7 +24,7 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
     }
 
     @Override
-    public Game registerGame(RegisterGameCommand command) {
+    public Game register(RegisterGameCommand command) {
         Url pictureUrl = Url.of(command.pictureUrl());
         Url gameUrl = Url.of(command.gameUrl());
         List<Rule> rules = command.rules().stream()

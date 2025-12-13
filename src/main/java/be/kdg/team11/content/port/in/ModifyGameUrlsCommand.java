@@ -1,5 +1,7 @@
 package be.kdg.team11.content.port.in;
 
+import org.springframework.util.Assert;
+
 import java.util.UUID;
 
 public record ModifyGameUrlsCommand(
@@ -8,19 +10,8 @@ public record ModifyGameUrlsCommand(
         String gameUrl
 ) {
     public ModifyGameUrlsCommand {
-        // Game ID
-        if (gameId == null) {
-            throw new IllegalArgumentException("Game ID cannot be null");
-        }
-
-        // Picture URLs
-        if (pictureUrl == null || pictureUrl.trim().isEmpty()) {
-            throw new IllegalArgumentException("Picture URL cannot be empty");
-        }
-
-        // Game URL
-        if (gameUrl == null || gameUrl.trim().isEmpty()) {
-            throw new IllegalArgumentException("Game URL cannot be empty");
-        }
+        Assert.notNull(gameId, "Game ID cannot be null");
+        Assert.hasText(pictureUrl, "Picture URL cannot be empty");
+        Assert.hasText(gameUrl, "Game URL cannot be empty");
     }
 }
