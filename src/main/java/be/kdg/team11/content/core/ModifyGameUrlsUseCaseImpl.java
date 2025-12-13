@@ -27,16 +27,12 @@ public class ModifyGameUrlsUseCaseImpl implements ModifyGameUrlsPort {
 
     @Override
     public Game modifyGameUrls(ModifyGameUrlsCommand command) {
-        // 1. Load the existing game aggregate
-        GameId gameId = new GameId(command.gameId());
-        Optional<Game> optionalGame = loadGamePort.loadBy(gameId);
-        if (optionalGame.isEmpty()) {
-            throw new IllegalArgumentException("Game with id " + gameId + " not found");
-        }
-        Game game = optionalGame.get();
+        GameId gameId = GameId.of(command.gameId());
+        Game game = loadGamePort.loadBy(gameId)
+                .orElseThrow(() -> GameId.notFound(gameId));
 
-        Url pictureUrl = new Url(command.pictureUrl());
-        Url gameUrl = new Url(command.gameUrl());
+        Url pictureUrl = Url.of(command.pictureUrl());
+        Url gameUrl = Url.of(command.gameUrl());
 
         game.modifyUrls(pictureUrl, gameUrl);
         // 6. Persist the new aggregate

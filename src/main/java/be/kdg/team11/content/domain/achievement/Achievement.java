@@ -25,8 +25,12 @@ public class Achievement {
         this.requiredValue = requiredValue;
     }
 
-    public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
-        validateInputs(name, description, pictureUrl, type, requiredValue);
+    public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+        validateAchievementName(name);
+        validateAchievementDescription(description);
+        validateAchievementPictureUrl(pictureUrl);
+        validateAchievementType(type);
+        validateAchievementRequiredValue(requiredValue);
         return new Achievement(
                 AchievementId.create(),
                 name,
@@ -51,37 +55,48 @@ public class Achievement {
         return type.isMetBy(requiredValue, statistics);
     }
 
-    private static void validateInputs(
-            String name,
-            String description,
-            Url pictureUrl,
-            AchievementType type,
-            long requiredValue
-    ) {
+    private static void validateAchievementName(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidAchievementException(
                     "Achievement name cannot be null or empty"
             );
         }
+        if (name.length() > 100) {
+            throw new InvalidAchievementException(
+                    "Achievement name cannot exceed 100 characters, received: " + name.length()
+            );
+        }
+    }
 
+    private static void validateAchievementDescription(String description) {
         if (description == null || description.isBlank()) {
             throw new InvalidAchievementException(
                     "Achievement description cannot be null or empty"
             );
         }
-
+        if (description.length() > 500) {
+            throw new InvalidAchievementException(
+                    "Achievement description cannot exceed 500 characters, received: " + description.length()
+            );
+        }
+    }
+    private static void validateAchievementPictureUrl(Url pictureUrl) {
         if (pictureUrl == null) {
             throw new InvalidAchievementException(
                     "Achievement picture URL cannot be null"
             );
         }
+    }
 
+    private static void validateAchievementType(AchievementType type) {
         if (type == null) {
             throw new InvalidAchievementTypeException(
                     "Achievement type cannot be null"
             );
         }
+    }
 
+    private static void validateAchievementRequiredValue(long requiredValue) {
         if (requiredValue < 0) {
             throw new InvalidAchievementException(
                     "Required value cannot be negative, received: " + requiredValue

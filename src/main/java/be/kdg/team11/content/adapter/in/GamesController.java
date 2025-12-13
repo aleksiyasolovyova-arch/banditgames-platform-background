@@ -1,16 +1,15 @@
 package be.kdg.team11.content.adapter.in;
 
-import be.kdg.team11.content.adapter.in.mapper.GameMapper;
-import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
-import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
-import be.kdg.team11.content.adapter.in.response.GameDto;
-import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import be.kdg.team11.content.adapter.in.mapper.GameMapper;
+import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
+import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
+import be.kdg.team11.content.adapter.in.response.GameDto;
+import be.kdg.team11.content.domain.game.Game;
 import java.util.UUID;
 
 @RestController
@@ -66,13 +65,14 @@ public class GamesController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{gameId}")
-    public ResponseEntity<Void> rejectGame(
+    @PutMapping("/{gameId}/reject")
+    public ResponseEntity<GameDto> rejectGame(
             @PathVariable UUID gameId) {
-        rejectGamePort.rejectGame(
+        Game rejectedGame = rejectGamePort.rejectGame(
                 new RejectGameCommand(gameId)
         );
-        return ResponseEntity.ok().build();
+        GameDto response = gameMapper.toResponse(rejectedGame);
+        return ResponseEntity.ok(response);
     }
 
 }
