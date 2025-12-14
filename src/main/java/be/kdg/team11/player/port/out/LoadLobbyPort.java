@@ -5,6 +5,6 @@ import be.kdg.team11.player.domain.lobby.LobbyId;
 
 import java.util.Optional;
 
-public interface LoadGameLobbyPort {
+public interface LoadLobbyPort {
     Optional<Lobby> loadBy(LobbyId lobbyId);
 }

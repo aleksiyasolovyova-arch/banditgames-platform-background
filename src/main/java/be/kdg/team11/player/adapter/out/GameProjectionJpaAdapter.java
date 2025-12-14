@@ -2,14 +2,14 @@ package be.kdg.team11.player.adapter.out;
 
 import be.kdg.team11.player.adapter.out.jpa.GameProjectionJpaRepository;
 import be.kdg.team11.player.adapter.out.mapper.GameProjectionJpaMapper;
-import be.kdg.team11.player.port.out.LoadGameProjectionsPort;
+import be.kdg.team11.player.port.out.GameReferenceExistsPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GameProjectionJpaAdapter implements LoadGameProjectionsPort {
+public class GameProjectionJpaAdapter implements GameReferenceExistsPort {
     private final GameProjectionJpaRepository gameProjectionJpaRepository;
     private final GameProjectionJpaMapper gameProjectionJpaMapper;
 

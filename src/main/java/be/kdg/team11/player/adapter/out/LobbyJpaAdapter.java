@@ -5,8 +5,7 @@ import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.GameLobbyJpaMapper;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
-import be.kdg.team11.player.port.out.LoadGameLobbiesPort;
-import be.kdg.team11.player.port.out.LoadGameLobbyPort;
+import be.kdg.team11.player.port.out.LoadLobbyPort;
 import be.kdg.team11.player.port.out.SaveGameLobbyPort;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class GameLobbyJpaAdapter implements SaveGameLobbyPort, LoadGameLobbyPort, LoadGameLobbiesPort {
+public class LobbyJpaAdapter implements SaveGameLobbyPort, LoadLobbyPort, LoadGameLobbiesPort {
     private final GameLobbyJpaRepository gameLobbyJpaRepository;
     private final GameLobbyJpaMapper gameLobbyJpaMapper;
 
-    public GameLobbyJpaAdapter(
+    public LobbyJpaAdapter(
             GameLobbyJpaRepository gameLobbyJpaRepository,
             GameLobbyJpaMapper gameLobbyJpaMapper
     ) {
