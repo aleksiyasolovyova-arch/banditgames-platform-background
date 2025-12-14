@@ -7,6 +7,7 @@ import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -151,6 +152,6 @@ public class Achievement {
     }
 
     public List<DomainEvent> getEventStore() {
-        return eventStore;
+        return Collections.unmodifiableList(eventStore);
     }
 }
