@@ -3,6 +3,7 @@ package be.kdg.team11.player.domain.player;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +33,8 @@ public class Player {
         );
     }
 
-    public void addOwnedGame(GameReference gameReference) {
-        ownedGames.add(new OwnedGame(gameReference, false, LocalDate.now()));
+    public void buyGame(GameReference gameReference) {
+        ownedGames.add(OwnedGame.bought(gameReference, LocalDateTime.now()));
     }
 
     public PlayerId getPlayerId() {
@@ -45,14 +46,14 @@ public class Player {
     }
 
     public Set<UnlockedPlatformAchievement> getUnlockedPlatformAchievements() {
-        return unlockedPlatformAchievements;
+        return Collections.unmodifiableSet(unlockedPlatformAchievements);
     }
 
     public Set<UnlockedGameAchievement> getUnlockedGameAchievements() {
-        return unlockedGameAchievements;
+        return Collections.unmodifiableSet(unlockedGameAchievements);
     }
 
     public Set<OwnedGame> getOwnedGames() {
-        return ownedGames;
+        return Collections.unmodifiableSet(ownedGames);
     }
 }
