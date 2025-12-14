@@ -10,10 +10,10 @@ import java.util.UUID;
 public class OwnedGameEmbeddable {
 
     @Column(nullable = false)
-    private UUID gameId;
+    private UUID gameReference;
 
     @Column(nullable = false)
-    private boolean favourite;
+    private boolean favorite;
 
     @Column(nullable = false)
     private LocalDate dateBought;
@@ -21,20 +21,20 @@ public class OwnedGameEmbeddable {
     public OwnedGameEmbeddable() {
     }
 
-    public UUID getGameId() {
-        return gameId;
+    public UUID getGameReference() {
+        return gameReference;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
+    public void setGameReference(UUID gameReference) {
+        this.gameReference = gameReference;
     }
 
-    public boolean isFavourite() {
-        return favourite;
+    public boolean isFavorite() {
+        return favorite;
     }
 
-    public void setFavourite(boolean favourite) {
-        this.favourite = favourite;
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public LocalDate getDateBought() {

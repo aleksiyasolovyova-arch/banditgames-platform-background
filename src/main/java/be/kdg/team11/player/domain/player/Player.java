@@ -3,7 +3,6 @@ package be.kdg.team11.player.domain.player;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class Player {
     }
 
     public void buyGame(GameReference gameReference) {
-        ownedGames.add(OwnedGame.bought(gameReference, LocalDateTime.now()));
+        ownedGames.add(OwnedGame.bought(gameReference, LocalDate.now()));
     }
 
     public PlayerId getPlayerId() {

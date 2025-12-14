@@ -1,8 +1,8 @@
 package be.kdg.team11.player.adapter.out;
 
-import be.kdg.team11.player.adapter.out.jpa.GameLobbyJpaRepository;
-import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
-import be.kdg.team11.player.adapter.out.mapper.GameLobbyJpaMapper;
+import be.kdg.team11.player.adapter.out.jpa.LobbyJpaRepository;
+import be.kdg.team11.player.adapter.out.jpa.entity.LobbyJpaEntity;
+import be.kdg.team11.player.adapter.out.mapper.LobbyJpaMapper;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
 import be.kdg.team11.player.port.out.LoadLobbyPort;
@@ -14,34 +14,34 @@ import java.util.Optional;
 
 @Component
 public class LobbyJpaAdapter implements SaveGameLobbyPort, LoadLobbyPort, LoadGameLobbiesPort {
-    private final GameLobbyJpaRepository gameLobbyJpaRepository;
-    private final GameLobbyJpaMapper gameLobbyJpaMapper;
+    private final LobbyJpaRepository lobbyJpaRepository;
+    private final LobbyJpaMapper lobbyJpaMapper;
 
     public LobbyJpaAdapter(
-            GameLobbyJpaRepository gameLobbyJpaRepository,
-            GameLobbyJpaMapper gameLobbyJpaMapper
+            LobbyJpaRepository lobbyJpaRepository,
+            LobbyJpaMapper lobbyJpaMapper
     ) {
-        this.gameLobbyJpaRepository = gameLobbyJpaRepository;
-        this.gameLobbyJpaMapper = gameLobbyJpaMapper;
+        this.lobbyJpaRepository = lobbyJpaRepository;
+        this.lobbyJpaMapper = lobbyJpaMapper;
     }
 
     @Override
     public List<Lobby> loadAll() {
-        return gameLobbyJpaRepository.findAll().stream()
-                .map(gameLobbyJpaMapper::toDomain)
+        return lobbyJpaRepository.findAll().stream()
+                .map(lobbyJpaMapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Lobby> loadBy(LobbyId lobbyId) {
-        return gameLobbyJpaRepository.findById(lobbyId.gameLobbyId())
-                .map(gameLobbyJpaMapper::toDomain);
+        return lobbyJpaRepository.findById(lobbyId.gameLobbyId())
+                .map(lobbyJpaMapper::toDomain);
     }
 
     @Override
     public Lobby save(Lobby lobby) {
-        GameLobbyJpaEntity entity = gameLobbyJpaMapper.toJpaEntity(lobby);
-        GameLobbyJpaEntity saved = gameLobbyJpaRepository.save(entity);
-        return gameLobbyJpaMapper.toDomain(saved);
+        LobbyJpaEntity entity = lobbyJpaMapper.toJpaEntity(lobby);
+        LobbyJpaEntity saved = lobbyJpaRepository.save(entity);
+        return lobbyJpaMapper.toDomain(saved);
     }
 }

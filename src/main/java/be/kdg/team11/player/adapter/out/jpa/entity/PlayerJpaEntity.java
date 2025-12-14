@@ -11,29 +11,24 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "players", schema = "player_schema")
+@Table(schema = "player_schema")
 public class PlayerJpaEntity {
-
     @Id
-    @Column(name = "player_id", columnDefinition = "UUID")
     private UUID playerId;
 
-    @Column(name = "joined_date", nullable = false)
+    @Column(nullable = false)
     private LocalDate joinedDate;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "unlocked_platform_achievements", schema = "player_schema",
-            joinColumns = @JoinColumn(name = "player_id"))
+    @ElementCollection
+    @CollectionTable(schema = "player_schema")
     private Set<UnlockedPlatformAchievementEmbeddable> unlockedPlatformAchievements = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "unlocked_game_achievements", schema = "player_schema",
-            joinColumns = @JoinColumn(name = "player_id"))
+    @ElementCollection
+    @CollectionTable(schema = "player_schema")
     private Set<UnlockedGameAchievementEmbeddable> unlockedGameAchievements = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "owned_games", schema = "player_schema",
-            joinColumns = @JoinColumn(name = "player_id"))
+    @ElementCollection
+    @CollectionTable(schema = "player_schema")
     private Set<OwnedGameEmbeddable> ownedGames = new HashSet<>();
 
     public PlayerJpaEntity() {

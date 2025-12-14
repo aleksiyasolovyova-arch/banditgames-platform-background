@@ -27,7 +27,7 @@ public class PlayerJpaMapper {
         // Map unlocked game achievements
         Set<UnlockedGameAchievement> unlockedGameAchievements = entity.getUnlockedGameAchievements().stream()
                 .map(embeddable -> new UnlockedGameAchievement(
-                        new AvailableGame(embeddable.getGameId()),
+                        new AvailableGame(embeddable.getGameReference()),
                         embeddable.getCode(),
                         embeddable.getUnlockedAt()
                 ))
@@ -36,8 +36,8 @@ public class PlayerJpaMapper {
         // Map owned games
         Set<OwnedGame> ownedGames = entity.getOwnedGames().stream()
                 .map(embeddable -> new OwnedGame(
-                        new AvailableGame(embeddable.getGameId()),
-                        embeddable.isFavourite(),
+                        new AvailableGame(embeddable.getGameReference()),
+                        embeddable.isFavorite(),
                         embeddable.getDateBought()
                 ))
                 .collect(Collectors.toSet());
@@ -71,7 +71,7 @@ public class PlayerJpaMapper {
         Set<UnlockedGameAchievementEmbeddable> gameAchievements = player.getUnlockedGameAchievements().stream()
                 .map(achievement -> {
                             UnlockedGameAchievementEmbeddable embeddable = new UnlockedGameAchievementEmbeddable();
-                            embeddable.setGameId(achievement.gameId().gameId());
+                            embeddable.setGameReference(achievement.gameId().gameId());
                             embeddable.setCode(achievement.code());
                             embeddable.setUnlockedAt(achievement.unlockedAt());
                             return embeddable;
@@ -84,8 +84,8 @@ public class PlayerJpaMapper {
         Set<OwnedGameEmbeddable> ownedGames = player.getOwnedGames().stream()
                 .map(game -> {
                     OwnedGameEmbeddable embeddable = new OwnedGameEmbeddable();
-                    embeddable.setGameId(game.gameId().gameId());
-                    embeddable.setFavourite(game.favourite());
+                    embeddable.setGameReference(game.gameId().gameId());
+                    embeddable.setFavorite(game.favourite());
                     embeddable.setDateBought(game.dateBought());
                     return embeddable;
                 })

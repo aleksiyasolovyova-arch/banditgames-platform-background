@@ -1,6 +1,6 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
-import be.kdg.team11.player.adapter.out.jpa.entity.GameLobbyJpaEntity;
+import be.kdg.team11.player.adapter.out.jpa.entity.LobbyJpaEntity;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
 import be.kdg.team11.player.domain.player.PlayerId;
@@ -9,13 +9,13 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GameLobbyJpaMapper {
+public class LobbyJpaMapper {
 
-    public GameLobbyJpaEntity toJpaEntity(Lobby lobby) {
-        GameLobbyJpaEntity entity = new GameLobbyJpaEntity();
+    public LobbyJpaEntity toJpaEntity(Lobby lobby) {
+        LobbyJpaEntity entity = new LobbyJpaEntity();
 
         entity.setGameLobbyId(lobby.getLobbyId().gameLobbyId());
-        entity.setGameId(lobby.getGameId().gameId());
+        entity.setGameReference(lobby.getGameId().gameId());
         entity.setPlayerId1(lobby.getSlotPair().getFirst().playerId());
         entity.setPlayerId2(lobby.getSlotPair().getSecond().playerId());
         entity.setPlayer1Accepted(lobby.getPlayer1Accepted());
@@ -28,9 +28,9 @@ public class GameLobbyJpaMapper {
         return entity;
     }
 
-    public Lobby toDomain(GameLobbyJpaEntity entity) {
+    public Lobby toDomain(LobbyJpaEntity entity) {
         LobbyId lobbyId = new LobbyId(entity.getGameLobbyId());
-        AvailableGame gameId = new AvailableGame(entity.getGameId());
+        AvailableGame gameId = new AvailableGame(entity.getGameReference());
         PlayerId playerId1 = new PlayerId(entity.getPlayerId1());
         PlayerId playerId2 = new PlayerId(entity.getPlayerId2());
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId1, playerId2);

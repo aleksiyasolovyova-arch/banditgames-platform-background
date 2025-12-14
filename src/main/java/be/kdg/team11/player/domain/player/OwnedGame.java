@@ -2,20 +2,20 @@ package be.kdg.team11.player.domain.player;
 
 import be.kdg.team11.player.domain.projections.GameReference;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class OwnedGame {
     private final GameReference game;
-    private final LocalDateTime dateBought;
+    private final LocalDate dateBought;
     private boolean favorite;
 
-    private OwnedGame(GameReference game, LocalDateTime dateBought) {
+    private OwnedGame(GameReference game, LocalDate dateBought) {
         this.game = game;
         this.dateBought = dateBought;
         this.favorite = false;
     }
 
-    public static OwnedGame bought(GameReference game, LocalDateTime dateBought) {
+    public static OwnedGame bought(GameReference game, LocalDate dateBought) {
         return new OwnedGame(game, dateBought);
     }
 
@@ -35,7 +35,7 @@ public class OwnedGame {
         return favorite;
     }
 
-    public LocalDateTime getDateBought() {
+    public LocalDate getDateBought() {
         return dateBought;
     }
 

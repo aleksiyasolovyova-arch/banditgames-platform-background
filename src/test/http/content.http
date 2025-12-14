@@ -108,14 +108,14 @@ Content-Type: {{contentType}}
   ]
 }
 
-### 4. Accept a game (replace {gameId} with actual UUID from registration response)
-# Copy the gameId from the response of request #1 and paste it below
+### 4. Accept a game (replace {gameReference} with actual UUID from registration response)
+# Copy the gameReference from the response of request #1 and paste it below
 PUT {{baseUrl}}/games/811345db-c9c9-4011-bf94-906c7cab2ddf/accept
 
-### Example with actual UUID (replace with your actual gameId)
+### Example with actual UUID (replace with your actual gameReference)
 # PUT {{baseUrl}}/games/550e8400-e29b-41d4-a716-446655440000/accept
 
-### 5. Update game URLs (replace {gameId} with actual UUID)
+### 5. Update game URLs (replace {gameReference} with actual UUID)
 PUT {{baseUrl}}/games/811345db-c9c9-4011-bf94-906c7cab2ddf
 Content-Type: {{contentType}}
 
@@ -124,7 +124,7 @@ Content-Type: {{contentType}}
   "gameUrl": "https://example.com/play/space-invaders-v2"
 }
 
-### Example with actual UUID (replace with your actual gameId)
+### Example with actual UUID (replace with your actual gameReference)
 # PUT {{baseUrl}}/games/550e8400-e29b-41d4-a716-446655440000
 # Content-Type: application/json
 #
@@ -133,11 +133,11 @@ Content-Type: {{contentType}}
 #   "gameUrl": "https://example.com/play/space-invaders-v2"
 # }
 
-### 6. Reject a game (replace {gameId} with actual UUID)
+### 6. Reject a game (replace {gameReference} with actual UUID)
 # This will delete the game from the system
 DELETE {{baseUrl}}/games/4017ca2a-818a-4066-8742-a198847ae22d
 
-### Example with actual UUID (replace with your actual gameId)
+### Example with actual UUID (replace with your actual gameReference)
 # DELETE {{baseUrl}}/games/550e8400-e29b-41d4-a716-446655440000/
 
 ### 7. Create standalone achievement (if this endpoint is still relevant)
