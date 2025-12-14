@@ -1,5 +1,6 @@
 package be.kdg.team11.content.domain.game;
 
+import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 
 import java.util.UUID;
@@ -18,8 +19,8 @@ public record GameId(
         return new GameId(uuid);
     }
 
-    public static InvalidGameDataException notFound(GameId gameId) {
-        return new InvalidGameDataException(
+    public static GameNotFoundException notFound(GameId gameId) {
+        return new GameNotFoundException(
                 String.format("Game not found with ID: %s", gameId.gameId())
         );
     }

@@ -1,5 +1,7 @@
 package be.kdg.team11.content.port.in;
 
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
@@ -16,16 +18,36 @@ public record RegisterGameCommand(
         List<GameAchievementCommand> achievements
 ) {
     public RegisterGameCommand {
-        Assert.hasText(name, "Game name cannot be empty");
-        Assert.isTrue(name.length() <= 100, "Game name cannot exceed 100 characters");
-        Assert.hasText(description, "Game description cannot be empty");
-        Assert.isTrue(description.length() <= 500, "Game description cannot exceed 500 characters");
-        Assert.notNull(price, "Game price cannot be null");
-        Assert.isTrue(price.compareTo(BigDecimal.ZERO) >= 0, "Game price cannot be negative");
-        Assert.hasText(pictureUrl, "Picture URL cannot be empty");
-        Assert.hasText(gameUrl, "Game URL cannot be empty");
-        Assert.hasText(gameCreatorName, "Game creator name cannot be empty");
-        Assert.notEmpty(rules, "At least one rule must be provided");
+        if (name == null || name.isBlank()) {
+            throw new InvalidGameDataException("Game name cannot be empty");
+        }
+        if (name.length() > 100) {
+            throw new InvalidGameDataException("Game name cannot exceed 100 characters");
+        }
+        if (description == null || description.isBlank()) {
+            throw new InvalidGameDataException("Game description cannot be empty");
+        }
+        if (description.length() > 500) {
+            throw new InvalidGameDataException("Game description cannot exceed 500 characters");
+        }
+        if (price == null) {
+            throw new InvalidGameDataException("Game price cannot be null");
+        }
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidGameDataException("Game price cannot be negative");
+        }
+        if (pictureUrl == null || pictureUrl.isBlank()) {
+            throw new InvalidGameUrlException("Picture URL cannot be empty");
+        }
+        if (gameUrl == null || gameUrl.isBlank()) {
+            throw new InvalidGameUrlException("Game URL cannot be empty");
+        }
+        if (gameCreatorName == null || gameCreatorName.isBlank()) {
+            throw new InvalidGameDataException("Game creator name cannot be empty");
+        }
+        if (rules == null || rules.isEmpty()) {
+            throw new InvalidGameDataException("At least one rule must be provided");
+        }
     }
 
     public record GameAchievementCommand(

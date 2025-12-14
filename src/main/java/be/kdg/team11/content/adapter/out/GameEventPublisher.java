@@ -7,25 +7,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContentEventPublisher implements SaveGamePort, SaveAchievementPort {
+public class GameEventPublisher implements SaveGamePort{
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ContentEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+    public GameEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    //TODO figure out
-   // @Override
-   // public void delete(Game game) {
-   //
-   // }
-    //if the game is deleted before the event was published it will gve an error
-
-    @Override
-    public Achievement save(Achievement achievement) {
-        achievement.getEventStore().forEach(applicationEventPublisher::publishEvent);
-        return achievement;
-    }
 
     @Override
     public Game save(Game game) {

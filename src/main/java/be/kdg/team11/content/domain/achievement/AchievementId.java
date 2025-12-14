@@ -1,5 +1,6 @@
 package be.kdg.team11.content.domain.achievement;
 
+import be.kdg.team11.content.domain.achievement.exeptions.AchievementNotFoundException;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 
 import java.util.UUID;
@@ -18,8 +19,8 @@ public record AchievementId(
         return new AchievementId(uuid);
     }
 
-    public static InvalidAchievementException notFound(AchievementId achievementId) {
-        return new InvalidAchievementException(
+    public static AchievementNotFoundException notFound(AchievementId achievementId) {
+        return new AchievementNotFoundException(
                 String.format("Achievement not found with ID: %s", achievementId.achievementId())
         );
     }
