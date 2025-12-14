@@ -42,6 +42,14 @@ public class Friendship {
         this.friendshipState = FriendshipState.REJECTED;
     }
 
+    public PlayerId getRequester() {
+        return playerIdPair.getFirst();
+    }
+
+    public PlayerId getRecipient() {
+        return playerIdPair.getSecond();
+    }
+
     public FriendshipId getFriendshipId() {
         return friendshipId;
     }

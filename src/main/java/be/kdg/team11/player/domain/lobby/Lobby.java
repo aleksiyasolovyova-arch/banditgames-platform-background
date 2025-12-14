@@ -160,7 +160,7 @@ public class Lobby {
     }
 
     public Pair<Slot,Slot> getSlotPair() {
-        return slotPair;
+        return Pair.of(slotPair.getFirst(), slotPair.getSecond());
     }
 
     public LobbyResult getLobbyResult() {
