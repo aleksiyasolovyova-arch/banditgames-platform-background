@@ -5,11 +5,14 @@ import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 import be.kdg.team11.sharedkernel.events.*;
+import be.kdg.team11.sharedkernel.events.game.GameAcceptedEvent;
+import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
+import be.kdg.team11.sharedkernel.events.game.GameRejectedEvent;
+import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Aggregate Root for the Game subdomain.
@@ -30,7 +33,7 @@ import java.util.stream.Stream;
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
 
-    private Game(
+    public Game(
             GameId gameId,
             String name,
             String description,

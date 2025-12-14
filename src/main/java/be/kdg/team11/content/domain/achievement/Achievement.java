@@ -3,7 +3,7 @@ package be.kdg.team11.content.domain.achievement;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
-import be.kdg.team11.sharedkernel.events.AchievementCreatedEvent;
+import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 
 import java.util.ArrayList;
@@ -54,6 +54,7 @@ public class Achievement {
                 name,
                 description,
                 pictureUrl.toString(),
+                type.name(),
                 requiredValue
         );
         achievement.eventStore.add(event);

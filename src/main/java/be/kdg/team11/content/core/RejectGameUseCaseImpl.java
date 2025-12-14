@@ -32,7 +32,6 @@ public class RejectGameUseCaseImpl implements RejectGamePort{
                 .orElseThrow(() -> GameId.notFound(gameId));
 
         game.reject();
-        //TODO Ask for feedback about deleting when rejecting
         deleteGamePorts.forEach(deleteGamePort -> deleteGamePort.delete(game));
 
         return game;
