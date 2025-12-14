@@ -12,6 +12,7 @@ import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -194,6 +195,7 @@ import java.util.List;
         }
     }
 
+    //TODO Could wrap getters of Collections in Collections.unmodifiableList to protect aggregate invariants:
 
     public GameId getGameId() {
         return gameId;
@@ -228,14 +230,14 @@ import java.util.List;
     }
 
     public List<Rule> getRules() {
-        return rules;
+        return Collections.unmodifiableList(rules);
     }
 
     public List<GameAchievement> getAchievements() {
-        return achievements;
+        return Collections.unmodifiableList(achievements);
     }
 
     public List<DomainEvent> getEventStore() {
-        return eventStore;
+        return Collections.unmodifiableList(eventStore);
     }
 }
