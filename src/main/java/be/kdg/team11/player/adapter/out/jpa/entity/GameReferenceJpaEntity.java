@@ -8,17 +8,12 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "game_projections")
-public class GameProjectionJpaEntity {
+@Table(schema = "player_schema")
+public class GameReferenceJpaEntity {
     @Id
-    @Column(name = "game_id", columnDefinition = "UUID")
     private UUID gameId;
 
-    public GameProjectionJpaEntity() {
-    }
-
-    public GameProjectionJpaEntity(UUID gameId) {
-        this.gameId = gameId;
+    public GameReferenceJpaEntity() {
     }
 
     public UUID getGameId() {

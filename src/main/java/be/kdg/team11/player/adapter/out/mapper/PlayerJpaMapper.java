@@ -16,31 +16,36 @@ public class PlayerJpaMapper {
     public Player toDomain(PlayerJpaEntity entity) {
         PlayerId playerId = new PlayerId(entity.getPlayerId());
 
-        // Map unlocked platform achievements
-        Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = entity.getUnlockedPlatformAchievements().stream()
-                .map(embeddable -> new UnlockedPlatformAchievement(
-                        new AchievementId(embeddable.getAchievementId()),
-                        embeddable.getUnlockedAt()
-                ))
-                .collect(Collectors.toSet());
+        Set<UnlockedPlatformAchievement> unlockedPlatformAchievements =
+                entity.getUnlockedPlatformAchievements().stream()
+                        .map(e -> new UnlockedPlatformAchievement(
+                                new AchievementId(e.getAchievementId()),
+                                e.getUnlockedAt()
+                        ))
+                        .collect(Collectors.toSet());
 
-        // Map unlocked game achievements
-        Set<UnlockedGameAchievement> unlockedGameAchievements = entity.getUnlockedGameAchievements().stream()
-                .map(embeddable -> new UnlockedGameAchievement(
-                        new AvailableGame(embeddable.getGameId()),
-                        embeddable.getCode(),
-                        embeddable.getUnlockedAt()
-                ))
-                .collect(Collectors.toSet());
+        Set<UnlockedGameAchievement> unlockedGameAchievements =
+                entity.getUnlockedGameAchievements().stream()
+                        .map(e -> new UnlockedGameAchievement(
+                                new be.kdg.team11.player.domain.projections.GameReference(e.getGameReference()),
+                                e.getCode(),
+                                e.getUnlockedAt()
+                        ))
+                        .collect(Collectors.toSet());
 
-        // Map owned games
-        Set<OwnedGame> ownedGames = entity.getOwnedGames().stream()
-                .map(embeddable -> new OwnedGame(
-                        new AvailableGame(embeddable.getGameId()),
-                        embeddable.isFavourite(),
-                        embeddable.getDateBought()
-                ))
-                .collect(Collectors.toSet());
+        Set<OwnedGame> ownedGames =
+                entity.getOwnedGames().stream()
+                        .map(e -> {
+                            OwnedGame game = OwnedGame.bought(
+                                    new be.kdg.team11.player.domain.projections.GameReference(e.getGameReference()),
+                                    e.getDateBought()
+                            );
+                            if (e.isFavorite()) {
+                                game.favorite();
+                            }
+                            return game;
+                        })
+                        .collect(Collectors.toSet());
 
         return new Player(
                 playerId,
@@ -56,42 +61,44 @@ public class PlayerJpaMapper {
         entity.setPlayerId(player.getPlayerId().playerId());
         entity.setJoinedDate(player.getJoinedDate());
 
-        // Map unlocked platform achievements
-        Set<UnlockedPlatformAchievementEmbeddable> platformAchievements = player.getUnlockedPlatformAchievements().stream()
-                .map(achievement -> {
-                    UnlockedPlatformAchievementEmbeddable embeddable = new UnlockedPlatformAchievementEmbeddable();
-                    embeddable.setAchievementId(achievement.achievementId().achievementId());
-                    embeddable.setUnlockedAt(achievement.unlockedAt());
-                    return embeddable;
-                })
-                .collect(Collectors.toSet());
+        Set<UnlockedPlatformAchievementEmbeddable> platformAchievements =
+                player.getUnlockedPlatformAchievements().stream()
+                        .map(a -> {
+                            UnlockedPlatformAchievementEmbeddable e =
+                                    new UnlockedPlatformAchievementEmbeddable();
+                            e.setAchievementId(a.achievementId().achievementId());
+                            e.setUnlockedAt(a.unlockedAt());
+                            return e;
+                        })
+                        .collect(Collectors.toSet());
         entity.setUnlockedPlatformAchievements(platformAchievements);
 
-        // Map unlocked game achievements
-        Set<UnlockedGameAchievementEmbeddable> gameAchievements = player.getUnlockedGameAchievements().stream()
-                .map(achievement -> {
-                            UnlockedGameAchievementEmbeddable embeddable = new UnlockedGameAchievementEmbeddable();
-                            embeddable.setGameId(achievement.gameId().gameId());
-                            embeddable.setCode(achievement.code());
-                            embeddable.setUnlockedAt(achievement.unlockedAt());
-                            return embeddable;
-                        }
-                )
-                .collect(Collectors.toSet());
+        Set<UnlockedGameAchievementEmbeddable> gameAchievements =
+                player.getUnlockedGameAchievements().stream()
+                        .map(a -> {
+                            UnlockedGameAchievementEmbeddable e =
+                                    new UnlockedGameAchievementEmbeddable();
+                            e.setGameReference(a.gameReference().gameId());
+                            e.setCode(a.code());
+                            e.setUnlockedAt(a.unlockedAt());
+                            return e;
+                        })
+                        .collect(Collectors.toSet());
         entity.setUnlockedGameAchievements(gameAchievements);
 
-        // Map owned games
-        Set<OwnedGameEmbeddable> ownedGames = player.getOwnedGames().stream()
-                .map(game -> {
-                    OwnedGameEmbeddable embeddable = new OwnedGameEmbeddable();
-                    embeddable.setGameId(game.gameId().gameId());
-                    embeddable.setFavourite(game.favourite());
-                    embeddable.setDateBought(game.dateBought());
-                    return embeddable;
-                })
-                .collect(Collectors.toSet());
+        Set<OwnedGameEmbeddable> ownedGames =
+                player.getOwnedGames().stream()
+                        .map(g -> {
+                            OwnedGameEmbeddable e = new OwnedGameEmbeddable();
+                            e.setGameReference(g.getGame().gameId());
+                            e.setFavorite(g.isFavorite());
+                            e.setDateBought(g.getDateBought());
+                            return e;
+                        })
+                        .collect(Collectors.toSet());
         entity.setOwnedGames(ownedGames);
 
         return entity;
     }
+
 }

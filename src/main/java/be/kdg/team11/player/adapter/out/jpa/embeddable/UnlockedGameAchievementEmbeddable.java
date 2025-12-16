@@ -10,7 +10,7 @@ import java.util.UUID;
 public class UnlockedGameAchievementEmbeddable {
 
     @Column(nullable = false)
-    private UUID gameId;
+    private UUID gameReference;
 
     @Column(nullable = false, length = 100)
     private String code;
@@ -21,12 +21,12 @@ public class UnlockedGameAchievementEmbeddable {
     public UnlockedGameAchievementEmbeddable() {
     }
 
-    public UUID getGameId() {
-        return gameId;
+    public UUID getGameReference() {
+        return gameReference;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
+    public void setGameReference(UUID gameReference) {
+        this.gameReference = gameReference;
     }
 
     public String getCode() {
