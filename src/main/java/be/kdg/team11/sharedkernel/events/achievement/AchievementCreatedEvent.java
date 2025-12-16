@@ -14,7 +14,7 @@ public record AchievementCreatedEvent(
         String pictureUrl,
         String type,
         long requiredValue
-)implements DomainEvent {
+) implements DomainEvent {
     public AchievementCreatedEvent(
             UUID achievementId,
             String name,

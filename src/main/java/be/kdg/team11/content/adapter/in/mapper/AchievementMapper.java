@@ -1,9 +1,10 @@
 package be.kdg.team11.content.adapter.in.mapper;
-import org.springframework.stereotype.Component;
+
 import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementCommand;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AchievementMapper {
@@ -16,7 +17,6 @@ public class AchievementMapper {
                 request.requiredValue()
         );
     }
-
 
 
     public AchievementDto toResponse(Achievement achievement) {

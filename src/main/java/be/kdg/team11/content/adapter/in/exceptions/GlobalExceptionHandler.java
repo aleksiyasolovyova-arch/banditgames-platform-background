@@ -73,6 +73,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("INVALID_GAME_STATE", ex.getMessage()));
     }
+
     /**
      * Handles achievement not found errors
      * Returns 404 Not Found

@@ -19,7 +19,7 @@ public record GameRegisteredEvent(
         String gameCreatorName,
         List<RuleRecord> rules,
         List<GameAchievementRecord> achievements
-)implements DomainEvent {
+) implements DomainEvent {
 
     public GameRegisteredEvent(
             UUID gameId,

@@ -48,7 +48,8 @@ public record RegisterGameRequest(
             @NotBlank(message = "Rule description cannot be blank")
             @Size(min = 1, max = 255, message = "Rule description must be between 1 and 255 characters")
             String description
-    ) {}
+    ) {
+    }
 
     public record GameAchievementRequest(
             @NotNull(message = "Achievement code cannot be null")
@@ -60,5 +61,6 @@ public record RegisterGameRequest(
             @NotBlank(message = "Achievement description cannot be blank")
             @Size(min = 1, max = 500, message = "Achievement description must be between 1 and 500 characters")
             String description
-    ) {}
+    ) {
+    }
 }

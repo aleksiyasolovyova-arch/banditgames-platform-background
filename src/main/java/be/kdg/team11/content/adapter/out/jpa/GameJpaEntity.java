@@ -53,7 +53,8 @@ public class GameJpaEntity {
     )
     private List<GameAchievementEmbeddable> achievementEmbeddables = new ArrayList<>();
 
-    public GameJpaEntity() {}
+    public GameJpaEntity() {
+    }
 
     public UUID getGameId() {
         return gameId;

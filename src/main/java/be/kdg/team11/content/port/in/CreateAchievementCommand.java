@@ -2,7 +2,6 @@ package be.kdg.team11.content.port.in;
 
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
-import org.springframework.util.Assert;
 
 public record CreateAchievementCommand(
         String name,

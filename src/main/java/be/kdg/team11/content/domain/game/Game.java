@@ -1,10 +1,10 @@
 package be.kdg.team11.content.domain.game;
 
+import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
-import be.kdg.team11.sharedkernel.events.*;
+import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.game.GameAcceptedEvent;
 import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
 import be.kdg.team11.sharedkernel.events.game.GameRejectedEvent;
@@ -19,7 +19,7 @@ import java.util.List;
  * Aggregate Root for the Game subdomain.
  * Represents a publishable game on the platform.
  */
- public class Game {
+public class Game {
     private final GameId gameId;
     private final String name;
     private final String description;
@@ -128,11 +128,12 @@ import java.util.List;
         this.eventStore.add(event);
     }
 
-/**
- * Updates game URLs for maintenance purposes.
- * Allows updating icon/screenshot and playable game links without recreating the aggregate.
- * */
-    public void modifyUrls(Url pictureUrl, Url gameUrl){
+    /**
+     * Updates game URLs for maintenance purposes.
+     * Allows updating icon/screenshot and playable game links without recreating the aggregate.
+     *
+     */
+    public void modifyUrls(Url pictureUrl, Url gameUrl) {
         validateGamePictureUrl(pictureUrl);
         validateGameUrl(gameUrl);
 
@@ -145,7 +146,7 @@ import java.util.List;
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
 
-       this.eventStore.add(event);
+        this.eventStore.add(event);
     }
 
 

@@ -14,7 +14,8 @@ public class SlotJpaEmbeddable {
     @Column
     private ParticipationStatus participationStatus;
 
-    public SlotJpaEmbeddable() {}
+    public SlotJpaEmbeddable() {
+    }
 
     public UUID getPlayerId() {
         return playerId;

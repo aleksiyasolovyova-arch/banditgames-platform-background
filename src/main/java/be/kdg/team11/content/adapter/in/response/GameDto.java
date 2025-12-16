@@ -18,9 +18,12 @@ public record GameDto(
 ) {
     public record RuleDto(
             String description
-    ) {}
+    ) {
+    }
+
     public record GameAchievementDto(
             String code,
             String description
-    ) {}
+    ) {
+    }
 }

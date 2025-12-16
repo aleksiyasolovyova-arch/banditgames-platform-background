@@ -1,7 +1,10 @@
 package be.kdg.team11.content.adapter.in.request;
 
 import be.kdg.team11.content.domain.achievement.AchievementType;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record CreateAchievementRequest(
         @NotNull(message = "Achievement name cannot be null")

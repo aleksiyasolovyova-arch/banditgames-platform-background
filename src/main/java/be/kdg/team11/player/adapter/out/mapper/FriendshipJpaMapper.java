@@ -9,14 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FriendshipJpaMapper {
-    public Friendship toDomain(FriendshipJpaEntity entity){
+    public Friendship toDomain(FriendshipJpaEntity entity) {
         return new Friendship(
                 new FriendshipId(entity.getFriendShipId()),
                 Pair.of(new PlayerId(entity.getRequesterId()), new PlayerId(entity.getRecipientId())),
                 entity.getFriendshipState()
         );
     }
-    public FriendshipJpaEntity toJpaEntity (Friendship friendship){
+
+    public FriendshipJpaEntity toJpaEntity(Friendship friendship) {
         FriendshipJpaEntity friendshipJpaEntity = new FriendshipJpaEntity();
 
         friendshipJpaEntity.setFriendShipId(friendship.getFriendshipId().friendshipId());

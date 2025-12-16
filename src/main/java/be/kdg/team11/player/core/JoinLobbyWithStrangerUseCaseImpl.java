@@ -25,7 +25,7 @@ public class JoinLobbyWithStrangerUseCaseImpl implements JoinLobbyWithStrangerPo
 
     public JoinLobbyWithStrangerUseCaseImpl(
             List<SaveLobbyPort> saveGameLobbyPorts
-    ){
+    ) {
         this.saveGameLobbyPorts = saveGameLobbyPorts;
     }
 
