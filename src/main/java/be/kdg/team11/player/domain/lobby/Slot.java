@@ -1,12 +1,24 @@
 package be.kdg.team11.player.domain.lobby;
 
+import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyException;
+import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyStateException;
 import be.kdg.team11.player.domain.player.PlayerId;
 
-public class Slot {
+/**
+ * Value Object for a player slot in a lobby.
+ * Manages player identity and participation status (PENDING → ACCEPTED | REJECTED).
+ */
+ public class Slot {
     private final PlayerId playerId;
     private ParticipationStatus participationStatus;
 
     public Slot(PlayerId playerId, ParticipationStatus participationStatus) {
+        if (playerId == null) {
+            throw new InvalidLobbyException("Player ID cannot be null");
+        }
+        if (participationStatus == null) {
+            throw new InvalidLobbyException("Participation status cannot be null");
+        }
         this.playerId = playerId;
         this.participationStatus = participationStatus;
     }
@@ -21,14 +33,22 @@ public class Slot {
 
     public void accept() {
         if (participationStatus != ParticipationStatus.PENDING) {
-            throw new IllegalStateException("Slot cannot be accepted");
+            throw InvalidLobbyStateException.invalidStateTransition(
+                    participationStatus.name(),
+                    "PENDING",
+                    "accept slot"
+            );
         }
         participationStatus = ParticipationStatus.ACCEPTED;
     }
 
     public void reject() {
         if (participationStatus != ParticipationStatus.PENDING) {
-            throw new IllegalStateException("Slot cannot be refused");
+            throw InvalidLobbyStateException.invalidStateTransition(
+                    participationStatus.name(),
+                    "PENDING",
+                    "reject slot"
+            );
         }
         participationStatus = ParticipationStatus.REJECTED;
     }
