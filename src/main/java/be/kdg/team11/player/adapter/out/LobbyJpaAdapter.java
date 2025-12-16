@@ -6,14 +6,13 @@ import be.kdg.team11.player.adapter.out.mapper.LobbyJpaMapper;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
 import be.kdg.team11.player.port.out.LoadLobbyPort;
-import be.kdg.team11.player.port.out.SaveGameLobbyPort;
+import be.kdg.team11.player.port.out.SaveLobbyPort;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
-public class LobbyJpaAdapter implements SaveGameLobbyPort, LoadLobbyPort, LoadGameLobbiesPort {
+public class LobbyJpaAdapter implements SaveLobbyPort, LoadLobbyPort {
     private final LobbyJpaRepository lobbyJpaRepository;
     private final LobbyJpaMapper lobbyJpaMapper;
 
@@ -26,15 +25,8 @@ public class LobbyJpaAdapter implements SaveGameLobbyPort, LoadLobbyPort, LoadGa
     }
 
     @Override
-    public List<Lobby> loadAll() {
-        return lobbyJpaRepository.findAll().stream()
-                .map(lobbyJpaMapper::toDomain)
-                .toList();
-    }
-
-    @Override
     public Optional<Lobby> loadBy(LobbyId lobbyId) {
-        return lobbyJpaRepository.findById(lobbyId.gameLobbyId())
+        return lobbyJpaRepository.findById(lobbyId.lobbyId())
                 .map(lobbyJpaMapper::toDomain);
     }
 

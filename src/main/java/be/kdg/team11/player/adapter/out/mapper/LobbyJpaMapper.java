@@ -1,27 +1,42 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
+import be.kdg.team11.player.adapter.out.jpa.embeddable.SlotJpaEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.entity.LobbyJpaEntity;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
+import be.kdg.team11.player.domain.lobby.Slot;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.domain.projections.AvailableGame;
+import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LobbyJpaMapper {
+    //TODO Make sure it is ok to inject this mapper into here
+    private final GameReferenceJpaMapper gameReferenceJpaMapper;
+
+    public LobbyJpaMapper (GameReferenceJpaMapper gameReferenceJpaMapper){
+        this.gameReferenceJpaMapper = gameReferenceJpaMapper;
+    }
 
     public LobbyJpaEntity toJpaEntity(Lobby lobby) {
         LobbyJpaEntity entity = new LobbyJpaEntity();
 
-        entity.setGameLobbyId(lobby.getLobbyId().gameLobbyId());
-        entity.setGameReference(lobby.getGameId().gameId());
-        entity.setPlayerId1(lobby.getSlotPair().getFirst().playerId());
-        entity.setPlayerId2(lobby.getSlotPair().getSecond().playerId());
-        entity.setPlayer1Accepted(lobby.getPlayer1Accepted());
-        entity.setPlayer2Accepted(lobby.getPlayer2Accepted());
-        entity.setGameLobbyStatus(lobby.getGameLobbyStatus());
-        entity.setGameLobbyResult(lobby.getLobbyResult());
+        entity.setLobbyId(lobby.getLobbyId().lobbyId());
+        entity.setGameReference(gameReferenceJpaMapper.toJpaEntity(lobby.getGameReference()));
+
+        SlotJpaEmbeddable slotJpaEmbeddable1 = new SlotJpaEmbeddable();
+        SlotJpaEmbeddable slotJpaEmbeddable2 = new SlotJpaEmbeddable();
+
+        slotJpaEmbeddable1.setPlayerId(lobby.getSlotPair().getFirst().getPlayerId().playerId());
+        slotJpaEmbeddable2.setPlayerId(lobby.getSlotPair().getSecond().getPlayerId().playerId());
+        slotJpaEmbeddable1.setParticipationStatus(lobby.getSlotPair().getFirst().getParticipationStatus());
+        slotJpaEmbeddable2.setParticipationStatus(lobby.getSlotPair().getSecond().getParticipationStatus());
+
+        entity.setSlot1(slotJpaEmbeddable1);
+        entity.setSlot2(slotJpaEmbeddable2);
+
+        entity.setLobbyResult(lobby.getLobbyResult());
         entity.setStartTime(lobby.getStartTime());
         entity.setEndTime(lobby.getEndTime());
 
@@ -29,20 +44,24 @@ public class LobbyJpaMapper {
     }
 
     public Lobby toDomain(LobbyJpaEntity entity) {
-        LobbyId lobbyId = new LobbyId(entity.getGameLobbyId());
-        AvailableGame gameId = new AvailableGame(entity.getGameReference());
-        PlayerId playerId1 = new PlayerId(entity.getPlayerId1());
-        PlayerId playerId2 = new PlayerId(entity.getPlayerId2());
-        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId1, playerId2);
+        LobbyId lobbyId = new LobbyId(entity.getLobbyId());
+        GameReference gameReference = gameReferenceJpaMapper.toDomain(entity.getGameReference());
+
+        SlotJpaEmbeddable slotJpaEmbeddable1 = entity.getSlot1();
+        SlotJpaEmbeddable slotJpaEmbeddable2 = entity.getSlot2();
+
+        Slot slot1 = new Slot(new PlayerId(slotJpaEmbeddable1.getPlayerId()), slotJpaEmbeddable1.getParticipationStatus());
+        Slot slot2 = new Slot(new PlayerId(slotJpaEmbeddable2.getPlayerId()), slotJpaEmbeddable2.getParticipationStatus());
+
+        Pair<Slot, Slot> slotPair = Pair.of(slot1,slot2);
+
+
 
         return new Lobby(
                 lobbyId,
-                gameId,
-                playerIdPair,
-                entity.getPlayer1Accepted(),
-                entity.getPlayer2Accepted(),
-                entity.getGameLobbyStatus(),
-                entity.getGameLobbyResult(),
+                gameReference,
+                slotPair,
+                entity.getLobbyResult(),
                 entity.getStartTime(),
                 entity.getEndTime()
         );
