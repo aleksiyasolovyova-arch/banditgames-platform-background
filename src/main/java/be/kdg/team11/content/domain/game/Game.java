@@ -1,19 +1,25 @@
 package be.kdg.team11.content.domain.game;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
+import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
+import be.kdg.team11.sharedkernel.events.*;
+import be.kdg.team11.sharedkernel.events.game.GameAcceptedEvent;
+import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
+import be.kdg.team11.sharedkernel.events.game.GameRejectedEvent;
+import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Aggregate Root for the Game subdomain.
- * Represents a publishable game in the platform.
+ * Represents a publishable game on the platform.
  */
-public class Game {
+ public class Game {
     private final GameId gameId;
     private final String name;
     private final String description;
@@ -25,25 +31,21 @@ public class Game {
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
 
-    public void accept() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
-            );
-        }
-        this.registrationState = GameRegistrationState.ACCEPTED;
-    }
+    private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    public void reject() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
-            throw new InvalidGameStateException(
-                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
-            );
-        }
-        this.registrationState = GameRegistrationState.REJECTED;
-    }
 
-    public Game(GameId gameId, String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, GameRegistrationState registrationState, List<Rule> rules, List<GameAchievement> achievements) {
+    public Game(
+            GameId gameId,
+            String name,
+            String description,
+            BigDecimal price,
+            Url pictureUrl,
+            Url gameUrl,
+            String gameCreatorName,
+            GameRegistrationState registrationState,
+            List<Rule> rules,
+            List<GameAchievement> achievements
+    ) {
         this.gameId = gameId;
         this.name = name;
         this.description = description;
@@ -57,8 +59,14 @@ public class Game {
     }
 
     public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
-        validateGameInputs(name, description, price, pictureUrl, gameUrl, gameCreatorName);
-        return new Game(
+        validateGameName(name);
+        validateGameDescription(description);
+        validateGamePrice(price);
+        validateGamePictureUrl(pictureUrl);
+        validateGameUrl(gameUrl);
+        validateGameCreatorName(gameCreatorName);
+
+        Game game = new Game(
                 GameId.create(),
                 name,
                 description,
@@ -70,41 +78,91 @@ public class Game {
                 rules,
                 achievements
         );
+
+        List<GameRegisteredEvent.RuleRecord> ruleRecords = rules.stream()
+                .map(rule -> GameRegisteredEvent.RuleRecord.of(rule.description()))
+                .toList();
+
+        List<GameRegisteredEvent.GameAchievementRecord> achievementRecords = achievements.stream()
+                .map(achievement -> GameRegisteredEvent.GameAchievementRecord.of(
+                        achievement.code(),
+                        achievement.description()
+                ))
+                .toList();
+
+        GameRegisteredEvent event = new GameRegisteredEvent(
+                game.gameId.gameId(),
+                name,
+                description,
+                price,
+                pictureUrl.toString(),
+                gameUrl.toString(),
+                gameCreatorName,
+                ruleRecords,
+                achievementRecords
+        );
+        game.eventStore.add(event);
+
+        return game;
     }
 
-    /**
-     * Updates game URLs for maintenance purposes.
-     * Allows updating icon/screenshot and playable game links without recreating the aggregate.
-     *
-     */
-    public void modifyUrls(Url pictureUrl, Url gameUrl) {
-        if (pictureUrl == null) {
-            throw new InvalidGameUrlException("New picture URL cannot be null");
+    public void accept() {
+        if (this.registrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
+            );
         }
+        GameAcceptedEvent event = new GameAcceptedEvent(this.gameId.gameId());
+        this.registrationState = GameRegistrationState.ACCEPTED;
+        this.eventStore.add(event);
+    }
 
-        if (gameUrl == null) {
-            throw new InvalidGameUrlException("New game URL cannot be null");
+    public void reject() {
+        if (this.registrationState != GameRegistrationState.PENDING) {
+            throw new InvalidGameStateException(
+                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
+            );
         }
+        GameRejectedEvent event = new GameRejectedEvent(this.gameId.gameId());
+        this.registrationState = GameRegistrationState.REJECTED;
+        this.eventStore.add(event);
+    }
+
+/**
+ * Updates game URLs for maintenance purposes.
+ * Allows updating icon/screenshot and playable game links without recreating the aggregate.
+ * */
+    public void modifyUrls(Url pictureUrl, Url gameUrl){
+        validateGamePictureUrl(pictureUrl);
+        validateGameUrl(gameUrl);
+
+        GameUrlsModifiedEvent event = new GameUrlsModifiedEvent(
+                this.gameId.gameId(),
+                pictureUrl.toString(),
+                gameUrl.toString()
+        );
+
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
+
+       this.eventStore.add(event);
     }
 
-    private static void validateGameInputs(
-            String name,
-            String description,
-            BigDecimal price,
-            Url pictureUrl,
-            Url gameUrl,
-            String gameCreatorName
-    ) {
+
+    private static void validateGameName(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidGameDataException("Game name cannot be null or empty");
         }
+    }
 
+
+    private static void validateGameDescription(String description) {
         if (description == null || description.isBlank()) {
             throw new InvalidGameDataException("Game description cannot be null or empty");
         }
+    }
 
+    private static void validateGamePrice(BigDecimal price) {
         if (price == null) {
             throw new InvalidGameDataException("Game price cannot be null");
         }
@@ -114,19 +172,30 @@ public class Game {
                     "Game price cannot be negative, received: " + price
             );
         }
+    }
 
+
+    private static void validateGamePictureUrl(Url pictureUrl) {
         if (pictureUrl == null) {
             throw new InvalidGameUrlException("Game picture URL cannot be null");
         }
+    }
 
+
+    private static void validateGameUrl(Url gameUrl) {
         if (gameUrl == null) {
             throw new InvalidGameUrlException("Game playable URL cannot be null");
         }
+    }
 
+
+    private static void validateGameCreatorName(String gameCreatorName) {
         if (gameCreatorName == null || gameCreatorName.isBlank()) {
             throw new InvalidGameDataException("Game creator name cannot be null or empty");
         }
     }
+
+    //TODO Could wrap getters of Collections in Collections.unmodifiableList to protect aggregate invariants:
 
     public GameId getGameId() {
         return gameId;
@@ -161,10 +230,14 @@ public class Game {
     }
 
     public List<Rule> getRules() {
-        return rules;
+        return Collections.unmodifiableList(rules);
     }
 
     public List<GameAchievement> getAchievements() {
-        return achievements;
+        return Collections.unmodifiableList(achievements);
+    }
+
+    public List<DomainEvent> getEventStore() {
+        return Collections.unmodifiableList(eventStore);
     }
 }

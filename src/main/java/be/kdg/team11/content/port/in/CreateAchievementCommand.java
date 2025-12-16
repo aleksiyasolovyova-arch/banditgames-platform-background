@@ -1,5 +1,9 @@
 package be.kdg.team11.content.port.in;
 
+import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
+import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
+import org.springframework.util.Assert;
+
 public record CreateAchievementCommand(
         String name,
         String description,
@@ -9,37 +13,28 @@ public record CreateAchievementCommand(
 ) {
 
     public CreateAchievementCommand {
-        // Achievement Name
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Achievement name cannot be empty");
+        if (name == null || name.isBlank()) {
+            throw new InvalidAchievementException("Achievement name cannot be empty");
         }
-        name = name.trim();
         if (name.length() > 100) {
-            throw new IllegalArgumentException("Achievement name cannot exceed 100 characters");
+            throw new InvalidAchievementException("Achievement name cannot exceed 100 characters");
         }
-
-        // Achievement Description
-        if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Achievement description cannot be empty");
+        if (description == null || description.isBlank()) {
+            throw new InvalidAchievementException("Achievement description cannot be empty");
         }
         if (description.length() > 255) {
-            throw new IllegalArgumentException("Achievement description cannot exceed 255 characters");
+            throw new InvalidAchievementException("Achievement description cannot exceed 255 characters");
         }
-
-        // Picture URL
-        if (pictureUrl == null || pictureUrl.trim().isEmpty()) {
-            throw new IllegalArgumentException("Picture URL cannot be empty");
+        if (pictureUrl == null || pictureUrl.isBlank()) {
+            throw new InvalidAchievementException("Picture URL cannot be empty");
         }
-
-        // Achievement Type
-        if (type == null || type.trim().isEmpty()) {
-            throw new IllegalArgumentException("Achievement type cannot be empty");
+        if (type == null || type.isBlank()) {
+            throw new InvalidAchievementTypeException("Achievement type cannot be empty");
         }
-
-        // Threshold
         if (requiredValue < 0 || requiredValue > 100) {
-            throw new IllegalArgumentException("Achievement required value must be between 0 and 100");
+            throw new InvalidAchievementException("Achievement required value must be between 0 and 100");
         }
     }
+
 
 }

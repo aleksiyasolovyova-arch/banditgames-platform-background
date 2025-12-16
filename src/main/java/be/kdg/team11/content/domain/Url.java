@@ -9,7 +9,7 @@ import java.net.URL;
 public record Url(
         String value
 ) {
-    public Url {
+    public static Url of(String value) {
         if (value == null || value.isBlank()) {
             throw new InvalidGameUrlException("URL cannot be null or empty");
         }
@@ -19,9 +19,11 @@ public record Url(
                     "URL format is invalid. Must be a properly formatted URL: " + value
             );
         }
+
+        return new Url(value);
     }
 
-    private boolean isValidUrl(String value) {
+    private static boolean isValidUrl(String value) {
         try {
             URL url = URI.create(value).toURL();
             return true;

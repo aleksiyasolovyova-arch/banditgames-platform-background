@@ -12,7 +12,7 @@ public record Rule(
     private static final int MAX_DESCRIPTION_LENGTH = 255;
     private static final int MIN_DESCRIPTION_LENGTH = 5;
 
-    public Rule {
+    public static Rule of(String description) {
         if (description == null) {
             throw new InvalidGameDataException("Rule description cannot be null");
         }
@@ -27,5 +27,7 @@ public record Rule(
                             MAX_DESCRIPTION_LENGTH + " characters, received: " + description.length()
             );
         }
+
+        return new Rule(description);
     }
 }

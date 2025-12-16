@@ -1,5 +1,9 @@
 package be.kdg.team11.content.port.in;
 
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
+import org.springframework.util.Assert;
+
 import java.util.UUID;
 
 public record ModifyGameUrlsCommand(
@@ -8,19 +12,14 @@ public record ModifyGameUrlsCommand(
         String gameUrl
 ) {
     public ModifyGameUrlsCommand {
-        // Game ID
         if (gameId == null) {
-            throw new IllegalArgumentException("Game ID cannot be null");
+            throw new InvalidGameDataException("Game ID cannot be null");
         }
-
-        // Picture URLs
-        if (pictureUrl == null || pictureUrl.trim().isEmpty()) {
-            throw new IllegalArgumentException("Picture URL cannot be empty");
+        if (pictureUrl == null || pictureUrl.isBlank()) {
+            throw new InvalidGameUrlException("Picture URL cannot be empty");
         }
-
-        // Game URL
-        if (gameUrl == null || gameUrl.trim().isEmpty()) {
-            throw new IllegalArgumentException("Game URL cannot be empty");
+        if (gameUrl == null || gameUrl.isBlank()) {
+            throw new InvalidGameUrlException("Game URL cannot be empty");
         }
     }
 }

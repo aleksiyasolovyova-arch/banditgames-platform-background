@@ -1,11 +1,11 @@
 package be.kdg.team11.gametests;
 
-import be.kdg.team11.content.core.RejectGameUseCaseImpl;
+import be.kdg.team11.content.core.ModifyGameUrlsUseCaseImpl;
+import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
-import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.port.in.RejectGameCommand;
+import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("RejectGameUseCase Tests")
-class RejectGameUseCaseTest {
+@DisplayName("ModifyGameUrlsUseCase Tests")
+class ModifyGameUrlsUseCaseTest {
 
     @Mock
     private LoadGamePort loadGamePort;
@@ -33,62 +33,74 @@ class RejectGameUseCaseTest {
     @Mock
     private SaveGamePort saveGamePort;
 
-    private RejectGameUseCaseImpl useCase;
+    private ModifyGameUrlsUseCaseImpl useCase;
     private UUID gameId;
 
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new RejectGameUseCaseImpl(loadGamePort, List.of(saveGamePort));
+        useCase = new ModifyGameUrlsUseCaseImpl(loadGamePort, List.of(saveGamePort));
     }
 
     @Test
-    @DisplayName("Should successfully reject a pending game")
-    void testRejectGame_Success() {
+    @DisplayName("Should successfully modify game URLs")
+    void testModifyGameUrls_Success() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
+                gameId,
+                "https://example.com/new-picture.png",
+                "https://example.com/new-game"
+        );
 
         // Act
-        Game result = useCase.rejectGame(command);
+        Game result = useCase.modifyGameUrls(command);
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).reject();
+        verify(mockGame, times(1)).modifyUrls(any(Url.class), any(Url.class));
         verify(saveGamePort, times(1)).save(mockGame);
     }
 
     @Test
     @DisplayName("Should throw GameNotFoundException when game doesn't exist")
-    void testRejectGame_NotFound() {
+    void testModifyGameUrls_NotFound() {
         // Arrange
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.empty());
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
+                gameId,
+                "https://example.com/pic.png",
+                "https://example.com/play"
+        );
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.rejectGame(command))
+        assertThatThrownBy(() -> useCase.modifyGameUrls(command))
                 .isInstanceOf(GameNotFoundException.class)
                 .hasMessageContaining("Game not found");
     }
 
     @Test
-    @DisplayName("Should persist rejected game to all save ports")
-    void testRejectGame_PersistsToAllPorts() {
+    @DisplayName("Should persist modified game to all save ports")
+    void testModifyGameUrls_PersistsToAllPorts() {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new RejectGameUseCaseImpl(loadGamePort, List.of(port1, port2));
+        useCase = new ModifyGameUrlsUseCaseImpl(loadGamePort, List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
+                gameId,
+                "https://example.com/pic.png",
+                "https://example.com/play"
+        );
 
         // Act
-        useCase.rejectGame(command);
+        useCase.modifyGameUrls(command);
 
         // Assert
         verify(port1, times(1)).save(mockGame);
@@ -96,37 +108,46 @@ class RejectGameUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw InvalidGameStateException when game cannot be rejected")
-    void testRejectGame_InvalidState() {
-        // Arrange
-        Game mockGame = mock(Game.class);
-        doThrow(new InvalidGameStateException("Cannot reject game: current state is REJECTED, expected PENDING"))
-                .when(mockGame).reject();
-        when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
-
-        RejectGameCommand command = new RejectGameCommand(gameId);
-
-        // Act & Assert
-        assertThatThrownBy(() -> useCase.rejectGame(command))
-                .isInstanceOf(InvalidGameStateException.class)
-                .hasMessageContaining("Cannot reject game");
-    }
-
-    @Test
-    @DisplayName("Should find game with load port and reject it")
-    void testRejectGame_LoadAndReject() {
+    @DisplayName("Should modify game with valid URLs")
+    void testModifyGameUrls_ValidUrls() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        String newPicUrl = "https://cdn.example.com/updated-pic.png";
+        String newGameUrl = "https://cdn.example.com/updated-game";
+
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
+                gameId,
+                newPicUrl,
+                newGameUrl
+        );
 
         // Act
-        Game result = useCase.rejectGame(command);
+        Game result = useCase.modifyGameUrls(command);
 
         // Assert
         assertThat(result).isNotNull();
+        verify(mockGame, times(1)).modifyUrls(any(Url.class), any(Url.class));
+    }
+
+    @Test
+    @DisplayName("Should load game using GameId")
+    void testModifyGameUrls_LoadsGameById() {
+        // Arrange
+        Game mockGame = mock(Game.class);
+        when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
+
+        ModifyGameUrlsCommand command = new ModifyGameUrlsCommand(
+                gameId,
+                "https://example.com/pic.png",
+                "https://example.com/play"
+        );
+
+        // Act
+        useCase.modifyGameUrls(command);
+
+        // Assert
         verify(loadGamePort, times(1)).loadBy(any(GameId.class));
-        verify(mockGame, times(1)).reject();
     }
 }
