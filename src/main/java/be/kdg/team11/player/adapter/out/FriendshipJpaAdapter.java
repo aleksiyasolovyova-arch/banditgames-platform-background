@@ -15,10 +15,10 @@ public class FriendshipJpaAdapter implements LoadFriendshipPort, SaveFriendshipP
     private final FriendshipJpaRepository friendshipJpaRepository;
     private final FriendshipJpaMapper friendshipJpaMapper;
 
-    public FriendshipJpaAdapter (
+    public FriendshipJpaAdapter(
             FriendshipJpaRepository friendshipJpaRepository,
             FriendshipJpaMapper friendshipJpaMapper
-    ){
+    ) {
         this.friendshipJpaRepository = friendshipJpaRepository;
         this.friendshipJpaMapper = friendshipJpaMapper;
     }

@@ -1,4 +1,5 @@
 package be.kdg.team11.content.adapter.in.response;
+
 import java.util.UUID;
 
 public record AchievementDto(
@@ -8,4 +9,5 @@ public record AchievementDto(
         String pictureUrl,
         String achievementType,
         long requiredValue
-) {}
+) {
+}

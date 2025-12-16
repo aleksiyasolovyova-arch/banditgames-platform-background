@@ -89,7 +89,7 @@ public class Lobby {
             slotPair.getFirst().reject();
         } else if (playerNumber == 2 && slotPair.getSecond().isPending()) {
             slotPair.getSecond().reject();
-        } else  {
+        } else {
             throw new IllegalArgumentException("Player " + playerId + " is not in the lobby");
         }
     }
@@ -133,7 +133,7 @@ public class Lobby {
         this.endTime = LocalDateTime.now();
     }
 
-    public int whichPlayer (PlayerId playerId) {
+    public int whichPlayer(PlayerId playerId) {
         if (slotPair.getFirst().getPlayerId().equals(playerId)) {
             return 1;
         } else if (slotPair.getSecond().getPlayerId().equals(playerId)) {
@@ -159,7 +159,7 @@ public class Lobby {
         return gameReference;
     }
 
-    public Pair<Slot,Slot> getSlotPair() {
+    public Pair<Slot, Slot> getSlotPair() {
         return Pair.of(slotPair.getFirst(), slotPair.getSecond());
     }
 

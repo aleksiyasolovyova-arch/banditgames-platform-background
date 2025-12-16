@@ -11,7 +11,7 @@ public record GameUrlsModifiedEvent(
         UUID gameId,
         String newPictureUrl,
         String newGameUrl
-)implements DomainEvent {
+) implements DomainEvent {
     public GameUrlsModifiedEvent(
             UUID gameId,
             String newPictureUrl,

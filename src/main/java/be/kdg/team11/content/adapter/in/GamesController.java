@@ -1,15 +1,16 @@
 package be.kdg.team11.content.adapter.in;
 
-import be.kdg.team11.content.port.in.*;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import be.kdg.team11.content.adapter.in.mapper.GameMapper;
 import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
 import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
+import be.kdg.team11.content.port.in.*;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @RestController
@@ -32,10 +33,10 @@ public class GamesController {
      * - gameUrl (String, required): URL to game content
      * - gameCreatorName (String, required): Name of game creator (1-100 chars)
      * - rules (List<RuleRequest>, required): Game rules (at least one required)
-     *   - description (String, required): Rule description (1-255 chars)
+     * - description (String, required): Rule description (1-255 chars)
      * - achievements (List<GameAchievementRequest>, required): Linked achievements (at least one required)
-     *   - code (String, required): Achievement code (1-100 chars)
-     *   - description (String, required): Achievement description (1-500 chars)
+     * - code (String, required): Achievement code (1-100 chars)
+     * - description (String, required): Achievement description (1-500 chars)
      */
 
     public GamesController(RegisterGamePort registerGamePort,

@@ -1,13 +1,12 @@
 package be.kdg.team11.content.adapter.out;
 
-import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.domain.game.Game;
-import be.kdg.team11.content.port.out.*;
+import be.kdg.team11.content.port.out.SaveGamePort;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GameEventPublisher implements SaveGamePort{
+public class GameEventPublisher implements SaveGamePort {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public GameEventPublisher(ApplicationEventPublisher applicationEventPublisher) {

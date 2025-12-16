@@ -16,7 +16,7 @@ public class Friendship {
         this.friendshipState = friendshipState;
     }
 
-    public static Friendship create(Pair<PlayerId,PlayerId> playerIdPair){
+    public static Friendship create(Pair<PlayerId, PlayerId> playerIdPair) {
         return new Friendship(
                 FriendshipId.create(),
                 playerIdPair,
