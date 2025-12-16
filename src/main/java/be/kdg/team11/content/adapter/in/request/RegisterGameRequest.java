@@ -14,7 +14,7 @@ public record RegisterGameRequest(
 
         @NotNull(message = "Game description cannot be null")
         @NotBlank(message = "Game description cannot be blank")
-        @Size(min = 1, max = 500, message = "Game description must be between 1 and 500 characters")
+        @Size(min = 5, max = 500, message = "Game description must be between 5 and 500 characters")
         String description,
 
         @NotNull(message = "Game price cannot be null")

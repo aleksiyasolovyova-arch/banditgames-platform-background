@@ -23,7 +23,7 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
 
     @Override
     public Achievement createAchievement(CreateAchievementCommand command) {
-        Url pictureUrl = new Url(command.pictureUrl());
+        Url pictureUrl = Url.of(command.pictureUrl());
         AchievementType type = AchievementType.valueOf(command.type());
 
         Achievement achievement = Achievement.create(

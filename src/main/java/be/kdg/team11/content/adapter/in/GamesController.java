@@ -1,16 +1,15 @@
 package be.kdg.team11.content.adapter.in;
 
-import be.kdg.team11.content.adapter.in.mapper.GameMapper;
-import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
-import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
-import be.kdg.team11.content.adapter.in.response.GameDto;
-import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import be.kdg.team11.content.adapter.in.mapper.GameMapper;
+import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
+import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
+import be.kdg.team11.content.adapter.in.response.GameDto;
+import be.kdg.team11.content.domain.game.Game;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +21,22 @@ public class GamesController {
     private final RejectGamePort rejectGamePort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final GameMapper gameMapper;
+
+
+    /**
+     * REQUEST BODY (For all endpoints):
+     * - name (String, required): Game name (1-255 chars)
+     * - description (String, required): Game description (1-500 chars)
+     * - price (BigDecimal, required): Game price (non-negative)
+     * - pictureUrl (String, required): URL to game image
+     * - gameUrl (String, required): URL to game content
+     * - gameCreatorName (String, required): Name of game creator (1-100 chars)
+     * - rules (List<RuleRequest>, required): Game rules (at least one required)
+     *   - description (String, required): Rule description (1-255 chars)
+     * - achievements (List<GameAchievementRequest>, required): Linked achievements (at least one required)
+     *   - code (String, required): Achievement code (1-100 chars)
+     *   - description (String, required): Achievement description (1-500 chars)
+     */
 
     public GamesController(RegisterGamePort registerGamePort,
                            AcceptGamePort acceptGamePort,
@@ -35,16 +50,51 @@ public class GamesController {
         this.gameMapper = gameMapper;
     }
 
+
+    /**
+     * Registers a new game in the system.
+     * FULL PATH: /games (POST)
+     * RESPONSE BODY (GameDto):
+     * - gameId (UUID): Unique game identifier
+     * - name (String): Game name
+     * - description (String): Game description
+     * - price (BigDecimal): Game price
+     * - pictureUrl (String): Game image URL
+     * - gameUrl (String): Game content URL
+     * - gameCreatorName (String): Creator name
+     * - registrationState (String): Current state (e.g., "PENDING", "ACCEPTED", "REJECTED")
+     * - rules (List<RuleDto>): Game rules
+     * - achievements (List<GameAchievementDto>): Linked achievements
+     * HTTP Status Codes:
+     * - 201 Created: Game successfully registered
+     * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 500 Internal Server Error: Unexpected server error
+     */
+
     @PostMapping
     public ResponseEntity<GameDto> createGame(
             @Valid @RequestBody RegisterGameRequest request) {
-        Game createdGame = registerGamePort.registerGame(
+        Game createdGame = registerGamePort.register(
                 gameMapper.toCommand(request)
         );
         GameDto response = gameMapper.toResponse(createdGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Updates game URLs (picture and game content URLs).
+     * FULL PATH: /games/{gameId} (PUT)
+     * PATH PARAMETER:
+     * - gameId (UUID): ID of the game to update
+     * REQUEST BODY (UpdateGameRequest):
+     * - pictureUrl (String, required): New picture URL (cannot be blank)
+     * - gameUrl (String, required): New game URL (cannot be blank)
+     * HTTP Status Codes:
+     * - 200 OK: Game URLs successfully updated
+     * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 404 Not Found: Game with given ID doesn't exist
+     * - 500 Internal Server Error: Unexpected server error
+     */
     @PutMapping("/{gameId}")
     public ResponseEntity<GameDto> updateGame(
             @PathVariable UUID gameId,
@@ -56,6 +106,17 @@ public class GamesController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Accepts a game, transitioning it from PENDING to ACCEPTED state.
+     * FULL PATH: /games/{gameId}/accept (PUT)
+     * PATH PARAMETER:
+     * - gameId (UUID): ID of the game to accept
+     * HTTP Status Codes:
+     * - 200 OK: Game successfully accepted
+     * - 404 Not Found: Game with given ID doesn't exist
+     * - 409 Conflict: Invalid state transition (already accepted/rejected)
+     * - 500 Internal Server Error: Unexpected server error
+     */
     @PutMapping("/{gameId}/accept")
     public ResponseEntity<GameDto> acceptGame(
             @PathVariable UUID gameId) {
@@ -66,13 +127,25 @@ public class GamesController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{gameId}")
-    public ResponseEntity<Void> rejectGame(
+    /**
+     * Rejects a game, transitioning it from PENDING to REJECTED state.
+     * FULL PATH: /games/{gameId}/reject (PUT)
+     * PATH PARAMETER:
+     * - gameId (UUID): ID of the game to reject
+     * HTTP Status Codes:
+     * - 200 OK: Game successfully rejected
+     * - 404 Not Found: Game with given ID doesn't exist
+     * - 409 Conflict: Invalid state transition (already accepted/rejected)
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @PutMapping("/{gameId}/reject")
+    public ResponseEntity<GameDto> rejectGame(
             @PathVariable UUID gameId) {
-        rejectGamePort.rejectGame(
+        Game rejectedGame = rejectGamePort.rejectGame(
                 new RejectGameCommand(gameId)
         );
-        return ResponseEntity.ok().build();
+        GameDto response = gameMapper.toResponse(rejectedGame);
+        return ResponseEntity.ok(response);
     }
 
 }

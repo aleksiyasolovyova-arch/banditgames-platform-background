@@ -1,5 +1,8 @@
 package be.kdg.team11.content.port.in;
 
+import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
+import org.springframework.util.Assert;
+
 import java.util.UUID;
 
 public record RejectGameCommand(
@@ -7,7 +10,6 @@ public record RejectGameCommand(
 ) {
     public RejectGameCommand {
         if (gameId == null) {
-            throw new IllegalArgumentException("Game ID cannot be null");
-        }
-    }
+            throw new InvalidGameDataException("Game ID cannot be null");
+        }    }
 }

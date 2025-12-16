@@ -1,0 +1,283 @@
+### Games Controller API Tests
+### Base URL: http://localhost:8080
+
+### Variables
+@baseUrl = http://localhost:8080
+@gameId = 550e8400-e29b-41d4-a716-446655440000
+@invalidUUID = invalid-uuid
+@existingGameId = c83d6843-6ecc-4b32-804d-78be6c700513
+
+### ============================================================
+### 1. POST /games - Register Game
+### ============================================================
+
+### 1.1 Success - Register game with valid data (201 Created)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game for two players",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/tictactoe.png",
+  "gameUrl": "https://example.com/play/tictactoe",
+  "gameCreatorName": "John Developer",
+  "rules": [
+    {
+      "description": "Players alternate placing X and O on a 3x3 grid"
+    },
+    {
+      "description": "First player to get three in a row wins"
+    }
+  ],
+  "achievements": [
+    {
+      "code": "FIRST_WIN",
+      "description": "Win your first game"
+    },
+    {
+      "code": "PERFECT_GAME",
+      "description": "Complete a game without making any mistakes"
+    }
+  ]
+}
+
+### 1.2 Bad Request - Empty name (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.3 Bad Request - Name exceeds 100 characters (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "This is a very long game name that exceeds one hundred characters and should fail validation because it is way too long for a proper game name to be",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.4 Bad Request - Empty description (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.5 Bad Request - Description exceeds 500 characters (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Extra text to exceed 500 characters.",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.6 Bad Request - Null price (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": null,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.7 Bad Request - Negative price (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": -5.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.8 Bad Request - Empty picture URL (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.9 Bad Request - Empty game URL (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "",
+  "gameCreatorName": "John Developer",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.10 Bad Request - Empty creator name (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "",
+  "rules": [{"description": "Rule 1"}],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### 1.11 Bad Request - No rules provided (400 Bad Request)
+POST {{baseUrl}}/games
+Content-Type: application/json
+
+{
+  "name": "Tic Tac Toe",
+  "description": "A classic strategy game",
+  "price": 9.99,
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play",
+  "gameCreatorName": "John Developer",
+  "rules": [],
+  "achievements": [{"code": "ACH1", "description": "Achievement 1"}]
+}
+
+### ============================================================
+### 2. PUT /games/{gameId} - Update Game URLs
+### ============================================================
+
+### 2.1 Success - Update game URLs (200 OK)
+PUT {{baseUrl}}/games/{{existingGameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": "https://example.com/tictactoe-updated.png",
+  "gameUrl": "https://example.com/play/tictactoe-v2"
+}
+
+### 2.2 Not Found - Game doesn't exist (404 Not Found)
+PUT {{baseUrl}}/games/{{gameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": "https://example.com/play"
+}
+
+### 2.3 Bad Request - Empty picture URL (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": "",
+  "gameUrl": "https://example.com/play"
+}
+
+### 2.4 Bad Request - Empty game URL (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": ""
+}
+
+### 2.5 Bad Request - Null picture URL (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": null,
+  "gameUrl": "https://example.com/play"
+}
+
+### 2.6 Bad Request - Null game URL (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}
+Content-Type: application/json
+
+{
+  "pictureUrl": "https://example.com/game.png",
+  "gameUrl": null
+}
+
+### ============================================================
+### 3. PUT /games/{gameId}/accept - Accept Game
+### ============================================================
+
+### 3.1 Success - Accept pending game (200 OK)
+PUT {{baseUrl}}/games/{{existingGameId}}/accept
+
+### 3.2 Not Found - Game doesn't exist (404 Not Found)
+PUT {{baseUrl}}/games/{{gameId}}/accept
+
+### 3.3 Bad Request - Cannot accept already accepted game (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}/accept
+
+### 3.4 Bad Request - Cannot accept rejected game (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}/accept
+
+### ============================================================
+### 4. PUT /games/{gameId}/reject - Reject Game
+### ============================================================
+
+### 4.1 Success - Reject pending game (200 OK)
+PUT {{baseUrl}}/games/{{existingGameId}}/reject
+
+### 4.2 Not Found - Game doesn't exist (404 Not Found)
+PUT {{baseUrl}}/games/{{gameId}}/reject
+
+### 4.3 Bad Request - Cannot reject already accepted game (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}/reject
+
+### 4.4 Bad Request - Cannot reject already rejected game (400 Bad Request)
+PUT {{baseUrl}}/games/{{existingGameId}}/reject

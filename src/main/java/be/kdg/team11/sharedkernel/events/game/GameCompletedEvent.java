@@ -1,4 +1,6 @@
-package be.kdg.team11.sharedkernel.events;
+package be.kdg.team11.sharedkernel.events.game;
+
+import be.kdg.team11.sharedkernel.events.DomainEvent;
 
 import java.time.Duration;
 import java.util.UUID;

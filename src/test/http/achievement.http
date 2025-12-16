@@ -1,0 +1,202 @@
+### Achievements Controller API Tests
+### Base URL: http://localhost:8080
+
+### Variables
+@baseUrl = http://localhost:8080
+@achievementId = 650e8400-e29b-41d4-a716-446655440000
+
+### ============================================================
+### POST /achievements - Create Achievement
+### ============================================================
+
+### 1.1 Success - Create achievement with valid data (201 Created)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.2 Success - Create achievement with max required value (201 Created)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "Master Player",
+  "description": "Achieve 100 victories to become a master player",
+  "pictureUrl": "https://example.com/badges/master.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 100
+}
+
+### 1.3 Bad Request - Empty achievement name (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.4 Bad Request - Null achievement name (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": null,
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.5 Bad Request - Achievement name exceeds 100 characters (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "This is a very long achievement name that definitely exceeds one hundred characters and should fail the validation check because it is way too lengthy",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.6 Bad Request - Empty description (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.7 Bad Request - Null description (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": null,
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.8 Bad Request - Description exceeds 255 characters (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "This is a very long description that exceeds the maximum allowed length of 255 characters. It contains additional text to ensure it goes well over the limit. The description should be concise and informative. When it exceeds the limit it should be rejected.",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.9 Bad Request - Empty picture URL (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.10 Bad Request - Null picture URL (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": null,
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 1
+}
+
+### 1.11 Bad Request - Empty achievement type (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "",
+  "requiredValue": 1
+}
+
+### 1.12 Bad Request - Null achievement type (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "",
+  "requiredValue": 1
+}
+
+### 1.13 Bad Request - Required value below range (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": -1
+}
+
+### 1.14 Bad Request - Required value exceeds range (400 Bad Request)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "First Victory",
+  "description": "Achieve your first victory in the game",
+  "pictureUrl": "https://example.com/badges/first-victory.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 101
+}
+
+### 1.15 Bad Request - Required value at boundary (max) (201 Created)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "Perfect Player",
+  "description": "Achieve 100 victories",
+  "pictureUrl": "https://example.com/badges/perfect.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 100
+}
+
+### 1.16 Bad Request - Zero required value (201 Created)
+POST {{baseUrl}}/achievements
+Content-Type: application/json
+
+{
+  "achievementName": "Welcome",
+  "description": "Just for joining",
+  "pictureUrl": "https://example.com/badges/welcome.png",
+  "achievementType": "WIN_COUNT",
+  "requiredValue": 0
+}
