@@ -1,7 +1,5 @@
 package be.kdg.team11.player.domain.lobby;
 
-import be.kdg.team11.player.domain.friendship.FriendshipId;
-import be.kdg.team11.player.domain.friendship.exeptions.FriendshipNotFoundException;
 import be.kdg.team11.player.domain.lobby.exceptions.LobbyNotFoundException;
 
 import java.util.UUID;

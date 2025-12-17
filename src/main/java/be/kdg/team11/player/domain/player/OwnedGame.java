@@ -1,20 +1,37 @@
 package be.kdg.team11.player.domain.player;
 
+import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDate;
 
+/**
+ * Value Object representing a game owned by a player.
+ */
 public class OwnedGame {
     private final GameReference game;
     private final LocalDate dateBought;
     private boolean favorite;
 
+    /**
+     * Private constructor - use factory method instead.
+     */
     private OwnedGame(GameReference game, LocalDate dateBought) {
+        if (game == null) {
+            throw new InvalidGameForPlayerException("Game reference cannot be null");
+        }
+        if (dateBought == null) {
+            throw new InvalidGameForPlayerException("Date bought cannot be null");
+        }
         this.game = game;
         this.dateBought = dateBought;
         this.favorite = false;
     }
 
+    /**
+     * Factory method for creating a newly bought game.
+     * Initial state: not favorite.
+     */
     public static OwnedGame bought(GameReference game, LocalDate dateBought) {
         return new OwnedGame(game, dateBought);
     }

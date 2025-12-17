@@ -246,7 +246,6 @@ import java.util.List;
 
         LobbyStartedEvent event = new LobbyStartedEvent(
                 lobbyId.lobbyId(),
-                "DID_NOT_START",
                 "DID_NOT_FINISH"
         );
         eventStore.add(event);
@@ -285,7 +284,6 @@ import java.util.List;
  * Finishes the game in a draw.
  * Records that neither player won - game ended in tie.
  */
-    //todo does that mean if the game ended by any reason without a result it is considered draw
     public void end() {
         if (!lobbyResult.equals(LobbyResult.DID_NOT_FINISH)) {
             throw InvalidLobbyStateException.invalidStateTransition(

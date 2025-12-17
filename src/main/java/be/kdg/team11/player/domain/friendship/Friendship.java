@@ -1,7 +1,7 @@
 package be.kdg.team11.player.domain.friendship;
 
-import be.kdg.team11.player.domain.friendship.exeptions.InvalidFriendshipException;
-import be.kdg.team11.player.domain.friendship.exeptions.InvalidFriendshipStateException;
+import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipException;
+import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipStateException;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipAcceptedEvent;

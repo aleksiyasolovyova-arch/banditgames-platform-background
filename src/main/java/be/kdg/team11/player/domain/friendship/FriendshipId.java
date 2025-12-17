@@ -1,7 +1,7 @@
 package be.kdg.team11.player.domain.friendship;
 
-import be.kdg.team11.player.domain.friendship.exeptions.FriendshipNotFoundException;
-import be.kdg.team11.player.domain.friendship.exeptions.InvalidFriendshipException;
+import be.kdg.team11.player.domain.friendship.exceptions.FriendshipNotFoundException;
+import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipException;
 
 import java.util.UUID;
 
