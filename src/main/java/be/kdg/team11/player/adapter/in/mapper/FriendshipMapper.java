@@ -5,6 +5,7 @@ import be.kdg.team11.player.adapter.in.response.FriendshipDto;
 import be.kdg.team11.player.domain.friendship.Friendship;
 import be.kdg.team11.player.port.in.BefriendPlayerCommand;
 import be.kdg.team11.player.port.in.DeclineFriendshipCommand;
+import be.kdg.team11.player.port.in.EndFriendshipCommand;
 import be.kdg.team11.player.port.in.RequestFriendshipCommand;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,13 @@ public class FriendshipMapper {
         return new DeclineFriendshipCommand(
                 friendshipId,
                 recipientId
+        );
+    }
+
+    public EndFriendshipCommand toEndCommand(UUID friendshipId, UUID initiatedBy) {
+        return new EndFriendshipCommand(
+                friendshipId,
+                initiatedBy
         );
     }
 

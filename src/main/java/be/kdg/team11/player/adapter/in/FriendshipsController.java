@@ -19,17 +19,20 @@ public class FriendshipsController {
     private final RequestFriendshipPort requestFriendshipPort;
     private final BefriendPlayerPort befriendPlayerPort;
     private final DeclineFriendshipPort declineFriendshipPort;
+    private final EndFriendshipPort endFriendshipPort;
     private final FriendshipMapper friendshipMapper;
 
     public FriendshipsController(
             RequestFriendshipPort requestFriendshipPort,
             BefriendPlayerPort befriendPlayerPort,
             DeclineFriendshipPort declineFriendshipPort,
+            EndFriendshipPort endFriendshipPort,
             FriendshipMapper friendshipMapper
     ) {
         this.requestFriendshipPort = requestFriendshipPort;
         this.befriendPlayerPort = befriendPlayerPort;
         this.declineFriendshipPort = declineFriendshipPort;
+        this.endFriendshipPort = endFriendshipPort;
         this.friendshipMapper = friendshipMapper;
     }
 
@@ -61,11 +64,8 @@ public class FriendshipsController {
         UUID requesterId = UUID.randomUUID();
 
         RequestFriendshipCommand command = friendshipMapper.toRequestCommand(requesterId, request);
-
         Friendship createdFriendship = requestFriendshipPort.requestFriendship(command);
-
         FriendshipDto response = friendshipMapper.toResponse(createdFriendship);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -127,4 +127,34 @@ public class FriendshipsController {
         FriendshipDto response = friendshipMapper.toResponse(declinedFriendship);
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Ends an active friendship, transitioning it from FRIENDS to ENDED state.
+     * FULL PATH: POST /friendships/{friendshipId}/end
+     * PATH PARAMETER:
+     * - friendshipId (UUID): ID of the friendship to end
+    * RESPONSE BODY (FriendshipDto):
+     * - friendshipId (UUID): Unique friendship identifier
+     * - requesterId (UUID): ID of the player who initiated the friendship
+     * - recipientId (UUID): ID of the other player
+     * - state (String): Current friendship state ("ENDED")
+     * HTTP Status Codes:
+     * - 200 OK: Friendship successfully ended
+     * - 400 Bad Request: Invalid request or business rule violation (e.g., player not involved)
+     * - 404 Not Found: Friendship with given ID doesn't exist
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @PostMapping("/{friendshipId}/end")
+    public ResponseEntity<FriendshipDto> endFriendship(
+            @PathVariable UUID friendshipId
+    ) {
+        //TODO replace with value from JWT
+        UUID initiatedBy = UUID.randomUUID();
+
+        EndFriendshipCommand command = friendshipMapper.toEndCommand(friendshipId, initiatedBy);
+        Friendship endedFriendship = endFriendshipPort.endFriendship(command);
+        FriendshipDto response = friendshipMapper.toResponse(endedFriendship);
+        return ResponseEntity.ok(response);
+    }
+
 }
