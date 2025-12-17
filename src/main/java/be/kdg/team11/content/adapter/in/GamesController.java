@@ -17,8 +17,8 @@ import java.util.UUID;
 public class GamesController {
 
     private final RegisterGamePort registerGamePort;
-    private final AcceptGamePort acceptGamePort;
-    private final RejectGamePort rejectGamePort;
+    private final PassGameReviewPort passGameReviewPort;
+    private final FailGameReviewPort failGameReviewPort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final GameMapper gameMapper;
 
@@ -39,13 +39,13 @@ public class GamesController {
      */
 
     public GamesController(RegisterGamePort registerGamePort,
-                           AcceptGamePort acceptGamePort,
-                           RejectGamePort rejectGamePort,
+                           PassGameReviewPort passGameReviewPort,
+                           FailGameReviewPort failGameReviewPort,
                            ModifyGameUrlsPort modifyGameUrlsPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
-        this.acceptGamePort = acceptGamePort;
-        this.rejectGamePort = rejectGamePort;
+        this.passGameReviewPort = passGameReviewPort;
+        this.failGameReviewPort = failGameReviewPort;
         this.modifyGameUrlsPort = modifyGameUrlsPort;
         this.gameMapper = gameMapper;
     }
@@ -70,9 +70,8 @@ public class GamesController {
      * - 400 Bad Request: Validation failed (invalid/missing fields)
      * - 500 Internal Server Error: Unexpected server error
      */
-
     @PostMapping
-    public ResponseEntity<GameDto> createGame(
+    public ResponseEntity<GameDto> registerGame(
             @Valid @RequestBody RegisterGameRequest request) {
         Game createdGame = registerGamePort.register(
                 gameMapper.toCommand(request)
@@ -108,7 +107,7 @@ public class GamesController {
 
     /**
      * Accepts a game, transitioning it from PENDING to ACCEPTED state.
-     * FULL PATH: /games/{gameId}/accept (PUT)
+     * FULL PATH: /games/{gameId}/pass (PUT)
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to accept
      * HTTP Status Codes:
@@ -117,11 +116,11 @@ public class GamesController {
      * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PutMapping("/{gameId}/accept")
-    public ResponseEntity<GameDto> acceptGame(
+    @PutMapping("/{gameId}/pass")
+    public ResponseEntity<GameDto> passGameReview(
             @PathVariable UUID gameId) {
-        Game acceptedGame = acceptGamePort.acceptGame(
-                new AcceptGameCommand(gameId)
+        Game acceptedGame = passGameReviewPort.passGameReview(
+                new PassGameReviewCommand(gameId)
         );
         GameDto response = gameMapper.toResponse(acceptedGame);
         return ResponseEntity.ok(response);
@@ -129,7 +128,7 @@ public class GamesController {
 
     /**
      * Rejects a game, transitioning it from PENDING to REJECTED state.
-     * FULL PATH: /games/{gameId}/reject (PUT)
+     * FULL PATH: /games/{gameId}/fail (PUT)
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to reject
      * HTTP Status Codes:
@@ -138,11 +137,11 @@ public class GamesController {
      * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PutMapping("/{gameId}/reject")
-    public ResponseEntity<GameDto> rejectGame(
+    @PutMapping("/{gameId}/fail")
+    public ResponseEntity<GameDto> failGameReview(
             @PathVariable UUID gameId) {
-        Game rejectedGame = rejectGamePort.rejectGame(
-                new RejectGameCommand(gameId)
+        Game rejectedGame = failGameReviewPort.failGameReview(
+                new FailGameReviewCommand(gameId)
         );
         GameDto response = gameMapper.toResponse(rejectedGame);
         return ResponseEntity.ok(response);

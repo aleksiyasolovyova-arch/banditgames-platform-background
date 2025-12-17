@@ -43,7 +43,7 @@ public class GameMapper {
                 game.getPictureUrl().value(),
                 game.getGameUrl().value(),
                 game.getGameCreatorName(),
-                game.getRegistrationState().name(),  // Enum name for HTTP
+                game.getReviewState().name(),
                 game.getRules().stream()
                         .map(rule -> new GameDto.RuleDto(rule.description()))
                         .toList(),

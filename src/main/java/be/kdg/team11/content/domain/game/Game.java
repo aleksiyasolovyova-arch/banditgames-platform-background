@@ -5,9 +5,9 @@ import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 import be.kdg.team11.sharedkernel.events.*;
-import be.kdg.team11.sharedkernel.events.game.GameAcceptedEvent;
+import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
 import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
-import be.kdg.team11.sharedkernel.events.game.GameRejectedEvent;
+import be.kdg.team11.sharedkernel.events.game.FailedGameReviewEvent;
 import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import java.util.List;
     private Url pictureUrl;
     private Url gameUrl;
     private final String gameCreatorName;
-    private GameRegistrationState registrationState;
+    private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
 
@@ -42,7 +42,7 @@ import java.util.List;
             Url pictureUrl,
             Url gameUrl,
             String gameCreatorName,
-            GameRegistrationState registrationState,
+            GameReviewState reviewState,
             List<Rule> rules,
             List<GameAchievement> achievements
     ) {
@@ -53,7 +53,7 @@ import java.util.List;
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
         this.gameCreatorName = gameCreatorName;
-        this.registrationState = registrationState;
+        this.reviewState = reviewState;
         this.rules.addAll(rules);
         this.achievements.addAll(achievements);
     }
@@ -74,7 +74,7 @@ import java.util.List;
                 pictureUrl,
                 gameUrl,
                 gameCreatorName,
-                GameRegistrationState.PENDING,
+                GameReviewState.PENDING,
                 rules,
                 achievements
         );
@@ -106,25 +106,25 @@ import java.util.List;
         return game;
     }
 
-    public void accept() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
+    public void pass() {
+        if (this.reviewState != GameReviewState.PENDING) {
             throw new InvalidGameStateException(
-                    "Cannot accept game: current state is " + this.registrationState + ", expected PENDING"
+                    "Cannot pass game review: current state is " + this.reviewState + ", expected PENDING"
             );
         }
-        GameAcceptedEvent event = new GameAcceptedEvent(this.gameId.gameId());
-        this.registrationState = GameRegistrationState.ACCEPTED;
+        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId());
+        this.reviewState = GameReviewState.PASSED;
         this.eventStore.add(event);
     }
 
-    public void reject() {
-        if (this.registrationState != GameRegistrationState.PENDING) {
+    public void fail() {
+        if (this.reviewState != GameReviewState.PENDING) {
             throw new InvalidGameStateException(
-                    "Cannot reject game: current state is " + this.registrationState + ", expected PENDING"
+                    "Cannot fail game review: current state is " + this.reviewState + ", expected PENDING"
             );
         }
-        GameRejectedEvent event = new GameRejectedEvent(this.gameId.gameId());
-        this.registrationState = GameRegistrationState.REJECTED;
+        FailedGameReviewEvent event = new FailedGameReviewEvent(this.gameId.gameId());
+        this.reviewState = GameReviewState.FAILED;
         this.eventStore.add(event);
     }
 
@@ -225,8 +225,8 @@ import java.util.List;
         return gameUrl;
     }
 
-    public GameRegistrationState getRegistrationState() {
-        return registrationState;
+    public GameReviewState getReviewState() {
+        return reviewState;
     }
 
     public List<Rule> getRules() {

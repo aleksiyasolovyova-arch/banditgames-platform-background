@@ -24,7 +24,7 @@ public class GameJpaMapper {
         entity.setPictureUrl(game.getPictureUrl().value());
         entity.setGameUrl(game.getGameUrl().value());
         entity.setGameCreatorName(game.getGameCreatorName());
-        entity.setRegistrationState(game.getRegistrationState());
+        entity.setReviewState(game.getReviewState());
 
         // Map Rules (simple strings)
         List<String> ruleDescriptions = game.getRules().stream()
@@ -69,7 +69,7 @@ public class GameJpaMapper {
                 new Url(entity.getPictureUrl()),
                 new Url(entity.getGameUrl()),
                 entity.getGameCreatorName(),
-                entity.getRegistrationState(),
+                entity.getReviewState(),
                 rules,
                 achievements
         );

@@ -5,12 +5,12 @@ import be.kdg.team11.sharedkernel.events.DomainEvent;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record GameAcceptedEvent(
+public record PassedGameReviewEvent(
         UUID uuid,
         LocalDateTime eventPit,
         UUID gameId
 ) implements DomainEvent {
-    public GameAcceptedEvent(UUID gameId) {
+    public PassedGameReviewEvent(UUID gameId) {
         this(
                 UUID.randomUUID(),
                 LocalDateTime.now(),

@@ -4,10 +4,10 @@ import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipExcept
 import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipStateException;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
-import be.kdg.team11.sharedkernel.events.friendship.FriendshipAcceptedEvent;
+import be.kdg.team11.sharedkernel.events.friendship.BefriendedPlayerEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipCreatedEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipEndEvent;
-import be.kdg.team11.sharedkernel.events.friendship.FriendshipRejectedEvent;
+import be.kdg.team11.sharedkernel.events.friendship.FriendshipDeclinedEvent;
 import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
@@ -45,13 +45,13 @@ public class Friendship {
     public static Friendship create(Pair<PlayerId,PlayerId> playerIdPair){
         validatePlayerIdsDifferent(playerIdPair);
 
-        Friendship friendship = new Friendship(FriendshipId.create(),playerIdPair,FriendshipState.PENDING);
+        Friendship friendship = new Friendship(FriendshipId.create(),playerIdPair,FriendshipState.REQUESTED);
 
         FriendshipCreatedEvent event = new FriendshipCreatedEvent(
                 friendship.friendshipId.friendshipId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
-                FriendshipState.PENDING.name()
+                FriendshipState.REQUESTED.name()
         );
         friendship.eventStore.add(event);
 
@@ -59,19 +59,19 @@ public class Friendship {
     }
 
 /**
- * Transitions the friendship from PENDING to ACCEPTED state.
- * Can only be called when the friendship is in PENDING state.
- * Publishes a FriendshipAcceptedEvent to the event store.
+ * Transitions the friendship from REQUESTED to FRIENDS state.
+ * Can only be called when the friendship is in REQUESTED state.
+ * Publishes a BefriendedPlayerEvent to the event store.
  */
-    public void accept() {
-        if (this.friendshipState != FriendshipState.PENDING) {
+    public void befriend() {
+        if (this.friendshipState != FriendshipState.REQUESTED) {
             throw new InvalidFriendshipStateException(
-                    "Cannot accept friendship: current state is " + this.friendshipState + ", expected PENDING"
+                    "Cannot accept friendship: current state is " + this.friendshipState + ", expected REQUESTED"
             );
         }
-        this.friendshipState = FriendshipState.ACCEPTED;
+        this.friendshipState = FriendshipState.FRIENDS;
 
-        FriendshipAcceptedEvent event = new FriendshipAcceptedEvent(
+        BefriendedPlayerEvent event = new BefriendedPlayerEvent(
                 this.friendshipId.friendshipId(),
                 this.playerIdPair.getSecond().playerId()
         );
@@ -79,18 +79,18 @@ public class Friendship {
         this.eventStore.add(event);
     }
 /**
- * Transitions the friendship from PENDING to REJECTED state.
- * Can only be called when the friendship is in PENDING state.
- * Publishes a FriendshipRejectedEvent to the event store.
+ * Transitions the friendship from REQUESTED to DECLINED state.
+ * Can only be called when the friendship is in REQUESTED state.
+ * Publishes a DeclineFriendshipEvent to the event store.
  */
     public void reject() {
-        if (this.friendshipState != FriendshipState.PENDING) {
+        if (this.friendshipState != FriendshipState.REQUESTED) {
             throw new InvalidFriendshipStateException(
-                    "Cannot reject friendship: current state is " + this.friendshipState + ", expected PENDING"
+                    "Cannot decline friendship: current state is " + this.friendshipState + ", expected PENDING"
             );
         }
-        this.friendshipState = FriendshipState.REJECTED;
-        FriendshipRejectedEvent event = new FriendshipRejectedEvent(
+        this.friendshipState = FriendshipState.DECLINED;
+        FriendshipDeclinedEvent event = new FriendshipDeclinedEvent(
                 this.friendshipId.friendshipId(),
                 this.playerIdPair.getSecond().playerId()
         );
@@ -101,22 +101,22 @@ public class Friendship {
 /**
  * Terminates an active friendship relationship.
  * Can only be called when the friendship is in ACCEPTED state.
- * Publishes a FriendshipRemovedEvent to the event store.
+ * Publishes a FriendshipEndedEvent to the event store.
  */
     public void end(PlayerId initiatedBy) {
         if (!involvesPlayer(initiatedBy)) {
             throw new InvalidFriendshipException(
-                    String.format("Player %s is not involved in this friendship and cannot remove it", initiatedBy.playerId())
+                    String.format("Player %s is not involved in this friendship and cannot end it", initiatedBy.playerId())
             );
         }
 
-        if (this.friendshipState != FriendshipState.ACCEPTED) {
+        if (this.friendshipState != FriendshipState.FRIENDS) {
             throw new InvalidFriendshipStateException(
-                    "Cannot remove friendship: current state is " + this.friendshipState + ", expected ACCEPTED"
+                    "Cannot end friendship: current state is " + this.friendshipState + ", expected FRIENDS"
             );
         }
 
-        this.friendshipState = FriendshipState.REJECTED;
+        this.friendshipState = FriendshipState.DECLINED;
 
         FriendshipEndEvent event = new FriendshipEndEvent(
                 this.friendshipId.friendshipId(),

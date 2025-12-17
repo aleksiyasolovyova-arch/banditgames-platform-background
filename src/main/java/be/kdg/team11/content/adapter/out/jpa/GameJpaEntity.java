@@ -1,6 +1,6 @@
 package be.kdg.team11.content.adapter.out.jpa;
 
-import be.kdg.team11.content.domain.game.GameRegistrationState;
+import be.kdg.team11.content.domain.game.GameReviewState;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ public class GameJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameRegistrationState registrationState;
+    private GameReviewState reviewState;
 
     @ElementCollection
     @CollectionTable(
@@ -111,12 +111,12 @@ public class GameJpaEntity {
         this.gameCreatorName = gameCreatorName;
     }
 
-    public GameRegistrationState getRegistrationState() {
-        return registrationState;
+    public GameReviewState getReviewState() {
+        return reviewState;
     }
 
-    public void setRegistrationState(GameRegistrationState registrationState) {
-        this.registrationState = registrationState;
+    public void setReviewState(GameReviewState reviewState) {
+        this.reviewState = reviewState;
     }
 
     public List<String> getRules() {

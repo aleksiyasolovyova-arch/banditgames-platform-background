@@ -1,10 +1,10 @@
 package be.kdg.team11.gametests;
-import be.kdg.team11.content.core.AcceptGameUseCaseImpl;
+import be.kdg.team11.content.core.PassGameReviewReviewUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.port.in.AcceptGameCommand;
+import be.kdg.team11.content.port.in.PassGameReviewCommand;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("AcceptGameUseCase Tests")
-class AcceptGameUseCaseTest {
+@DisplayName("PassGameReviewUseCase Tests")
+class PassGameReviewUseCaseTest {
 
     @Mock
     private LoadGamePort loadGamePort;
@@ -32,62 +32,62 @@ class AcceptGameUseCaseTest {
     @Mock
     private SaveGamePort saveGamePort;
 
-    private AcceptGameUseCaseImpl useCase;
+    private PassGameReviewReviewUseCaseImpl useCase;
     private UUID gameId;
 
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new AcceptGameUseCaseImpl(List.of(loadGamePort), List.of(saveGamePort));
+        useCase = new PassGameReviewReviewUseCaseImpl(List.of(loadGamePort), List.of(saveGamePort));
     }
 
     @Test
     @DisplayName("Should successfully accept a pending game")
-    void testAcceptGame_Success() {
+    void testPassGame_Success() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        AcceptGameCommand command = new AcceptGameCommand(gameId);
+        PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.acceptGame(command);
+        Game result = useCase.passGameReview(command);
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).accept();
+        verify(mockGame, times(1)).pass();
         verify(saveGamePort, times(1)).save(mockGame);
     }
 
     @Test
     @DisplayName("Should throw GameNotFoundException when game doesn't exist")
-    void testAcceptGame_NotFound() {
+    void testPassGame_NotFound() {
         // Arrange
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.empty());
 
-        AcceptGameCommand command = new AcceptGameCommand(gameId);
+        PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.acceptGame(command))
+        assertThatThrownBy(() -> useCase.passGameReview(command))
                 .isInstanceOf(GameNotFoundException.class)
                 .hasMessageContaining("Game not found");
     }
 
     @Test
     @DisplayName("Should persist accepted game to all save ports")
-    void testAcceptGame_PersistsToAllPorts() {
+    void testPassGame_PersistsToAllPorts() {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new AcceptGameUseCaseImpl(List.of(loadGamePort), List.of(port1, port2));
+        useCase = new PassGameReviewReviewUseCaseImpl(List.of(loadGamePort), List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        AcceptGameCommand command = new AcceptGameCommand(gameId);
+        PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        useCase.acceptGame(command);
+        useCase.passGameReview(command);
 
         // Assert
         verify(port1, times(1)).save(mockGame);
@@ -96,7 +96,7 @@ class AcceptGameUseCaseTest {
 
     @Test
     @DisplayName("Should accept game with multiple load ports")
-    void testAcceptGame_MultipleLoadPorts() {
+    void testPassGame_MultipleLoadPorts() {
         // Arrange
         LoadGamePort port1 = mock(LoadGamePort.class);
         LoadGamePort port2 = mock(LoadGamePort.class);
@@ -105,33 +105,33 @@ class AcceptGameUseCaseTest {
         when(port1.loadBy(any(GameId.class))).thenReturn(Optional.empty());
         when(port2.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        useCase = new AcceptGameUseCaseImpl(List.of(port1, port2), List.of(saveGamePort));
+        useCase = new PassGameReviewReviewUseCaseImpl(List.of(port1, port2), List.of(saveGamePort));
 
-        AcceptGameCommand command = new AcceptGameCommand(gameId);
+        PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.acceptGame(command);
+        Game result = useCase.passGameReview(command);
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).accept();
+        verify(mockGame, times(1)).pass();
         verify(saveGamePort, times(1)).save(mockGame);
     }
 
     @Test
     @DisplayName("Should throw InvalidGameStateException when game cannot be accepted")
-    void testAcceptGame_InvalidState() {
+    void testPassGame_InvalidState() {
         // Arrange
         Game mockGame = mock(Game.class);
-        doThrow(new InvalidGameStateException("Cannot accept game: current state is ACCEPTED, expected PENDING"))
-                .when(mockGame).accept();
+        doThrow(new InvalidGameStateException("Cannot pass game review: current state is ACCEPTED, expected PENDING"))
+                .when(mockGame).pass();
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        AcceptGameCommand command = new AcceptGameCommand(gameId);
+        PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.acceptGame(command))
+        assertThatThrownBy(() -> useCase.passGameReview(command))
                 .isInstanceOf(InvalidGameStateException.class)
-                .hasMessageContaining("Cannot accept game");
+                .hasMessageContaining("Cannot pass game review");
     }
 }
