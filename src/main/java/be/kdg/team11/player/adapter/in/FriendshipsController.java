@@ -5,15 +5,11 @@ import be.kdg.team11.player.adapter.in.request.RequestFriendshipRequest;
 import be.kdg.team11.player.adapter.in.response.FriendshipDto;
 import be.kdg.team11.player.domain.friendship.Friendship;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.port.in.RequestFriendshipCommand;
-import be.kdg.team11.player.port.in.RequestFriendshipPort;
+import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -21,15 +17,22 @@ import java.util.UUID;
 @RequestMapping("/friendships")
 public class FriendshipsController {
     private final RequestFriendshipPort requestFriendshipPort;
+    private final BefriendPlayerPort befriendPlayerPort;
+    private final DeclineFriendshipPort declineFriendshipPort;
     private final FriendshipMapper friendshipMapper;
 
     public FriendshipsController(
             RequestFriendshipPort requestFriendshipPort,
+            BefriendPlayerPort befriendPlayerPort,
+            DeclineFriendshipPort declineFriendshipPort,
             FriendshipMapper friendshipMapper
     ) {
         this.requestFriendshipPort = requestFriendshipPort;
+        this.befriendPlayerPort = befriendPlayerPort;
+        this.declineFriendshipPort = declineFriendshipPort;
         this.friendshipMapper = friendshipMapper;
     }
+
 
 
     /**
@@ -57,12 +60,71 @@ public class FriendshipsController {
         //TODO replace with value from JWT
         UUID requesterId = UUID.randomUUID();
 
-        RequestFriendshipCommand command = friendshipMapper.toCommand(requesterId, request);
+        RequestFriendshipCommand command = friendshipMapper.toRequestCommand(requesterId, request);
 
         Friendship createdFriendship = requestFriendshipPort.requestFriendship(command);
 
         FriendshipDto response = friendshipMapper.toResponse(createdFriendship);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Accepts a friendship request, transitioning it from REQUESTED to FRIENDS state.
+     * FULL PATH: PUT /friendships/{friendshipId}/befriend
+     * PATH PARAMETER:
+     * - friendshipId (UUID): ID of the friendship to accept
+    * RESPONSE BODY (FriendshipDto):
+     * - friendshipId (UUID): Unique friendship identifier
+     * - requesterId (UUID): ID of the player who initiated the request
+     * - recipientId (UUID): ID of the player who accepted
+     * - state (String): Current friendship state ("FRIENDS")
+     * HTTP Status Codes:
+     * - 200 OK: Friendship successfully accepted
+     * - 400 Bad Request: Invalid request or business rule violation
+     * - 404 Not Found: Friendship with given ID doesn't exist
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @PutMapping("/{friendshipId}/befriend")
+    public ResponseEntity<FriendshipDto> acceptFriendship(
+            @PathVariable UUID friendshipId
+    ) {
+        //TODO replace with value from JWT
+        UUID recipientId = UUID.randomUUID();
+
+        BefriendPlayerCommand command = friendshipMapper.toBefriendCommand(friendshipId, recipientId);
+        Friendship acceptedFriendship = befriendPlayerPort.befriendPlayer(command);
+        FriendshipDto response = friendshipMapper.toResponse(acceptedFriendship);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Declines a friendship request, transitioning it from REQUESTED to DECLINED state.
+     * FULL PATH: PUT /friendships/{friendshipId}/decline
+     * PATH PARAMETER:
+     * - friendshipId (UUID): ID of the friendship to decline
+    * RESPONSE BODY (FriendshipDto):
+     * - friendshipId (UUID): Unique friendship identifier
+     * - requesterId (UUID): ID of the player who initiated the request
+     * - recipientId (UUID): ID of the player who declined
+     * - state (String): Current friendship state ("DECLINED")
+     * HTTP Status Codes:
+     * - 200 OK: Friendship successfully declined
+     * - 400 Bad Request: Invalid request or business rule violation
+     * - 404 Not Found: Friendship with given ID doesn't exist
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @PutMapping("/{friendshipId}/decline")
+    public ResponseEntity<FriendshipDto> declineFriendship(
+            @PathVariable UUID friendshipId
+    ) {
+        //TODO replace with value from JWT
+        UUID recipientId = UUID.randomUUID();
+
+
+        DeclineFriendshipCommand command = friendshipMapper.toDeclineCommand(friendshipId, recipientId);
+        Friendship declinedFriendship = declineFriendshipPort.declineFriendship(command);
+        FriendshipDto response = friendshipMapper.toResponse(declinedFriendship);
+        return ResponseEntity.ok(response);
     }
 }
