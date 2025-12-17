@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record AcceptGameRequest(
+public record PassGameReviewRequest(
         @NotNull(message = "Game ID cannot be null")
         UUID gameId
 ) {

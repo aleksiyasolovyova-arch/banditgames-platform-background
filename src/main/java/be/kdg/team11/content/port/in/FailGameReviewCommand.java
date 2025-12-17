@@ -4,10 +4,10 @@ import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 
 import java.util.UUID;
 
-public record AcceptGameCommand(
+public record FailGameReviewCommand(
         UUID gameId
 ) {
-    public AcceptGameCommand {
+    public FailGameReviewCommand {
         if (gameId == null) {
             throw new InvalidGameDataException("Game ID cannot be null");
         }

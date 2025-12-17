@@ -1,11 +1,11 @@
 package be.kdg.team11.gametests;
 
-import be.kdg.team11.content.core.RejectGameUseCaseImpl;
+import be.kdg.team11.content.core.FailGameReviewReviewUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.port.in.RejectGameCommand;
+import be.kdg.team11.content.port.in.FailGameReviewCommand;
 import be.kdg.team11.content.port.out.LoadGamePort;
 import be.kdg.team11.content.port.out.SaveGamePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("RejectGameUseCase Tests")
-class RejectGameUseCaseTest {
+@DisplayName("FailGameReviewUseCase Tests")
+class FailGameReviewUseCaseTest {
 
     @Mock
     private LoadGamePort loadGamePort;
@@ -33,62 +33,62 @@ class RejectGameUseCaseTest {
     @Mock
     private SaveGamePort saveGamePort;
 
-    private RejectGameUseCaseImpl useCase;
+    private FailGameReviewReviewUseCaseImpl useCase;
     private UUID gameId;
 
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new RejectGameUseCaseImpl(loadGamePort, List.of(saveGamePort));
+        useCase = new FailGameReviewReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
     }
 
     @Test
-    @DisplayName("Should successfully reject a pending game")
-    void testRejectGame_Success() {
+    @DisplayName("Should successfully fail a pending game")
+    void testFailGame_Success() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.rejectGame(command);
+        Game result = useCase.failGameReview(command);
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).reject();
+        verify(mockGame, times(1)).fail();
         verify(saveGamePort, times(1)).save(mockGame);
     }
 
     @Test
     @DisplayName("Should throw GameNotFoundException when game doesn't exist")
-    void testRejectGame_NotFound() {
+    void testFailGame_NotFound() {
         // Arrange
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.empty());
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.rejectGame(command))
+        assertThatThrownBy(() -> useCase.failGameReview(command))
                 .isInstanceOf(GameNotFoundException.class)
                 .hasMessageContaining("Game not found");
     }
 
     @Test
-    @DisplayName("Should persist rejected game to all save ports")
-    void testRejectGame_PersistsToAllPorts() {
+    @DisplayName("Should persist failed game review to all save ports")
+    void testFailGame_PersistsToAllPorts() {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new RejectGameUseCaseImpl(loadGamePort, List.of(port1, port2));
+        useCase = new FailGameReviewReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
         // Act
-        useCase.rejectGame(command);
+        useCase.failGameReview(command);
 
         // Assert
         verify(port1, times(1)).save(mockGame);
@@ -96,37 +96,37 @@ class RejectGameUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw InvalidGameStateException when game cannot be rejected")
-    void testRejectGame_InvalidState() {
+    @DisplayName("Should throw InvalidGameStateException when game cannot be failed")
+    void testFailGame_InvalidState() {
         // Arrange
         Game mockGame = mock(Game.class);
-        doThrow(new InvalidGameStateException("Cannot reject game: current state is REJECTED, expected PENDING"))
-                .when(mockGame).reject();
+        doThrow(new InvalidGameStateException("Cannot fail game review: current state is FAILED_REVIEW, expected PENDING"))
+                .when(mockGame).fail();
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.rejectGame(command))
+        assertThatThrownBy(() -> useCase.failGameReview(command))
                 .isInstanceOf(InvalidGameStateException.class)
-                .hasMessageContaining("Cannot reject game");
+                .hasMessageContaining("Cannot fail game review");
     }
 
     @Test
-    @DisplayName("Should find game with load port and reject it")
-    void testRejectGame_LoadAndReject() {
+    @DisplayName("Should find game with load port and fail it")
+    void testFailGame_LoadAndFail() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
-        RejectGameCommand command = new RejectGameCommand(gameId);
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.rejectGame(command);
+        Game result = useCase.failGameReview(command);
 
         // Assert
         assertThat(result).isNotNull();
         verify(loadGamePort, times(1)).loadBy(any(GameId.class));
-        verify(mockGame, times(1)).reject();
+        verify(mockGame, times(1)).fail();
     }
 }

@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.7"
 	id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm")
 }
 
 group = "team11"
@@ -37,6 +38,7 @@ dependencies {
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("jakarta.validation:jakarta.validation-api")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 dependencyManagement {

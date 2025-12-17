@@ -1,4 +1,4 @@
-package be.kdg.team11.player.domain.friendship.exeptions;
+package be.kdg.team11.player.domain.friendship.exceptions;
 
 public class FriendshipException extends RuntimeException {
     public FriendshipException(String message) {
