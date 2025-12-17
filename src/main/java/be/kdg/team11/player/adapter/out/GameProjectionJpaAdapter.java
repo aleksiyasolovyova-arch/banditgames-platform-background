@@ -7,9 +7,6 @@ import be.kdg.team11.player.port.out.GameReferenceExistsPort;
 import be.kdg.team11.player.port.out.SaveGameReferencePort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGameReferencePort {
     private final GameReferenceJpaRepository gameReferenceJpaRepository;

@@ -23,12 +23,12 @@ import be.kdg.team11.player.domain.player.PlayerId;
         this.participationStatus = participationStatus;
     }
 
-    public static Slot accepted (PlayerId playerId) {
-        return new Slot (playerId,ParticipationStatus.ACCEPTED);
+    public static Slot accepted(PlayerId playerId) {
+        return new Slot(playerId, ParticipationStatus.ACCEPTED);
     }
 
-    public static Slot pending (PlayerId playerId) {
-        return new Slot (playerId,ParticipationStatus.PENDING);
+    public static Slot pending(PlayerId playerId) {
+        return new Slot(playerId, ParticipationStatus.PENDING);
     }
 
     public void accept() {

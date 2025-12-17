@@ -10,5 +10,6 @@ public record FailGameReviewCommand(
     public FailGameReviewCommand {
         if (gameId == null) {
             throw new InvalidGameDataException("Game ID cannot be null");
-        }    }
+        }
+    }
 }

@@ -3,8 +3,8 @@ package be.kdg.team11.content.domain.achievement;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
-import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
+import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class Achievement {
     }
 
 
-    public static Achievement create (String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+    public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
         validateAchievementName(name);
         validateAchievementDescription(description);
         validateAchievementPictureUrl(pictureUrl);
@@ -103,6 +103,7 @@ public class Achievement {
             );
         }
     }
+
     private static void validateAchievementPictureUrl(Url pictureUrl) {
         if (pictureUrl == null) {
             throw new InvalidAchievementException(

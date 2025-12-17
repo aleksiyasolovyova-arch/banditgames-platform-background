@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AchievementEventPublisher implements SaveAchievementPort {
     private final ApplicationEventPublisher applicationEventPublisher;
+
     public AchievementEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }

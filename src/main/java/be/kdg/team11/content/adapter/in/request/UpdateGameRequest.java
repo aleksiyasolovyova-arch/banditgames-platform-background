@@ -1,5 +1,7 @@
 package be.kdg.team11.content.adapter.in.request;
-import jakarta.validation.constraints.*;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record UpdateGameRequest(
 
@@ -10,4 +12,5 @@ public record UpdateGameRequest(
         @NotNull(message = "Game URL cannot be null")
         @NotBlank(message = "Game URL cannot be blank")
         String gameUrl
-) {}
+) {
+}

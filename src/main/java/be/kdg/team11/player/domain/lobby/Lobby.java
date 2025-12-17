@@ -364,7 +364,7 @@ import java.util.List;
         return gameReference;
     }
 
-    public Pair<Slot,Slot> getSlotPair() {
+    public Pair<Slot, Slot> getSlotPair() {
         return Pair.of(slotPair.getFirst(), slotPair.getSecond());
     }
 

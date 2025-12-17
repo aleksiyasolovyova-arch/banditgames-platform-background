@@ -15,7 +15,7 @@ public class LobbyJpaMapper {
     //TODO Make sure it is ok to inject this mapper into here
     private final GameReferenceJpaMapper gameReferenceJpaMapper;
 
-    public LobbyJpaMapper (GameReferenceJpaMapper gameReferenceJpaMapper){
+    public LobbyJpaMapper(GameReferenceJpaMapper gameReferenceJpaMapper) {
         this.gameReferenceJpaMapper = gameReferenceJpaMapper;
     }
 
@@ -53,8 +53,7 @@ public class LobbyJpaMapper {
         Slot slot1 = new Slot(new PlayerId(slotJpaEmbeddable1.getPlayerId()), slotJpaEmbeddable1.getParticipationStatus());
         Slot slot2 = new Slot(new PlayerId(slotJpaEmbeddable2.getPlayerId()), slotJpaEmbeddable2.getParticipationStatus());
 
-        Pair<Slot, Slot> slotPair = Pair.of(slot1,slot2);
-
+        Pair<Slot, Slot> slotPair = Pair.of(slot1, slot2);
 
 
         return new Lobby(

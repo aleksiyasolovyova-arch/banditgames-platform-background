@@ -13,6 +13,7 @@ public record GameAchievement(
         validateAchievementCode(code);
         validateAchievementDescription(description);
     }
+
     public static GameAchievement of(String code, String description) {
         return new GameAchievement(code, description);
     }

@@ -1,13 +1,12 @@
 package be.kdg.team11.content.adapter.in.mapper;
 
-import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
-import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
-import org.springframework.stereotype.Component;
-
 import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
+import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
+import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
 import be.kdg.team11.content.port.in.RegisterGameCommand;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
@@ -55,6 +54,7 @@ public class GameMapper {
                         .toList()
         );
     }
+
     public ModifyGameUrlsCommand toUpdateCommand(UUID gameId, UpdateGameRequest request) {
         return new ModifyGameUrlsCommand(
                 gameId,

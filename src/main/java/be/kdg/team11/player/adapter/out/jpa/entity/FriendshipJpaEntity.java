@@ -21,7 +21,8 @@ public class FriendshipJpaEntity {
     @Column(nullable = false)
     private FriendshipState friendshipState;
 
-    public FriendshipJpaEntity() {}
+    public FriendshipJpaEntity() {
+    }
 
     public UUID getFriendShipId() {
         return friendShipId;
