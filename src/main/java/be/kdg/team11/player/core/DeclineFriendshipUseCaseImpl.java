@@ -1,0 +1,43 @@
+package be.kdg.team11.player.core;
+
+import be.kdg.team11.player.domain.friendship.Friendship;
+import be.kdg.team11.player.domain.friendship.FriendshipId;
+import be.kdg.team11.player.port.in.DeclineFriendshipCommand;
+import be.kdg.team11.player.port.in.DeclineFriendshipPort;
+import be.kdg.team11.player.port.out.LoadFriendshipPort;
+import be.kdg.team11.player.port.out.SaveFriendshipPort;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@Transactional
+public class DeclineFriendshipUseCaseImpl implements DeclineFriendshipPort {
+    private final List<LoadFriendshipPort> loadFriendshipPorts;
+    private final List<SaveFriendshipPort> saveFriendshipPorts;
+
+    public DeclineFriendshipUseCaseImpl(
+            List<LoadFriendshipPort> loadFriendshipPorts,
+            List<SaveFriendshipPort> saveFriendshipPorts
+    ) {
+        this.loadFriendshipPorts = loadFriendshipPorts;
+        this.saveFriendshipPorts = saveFriendshipPorts;
+    }
+
+    @Override
+    public Friendship declineFriendship(DeclineFriendshipCommand command) {
+        FriendshipId friendshipId = FriendshipId.of(command.friendshipId());
+
+        Friendship friendship = loadFriendshipPorts.stream()
+                .flatMap(port -> port.loadBy(friendshipId).stream())
+                .findFirst()
+                .orElseThrow(() -> FriendshipId.notFound(friendshipId));
+
+        friendship.decline();
+
+        saveFriendshipPorts.forEach(port -> port.save(friendship));
+
+        return friendship;
+    }
+}

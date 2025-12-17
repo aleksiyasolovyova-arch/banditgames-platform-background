@@ -83,7 +83,7 @@ public class Friendship {
  * Can only be called when the friendship is in REQUESTED state.
  * Publishes a DeclineFriendshipEvent to the event store.
  */
-    public void reject() {
+    public void decline() {
         if (this.friendshipState != FriendshipState.REQUESTED) {
             throw new InvalidFriendshipStateException(
                     "Cannot decline friendship: current state is " + this.friendshipState + ", expected PENDING"
