@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+//TODO Add technical validation
+
 @RestController
 @RequestMapping("/friendships")
 public class FriendshipsController {

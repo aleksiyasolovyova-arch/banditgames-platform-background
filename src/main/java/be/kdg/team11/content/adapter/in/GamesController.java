@@ -7,12 +7,14 @@ import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+//TODO Add technical validation
 @RestController
 @RequestMapping("/games")
 public class GamesController {
@@ -97,7 +99,7 @@ public class GamesController {
      */
     @PutMapping("/{gameId}")
     public ResponseEntity<GameDto> updateGame(
-            @PathVariable UUID gameId,
+            @NotNull @PathVariable UUID gameId,
             @Valid @RequestBody UpdateGameRequest request) {
         Game updatedGame = modifyGameUrlsPort.modifyGameUrls(
                 gameMapper.toUpdateCommand(gameId, request)

@@ -6,10 +6,4 @@ import java.util.UUID;
 
 public record FailGameReviewCommand(
         UUID gameId
-) {
-    public FailGameReviewCommand {
-        if (gameId == null) {
-            throw new InvalidGameDataException("Game ID cannot be null");
-        }
-    }
-}
+) {}

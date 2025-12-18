@@ -197,8 +197,6 @@ public class Game {
         }
     }
 
-    //TODO Could wrap getters of Collections in Collections.unmodifiableList to protect aggregate invariants:
-
     public GameId getGameId() {
         return gameId;
     }

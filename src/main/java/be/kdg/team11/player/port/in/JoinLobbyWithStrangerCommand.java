@@ -5,5 +5,4 @@ import be.kdg.team11.player.domain.projections.GameReference;
 
 public record JoinLobbyWithStrangerCommand(
         GameReference gameReference, PlayerId playerId
-) {
-}
+) {}
