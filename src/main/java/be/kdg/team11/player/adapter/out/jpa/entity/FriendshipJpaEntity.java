@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "player_schema")
+@Table(name = "friendship", schema = "player_schema")
 public class FriendshipJpaEntity {
     @Id
-    private UUID friendShipId;
+    private UUID friendshipId;
 
     @Column(nullable = false)
     private UUID requesterId;
@@ -24,12 +24,12 @@ public class FriendshipJpaEntity {
     public FriendshipJpaEntity() {
     }
 
-    public UUID getFriendShipId() {
-        return friendShipId;
+    public UUID getFriendshipId() {
+        return friendshipId;
     }
 
-    public void setFriendShipId(UUID friendShipId) {
-        this.friendShipId = friendShipId;
+    public void setFriendshipId(UUID friendhipId) {
+        this.friendshipId = friendhipId;
     }
 
     public UUID getRequesterId() {

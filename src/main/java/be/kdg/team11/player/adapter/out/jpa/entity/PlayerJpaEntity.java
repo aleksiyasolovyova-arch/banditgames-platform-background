@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "player_schema")
+@Table(name = "player", schema = "player_schema")
 public class PlayerJpaEntity {
     @Id
     private UUID playerId;
@@ -20,15 +20,15 @@ public class PlayerJpaEntity {
     private LocalDate joinedDate;
 
     @ElementCollection
-    @CollectionTable(schema = "player_schema")
+    @CollectionTable(name = "player_platform_achievements", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
     private Set<UnlockedPlatformAchievementEmbeddable> unlockedPlatformAchievements = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(schema = "player_schema")
+    @CollectionTable(name = "player_game_achievements", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
     private Set<UnlockedGameAchievementEmbeddable> unlockedGameAchievements = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(schema = "player_schema")
+    @CollectionTable(name = "player_owned_games", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
     private Set<OwnedGameEmbeddable> ownedGames = new HashSet<>();
 
     public PlayerJpaEntity() {

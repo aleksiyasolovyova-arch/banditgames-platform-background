@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "player_schema")
+@Table(name = "game_reference", schema = "player_schema")
 public class GameReferenceJpaEntity {
     @Id
     private UUID gameId;

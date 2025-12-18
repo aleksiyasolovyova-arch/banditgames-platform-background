@@ -23,7 +23,7 @@ public class GameJpaEntity {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "picture_url")
+    @Column(nullable = false)
     private String pictureUrl;
 
     @Column(nullable = false)
