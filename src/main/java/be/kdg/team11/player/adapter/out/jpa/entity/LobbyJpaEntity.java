@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "player_schema")
+@Table(name = "lobby" ,schema = "player_schema")
 public class LobbyJpaEntity {
     @Id
     private UUID lobbyId;
@@ -17,9 +17,17 @@ public class LobbyJpaEntity {
     private GameReferenceJpaEntity gameReference;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "playerId", column = @Column(name = "slot1_player_id")),
+            @AttributeOverride(name = "participationStatus", column = @Column(name = "slot1_participation_status"))
+    })
     private SlotJpaEmbeddable slot1;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "playerId", column = @Column(name = "slot2_player_id")),
+            @AttributeOverride(name = "participationStatus", column = @Column(name = "slot2_participation_status"))
+    })
     private SlotJpaEmbeddable slot2;
 
     @Enumerated(EnumType.STRING)
