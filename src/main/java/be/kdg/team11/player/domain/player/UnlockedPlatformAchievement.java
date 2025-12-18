@@ -1,23 +1,11 @@
 package be.kdg.team11.player.domain.player;
 
-
-import be.kdg.team11.player.domain.player.exceptions.InvalidAchievementForPlayerException;
-
 import java.time.LocalDateTime;
 
 public record UnlockedPlatformAchievement(
         AchievementId achievementId,
         LocalDateTime unlockedAt
 ) {
-
-    public UnlockedPlatformAchievement {
-        if (achievementId == null) {
-            throw new InvalidAchievementForPlayerException("Achievement ID cannot be null");
-        }
-        if (unlockedAt == null) {
-            throw new InvalidAchievementForPlayerException("Unlocked at time cannot be null");
-        }
-    }
 
     /**
      * Factory method for creating a newly unlocked achievement.

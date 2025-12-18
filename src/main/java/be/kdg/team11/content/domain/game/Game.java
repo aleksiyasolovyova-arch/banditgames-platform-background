@@ -3,8 +3,6 @@ package be.kdg.team11.content.domain.game;
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.domain.Url;
-import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 import be.kdg.team11.sharedkernel.events.*;
 import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
 import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
@@ -60,12 +58,7 @@ public class Game {
     }
 
     public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
-        validateGameName(name);
-        validateGameDescription(description);
         validateGamePrice(price);
-        validateGamePictureUrl(pictureUrl);
-        validateGameUrl(gameUrl);
-        validateGameCreatorName(gameCreatorName);
 
         Game game = new Game(
                 GameId.create(),
@@ -135,8 +128,6 @@ public class Game {
      *
      */
     public void modifyUrls(Url pictureUrl, Url gameUrl) {
-        validateGamePictureUrl(pictureUrl);
-        validateGameUrl(gameUrl);
 
         GameUrlsModifiedEvent event = new GameUrlsModifiedEvent(
                 this.gameId.gameId(),
@@ -151,23 +142,7 @@ public class Game {
     }
 
 
-    private static void validateGameName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidGameDataException("Game name cannot be null or empty");
-        }
-    }
-
-
-    private static void validateGameDescription(String description) {
-        if (description == null || description.isBlank()) {
-            throw new InvalidGameDataException("Game description cannot be null or empty");
-        }
-    }
-
     private static void validateGamePrice(BigDecimal price) {
-        if (price == null) {
-            throw new InvalidGameDataException("Game price cannot be null");
-        }
 
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidGameDataException(
@@ -177,25 +152,6 @@ public class Game {
     }
 
 
-    private static void validateGamePictureUrl(Url pictureUrl) {
-        if (pictureUrl == null) {
-            throw new InvalidGameUrlException("Game picture URL cannot be null");
-        }
-    }
-
-
-    private static void validateGameUrl(Url gameUrl) {
-        if (gameUrl == null) {
-            throw new InvalidGameUrlException("Game playable URL cannot be null");
-        }
-    }
-
-
-    private static void validateGameCreatorName(String gameCreatorName) {
-        if (gameCreatorName == null || gameCreatorName.isBlank()) {
-            throw new InvalidGameDataException("Game creator name cannot be null or empty");
-        }
-    }
 
     public GameId getGameId() {
         return gameId;

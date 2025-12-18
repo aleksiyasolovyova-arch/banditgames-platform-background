@@ -20,6 +20,7 @@ public record CreateAchievementRequest(
 
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")
+        @URL(message = "Picture URL must be a valid URL")
         String pictureUrl,
 
         @NotNull(message = "Achievement type cannot be null")
