@@ -20,14 +20,12 @@ public record CreateAchievementRequest(
 
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")
-        @URL(message = "Picture URL must be a valid URL")
         String pictureUrl,
 
         @NotNull(message = "Achievement type cannot be null")
         AchievementType achievementType,
 
         @NotNull(message = "Required value cannot be null")
-        @DecimalMin(value = "0", inclusive = true, message = "Required value cannot be negative")
         long requiredValue
 ) {
 }

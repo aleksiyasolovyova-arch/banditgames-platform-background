@@ -19,17 +19,14 @@ public record RegisterGameRequest(
         String description,
 
         @NotNull(message = "Game price cannot be null")
-        @DecimalMin(value = "0.0", message = "Game price cannot be negative")
         BigDecimal price,
 
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")
-        @URL(message = "Picture URL must be a valid URL")
         String pictureUrl,
 
         @NotNull(message = "Game URL cannot be null")
         @NotBlank(message = "Game URL cannot be blank")
-        @URL(message = "Game URL must be a valid URL")
         String gameUrl,
 
         @NotNull(message = "Game creator name cannot be null")

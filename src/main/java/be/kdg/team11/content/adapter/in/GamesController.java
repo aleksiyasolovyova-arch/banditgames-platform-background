@@ -121,7 +121,7 @@ public class GamesController {
      */
     @PutMapping("/{gameId}/pass")
     public ResponseEntity<GameDto> passGameReview(
-            @PathVariable UUID gameId) {
+           @NotNull @PathVariable UUID gameId) {
         Game acceptedGame = passGameReviewPort.passGameReview(
                 new PassGameReviewCommand(gameId)
         );
@@ -142,7 +142,7 @@ public class GamesController {
      */
     @PutMapping("/{gameId}/fail")
     public ResponseEntity<GameDto> failGameReview(
-            @PathVariable UUID gameId) {
+            @NotNull @PathVariable UUID gameId) {
         Game rejectedGame = failGameReviewPort.failGameReview(
                 new FailGameReviewCommand(gameId)
         );
