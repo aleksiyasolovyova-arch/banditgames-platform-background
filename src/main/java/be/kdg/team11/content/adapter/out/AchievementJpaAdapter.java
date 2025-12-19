@@ -6,13 +6,15 @@ import be.kdg.team11.content.adapter.out.mapper.AchievementJpaMapper;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.domain.achievement.AchievementId;
 import be.kdg.team11.content.port.out.LoadAchievementPort;
+import be.kdg.team11.content.port.out.LoadAchievementsPort;
 import be.kdg.team11.content.port.out.SaveAchievementPort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
-public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchievementPort {
+public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchievementPort, LoadAchievementsPort {
     private final AchievementJpaRepository achievementJpaRepository;
     private final AchievementJpaMapper achievementJpaMapper;
 
@@ -35,4 +37,8 @@ public class AchievementJpaAdapter implements SaveAchievementPort, LoadAchieveme
                 .map(achievementJpaMapper::toDomain);
     }
 
+    @Override
+    public List<Achievement> loadAll() {
+        return achievementJpaRepository.findAll().stream().map(achievementJpaMapper::toDomain).toList();
+    }
 }
