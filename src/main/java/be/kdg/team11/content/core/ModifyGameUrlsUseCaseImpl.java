@@ -1,6 +1,5 @@
 package be.kdg.team11.content.core;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
@@ -30,10 +29,7 @@ public class ModifyGameUrlsUseCaseImpl implements ModifyGameUrlsPort {
         Game game = loadGamePort.loadBy(gameId)
                 .orElseThrow(() -> GameId.notFound(gameId));
 
-        Url pictureUrl = Url.of(command.pictureUrl());
-        Url gameUrl = Url.of(command.gameUrl());
-
-        game.modifyUrls(pictureUrl, gameUrl);
+        game.modifyUrls(command.pictureUrl(), command.gameUrl());
         // 6. Persist the new aggregate
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 

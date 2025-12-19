@@ -1,6 +1,5 @@
 package be.kdg.team11.content.domain.achievement;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
@@ -17,13 +16,13 @@ public class Achievement {
     private final AchievementId achievementId;
     private final String name;
     private final String description;
-    private final Url pictureUrl;
+    private final String pictureUrl;
     private final AchievementType type;
     private final long requiredValue;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+    public Achievement(AchievementId achievementId, String name, String description, String pictureUrl, AchievementType type, long requiredValue) {
         this.achievementId = achievementId;
         this.name = name;
         this.description = description;
@@ -33,7 +32,7 @@ public class Achievement {
     }
 
 
-    public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+    public static Achievement create(String name, String description, String pictureUrl, AchievementType type, long requiredValue) {
         validateAchievementRequiredValue(requiredValue);
 
         Achievement achievement = new Achievement(
@@ -49,7 +48,7 @@ public class Achievement {
                 achievement.achievementId.achievementId(),
                 name,
                 description,
-                pictureUrl.toString(),
+                pictureUrl,
                 type.name(),
                 requiredValue
         );
@@ -93,7 +92,7 @@ public class Achievement {
         return description;
     }
 
-    public Url getPictureUrl() {
+    public String getPictureUrl() {
         return pictureUrl;
     }
 
