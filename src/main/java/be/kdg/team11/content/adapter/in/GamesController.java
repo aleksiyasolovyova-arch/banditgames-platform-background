@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 //TODO Add technical validation
@@ -23,6 +24,7 @@ public class GamesController {
     private final PassGameReviewPort passGameReviewPort;
     private final FailGameReviewPort failGameReviewPort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
+    private final ShowAllGamesPort showAllGamesPort;
     private final GameMapper gameMapper;
 
 
@@ -45,12 +47,44 @@ public class GamesController {
                            PassGameReviewPort passGameReviewPort,
                            FailGameReviewPort failGameReviewPort,
                            ModifyGameUrlsPort modifyGameUrlsPort,
+                           ShowAllGamesPort showAllGamesPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.passGameReviewPort = passGameReviewPort;
         this.failGameReviewPort = failGameReviewPort;
         this.modifyGameUrlsPort = modifyGameUrlsPort;
+        this.showAllGamesPort = showAllGamesPort;
         this.gameMapper = gameMapper;
+    }
+
+    /**
+     * Retrieves all games in the system.
+     * FULL PATH: /games (GET)
+     * RESPONSE BODY (List<GameDto>):
+     * - gameId (UUID): Unique game identifier
+     * - name (String): Game name
+     * - description (String): Game description
+     * - price (BigDecimal): Game price
+     * - pictureUrl (String): URL to game icon/screenshot
+     * - gameUrl (String): URL to playable game
+     * - gameCreatorName (String): Name of the game creator
+     * - registrationState (String): Game review state (PENDING, PASSED, FAILED)
+     * - rules (List<RuleDto>): List of game rules
+     *   - description (String): Rule description
+     * - achievements (List<GameAchievementDto>): List of game-specific achievements
+     *   - code (String): Achievement code
+     *   - description (String): Achievement description
+     * HTTP Status Codes:
+     * - 200 OK: Games retrieved successfully
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @GetMapping
+    public ResponseEntity<List<GameDto>> loadAllGames() {
+        List<Game> games = showAllGamesPort.showAll();
+        List<GameDto> response = games.stream()
+                .map(gameMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(response);
     }
 
 
