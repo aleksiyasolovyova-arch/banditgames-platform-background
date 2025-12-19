@@ -38,6 +38,7 @@ dependencies {
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("jakarta.validation:jakarta.validation-api")
+	implementation("org.hibernate.validator:hibernate-validator")
     implementation(kotlin("stdlib-jdk8"))
 }
 

@@ -1,10 +1,7 @@
 package be.kdg.team11.content.domain.game;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.content.domain.Url;
-import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
 import be.kdg.team11.sharedkernel.events.*;
 import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
 import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
@@ -25,8 +22,8 @@ public class Game {
     private final String name;
     private final String description;
     private final BigDecimal price;
-    private Url pictureUrl;
-    private Url gameUrl;
+    private String pictureUrl;
+    private String gameUrl;
     private final String gameCreatorName;
     private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
@@ -40,8 +37,8 @@ public class Game {
             String name,
             String description,
             BigDecimal price,
-            Url pictureUrl,
-            Url gameUrl,
+            String pictureUrl,
+            String gameUrl,
             String gameCreatorName,
             GameReviewState reviewState,
             List<Rule> rules,
@@ -59,13 +56,8 @@ public class Game {
         this.achievements.addAll(achievements);
     }
 
-    public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
-        validateGameName(name);
-        validateGameDescription(description);
+    public static Game register(String name, String description, BigDecimal price, String pictureUrl, String gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
         validateGamePrice(price);
-        validateGamePictureUrl(pictureUrl);
-        validateGameUrl(gameUrl);
-        validateGameCreatorName(gameCreatorName);
 
         Game game = new Game(
                 GameId.create(),
@@ -96,8 +88,8 @@ public class Game {
                 name,
                 description,
                 price,
-                pictureUrl.toString(),
-                gameUrl.toString(),
+                pictureUrl,
+                gameUrl,
                 gameCreatorName,
                 ruleRecords,
                 achievementRecords
@@ -134,14 +126,12 @@ public class Game {
      * Allows updating icon/screenshot and playable game links without recreating the aggregate.
      *
      */
-    public void modifyUrls(Url pictureUrl, Url gameUrl) {
-        validateGamePictureUrl(pictureUrl);
-        validateGameUrl(gameUrl);
+    public void modifyUrls(String pictureUrl, String gameUrl) {
 
         GameUrlsModifiedEvent event = new GameUrlsModifiedEvent(
                 this.gameId.gameId(),
-                pictureUrl.toString(),
-                gameUrl.toString()
+                pictureUrl,
+                gameUrl
         );
 
         this.pictureUrl = pictureUrl;
@@ -151,23 +141,7 @@ public class Game {
     }
 
 
-    private static void validateGameName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidGameDataException("Game name cannot be null or empty");
-        }
-    }
-
-
-    private static void validateGameDescription(String description) {
-        if (description == null || description.isBlank()) {
-            throw new InvalidGameDataException("Game description cannot be null or empty");
-        }
-    }
-
     private static void validateGamePrice(BigDecimal price) {
-        if (price == null) {
-            throw new InvalidGameDataException("Game price cannot be null");
-        }
 
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidGameDataException(
@@ -177,27 +151,6 @@ public class Game {
     }
 
 
-    private static void validateGamePictureUrl(Url pictureUrl) {
-        if (pictureUrl == null) {
-            throw new InvalidGameUrlException("Game picture URL cannot be null");
-        }
-    }
-
-
-    private static void validateGameUrl(Url gameUrl) {
-        if (gameUrl == null) {
-            throw new InvalidGameUrlException("Game playable URL cannot be null");
-        }
-    }
-
-
-    private static void validateGameCreatorName(String gameCreatorName) {
-        if (gameCreatorName == null || gameCreatorName.isBlank()) {
-            throw new InvalidGameDataException("Game creator name cannot be null or empty");
-        }
-    }
-
-    //TODO Could wrap getters of Collections in Collections.unmodifiableList to protect aggregate invariants:
 
     public GameId getGameId() {
         return gameId;
@@ -215,7 +168,7 @@ public class Game {
         return price;
     }
 
-    public Url getPictureUrl() {
+    public String getPictureUrl() {
         return pictureUrl;
     }
 
@@ -223,7 +176,7 @@ public class Game {
         return gameCreatorName;
     }
 
-    public Url getGameUrl() {
+    public String getGameUrl() {
         return gameUrl;
     }
 

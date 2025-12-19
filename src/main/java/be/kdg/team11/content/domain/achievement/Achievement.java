@@ -1,8 +1,6 @@
 package be.kdg.team11.content.domain.achievement;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
-import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 
@@ -18,13 +16,13 @@ public class Achievement {
     private final AchievementId achievementId;
     private final String name;
     private final String description;
-    private final Url pictureUrl;
+    private final String pictureUrl;
     private final AchievementType type;
     private final long requiredValue;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    public Achievement(AchievementId achievementId, String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
+    public Achievement(AchievementId achievementId, String name, String description, String pictureUrl, AchievementType type, long requiredValue) {
         this.achievementId = achievementId;
         this.name = name;
         this.description = description;
@@ -34,11 +32,7 @@ public class Achievement {
     }
 
 
-    public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
-        validateAchievementName(name);
-        validateAchievementDescription(description);
-        validateAchievementPictureUrl(pictureUrl);
-        validateAchievementType(type);
+    public static Achievement create(String name, String description, String pictureUrl, AchievementType type, long requiredValue) {
         validateAchievementRequiredValue(requiredValue);
 
         Achievement achievement = new Achievement(
@@ -54,7 +48,7 @@ public class Achievement {
                 achievement.achievementId.achievementId(),
                 name,
                 description,
-                pictureUrl.toString(),
+                pictureUrl,
                 type.name(),
                 requiredValue
         );
@@ -78,48 +72,6 @@ public class Achievement {
     }
 
 
-    private static void validateAchievementName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidAchievementException(
-                    "Achievement name cannot be null or empty"
-            );
-        }
-        if (name.length() > 100) {
-            throw new InvalidAchievementException(
-                    "Achievement name cannot exceed 100 characters, received: " + name.length()
-            );
-        }
-    }
-
-    private static void validateAchievementDescription(String description) {
-        if (description == null || description.isBlank()) {
-            throw new InvalidAchievementException(
-                    "Achievement description cannot be null or empty"
-            );
-        }
-        if (description.length() > 500) {
-            throw new InvalidAchievementException(
-                    "Achievement description cannot exceed 500 characters, received: " + description.length()
-            );
-        }
-    }
-
-    private static void validateAchievementPictureUrl(Url pictureUrl) {
-        if (pictureUrl == null) {
-            throw new InvalidAchievementException(
-                    "Achievement picture URL cannot be null"
-            );
-        }
-    }
-
-    private static void validateAchievementType(AchievementType type) {
-        if (type == null) {
-            throw new InvalidAchievementTypeException(
-                    "Achievement type cannot be null"
-            );
-        }
-    }
-
     private static void validateAchievementRequiredValue(long requiredValue) {
         if (requiredValue < 0) {
             throw new InvalidAchievementException(
@@ -140,7 +92,7 @@ public class Achievement {
         return description;
     }
 
-    public Url getPictureUrl() {
+    public String getPictureUrl() {
         return pictureUrl;
     }
 

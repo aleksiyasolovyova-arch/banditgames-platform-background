@@ -2,7 +2,6 @@ package be.kdg.team11.content.adapter.out.mapper;
 
 import be.kdg.team11.content.adapter.out.jpa.GameAchievementEmbeddable;
 import be.kdg.team11.content.adapter.out.jpa.GameJpaEntity;
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameAchievement;
 import be.kdg.team11.content.domain.game.GameId;
@@ -21,8 +20,8 @@ public class GameJpaMapper {
         entity.setName(game.getName());
         entity.setDescription(game.getDescription());
         entity.setPrice(game.getPrice());
-        entity.setPictureUrl(game.getPictureUrl().value());
-        entity.setGameUrl(game.getGameUrl().value());
+        entity.setPictureUrl(game.getPictureUrl());
+        entity.setGameUrl(game.getGameUrl());
         entity.setGameCreatorName(game.getGameCreatorName());
         entity.setReviewState(game.getReviewState());
 
@@ -66,8 +65,8 @@ public class GameJpaMapper {
                 entity.getName(),
                 entity.getDescription(),
                 entity.getPrice(),
-                new Url(entity.getPictureUrl()),
-                new Url(entity.getGameUrl()),
+                entity.getPictureUrl(),
+                entity.getGameUrl(),
                 entity.getGameCreatorName(),
                 entity.getReviewState(),
                 rules,

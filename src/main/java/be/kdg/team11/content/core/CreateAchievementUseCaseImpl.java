@@ -1,6 +1,5 @@
 package be.kdg.team11.content.core;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.domain.achievement.AchievementType;
 import be.kdg.team11.content.port.in.CreateAchievementCommand;
@@ -23,13 +22,12 @@ public class CreateAchievementUseCaseImpl implements CreateAchievementPort {
 
     @Override
     public Achievement createAchievement(CreateAchievementCommand command) {
-        Url pictureUrl = Url.of(command.pictureUrl());
         AchievementType type = AchievementType.valueOf(command.type());
 
         Achievement achievement = Achievement.create(
                 command.name(),
                 command.description(),
-                pictureUrl,
+                command.pictureUrl(),
                 type,
                 command.requiredValue()
         );

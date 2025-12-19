@@ -32,9 +32,6 @@ import java.util.List;
      * Used by repositories to load lobbies from database.
      */
     public Lobby(LobbyId lobbyId, GameReference gameReference, Pair<Slot, Slot> slotPair, LobbyResult lobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
-        validateLobbyId(lobbyId);
-        validateGameReference(gameReference);
-        validateSlotPair(slotPair);
         validateTimeConsistency(lobbyResult, startTime, endTime);
 
         this.lobbyId = lobbyId;
@@ -58,7 +55,6 @@ import java.util.List;
      * - Both players must accept before game starts
      */
     public static Lobby createForStrangers(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
-        validateGameReference(gameReference);
 
         Lobby lobby = new Lobby(LobbyId.create(),
                 gameReference,
@@ -91,7 +87,6 @@ import java.util.List;
      * - Waits for player2 decision before starting
      */
     public static Lobby createForFriends(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
-        validateGameReference(gameReference);
 
         Lobby lobby = new Lobby(
                 LobbyId.create(),
@@ -124,7 +119,6 @@ import java.util.List;
      * - Game starts immediately
      */
     public static Lobby createForAI(GameReference gameReference, PlayerId playerId) {
-        validateGameReference(gameReference);
         if (playerId == null) {
             throw new InvalidLobbyException("Player ID cannot be null");
         }
@@ -321,22 +315,6 @@ import java.util.List;
         return slotPair.getSecond().getPlayerId().isAI();
     }
 
-    private static void validateLobbyId(LobbyId lobbyId) {
-        if (lobbyId == null) {
-            throw new InvalidLobbyException("Lobby ID cannot be null");
-        }
-    }
-
-    private static void validateGameReference(GameReference gameReference) {
-        if (gameReference == null) {
-            throw new InvalidLobbyException("Game reference cannot be null");
-        }
-    }
-    private static void validateSlotPair(Pair<Slot, Slot> slotPair) {
-        if (slotPair == null) {
-            throw new InvalidLobbyException("Slot pair cannot be null");
-        }
-    }
 
     private static void validateTimeConsistency(LobbyResult result, LocalDateTime startTime, LocalDateTime endTime) {
         if (!result.equals(LobbyResult.DID_NOT_START) && startTime == null) {

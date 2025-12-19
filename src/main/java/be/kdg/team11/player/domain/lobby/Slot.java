@@ -1,6 +1,5 @@
 package be.kdg.team11.player.domain.lobby;
 
-import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyException;
 import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyStateException;
 import be.kdg.team11.player.domain.player.PlayerId;
 
@@ -13,12 +12,6 @@ import be.kdg.team11.player.domain.player.PlayerId;
     private ParticipationStatus participationStatus;
 
     public Slot(PlayerId playerId, ParticipationStatus participationStatus) {
-        if (playerId == null) {
-            throw new InvalidLobbyException("Player ID cannot be null");
-        }
-        if (participationStatus == null) {
-            throw new InvalidLobbyException("Participation status cannot be null");
-        }
         this.playerId = playerId;
         this.participationStatus = participationStatus;
     }

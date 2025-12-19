@@ -12,7 +12,7 @@ import be.kdg.team11.sharedkernel.events.player.PlayerUnfavoritedGameEvent;
 
 import java.time.LocalDate;
 import java.util.*;
-
+//TODO move validation of favoriting in the owned games entity
 /**
  * Aggregate Root for the Player subdomain.
  * Represents a player with their games, achievements, and profile information.
@@ -20,6 +20,8 @@ import java.util.*;
  */
 public class Player {
     private final PlayerId playerId;
+    private final String username;
+    private final String pictureUrl;
     private final LocalDate joinedDate;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
@@ -30,11 +32,12 @@ public class Player {
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Set<OwnedGame> ownedGames) {
-        validatePlayerId(playerId);
+    public Player(PlayerId playerId,String username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Set<OwnedGame> ownedGames) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
+        this.username = username;
+        this.pictureUrl = pictureUrl;
         this.joinedDate = joinedDate;
         this.unlockedPlatformAchievements.addAll(unlockedPlatformAchievements);
         this.unlockedGameAchievements.addAll(unlockedGameAchievements);
@@ -45,23 +48,24 @@ public class Player {
      * Factory method for creating a new player.
      * Initial state: no games, no achievements.
      */
-    public static Player create(PlayerId playerId) {
-        validatePlayerId(playerId);
+    public static Player create(PlayerId playerId, String username, String pictureUrl) {
 
-        Player player = new Player(playerId,
+        Player player = new Player(
+                playerId,
+                username,
+                pictureUrl,
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet());
 
-        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(), player.joinedDate);
+        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username,pictureUrl, player.joinedDate);
         player.eventStore.add(event);
 
         return player;
     }
 
     public void buyGame(GameReference gameReference) {
-        validateGameReference(gameReference);
         validateGameNotAlreadyOwned(gameReference);
 
         ownedGames.add(OwnedGame.bought(gameReference, LocalDate.now()));
@@ -77,7 +81,6 @@ public class Player {
      * Throws InvalidGameForPlayerException if game operation fails.
      */
     public void favoriteGame(GameReference gameReference) {
-        validateGameReference(gameReference);
         OwnedGame ownedGame = validateGameOwned(gameReference);
         validateGameNotAlreadyFavorited(ownedGame, gameReference);
 
@@ -95,7 +98,6 @@ public class Player {
      * Throws InvalidGameForPlayerException if game operation fails.
      */
     public void unfavoriteGame(GameReference gameReference) {
-        validateGameReference(gameReference);
 
         OwnedGame ownedGame = validateGameOwned(gameReference);
         validateGameIsFavorite(ownedGame, gameReference);
@@ -113,7 +115,6 @@ public class Player {
      * Throws InvalidAchievementForPlayerException if achievement operation fails.
      */
     public void unlockPlatformAchievement(AchievementId achievementId) {
-        validateAchievementId(achievementId);
         validatePlatformAchievementNotAlreadyUnlocked(achievementId);
 
         UnlockedPlatformAchievement achievement = UnlockedPlatformAchievement.now(achievementId);
@@ -124,8 +125,6 @@ public class Player {
      * Player unlocks a game-specific achievement.
     */
     public void unlockGameAchievement(GameReference gameReference, String achievementCode) {
-        validateGameReference(gameReference);
-        validateAchievementCode(achievementCode);
         validateGameOwnedForAchievement(gameReference);
         validateGameAchievementNotAlreadyUnlocked(gameReference, achievementCode);
 
@@ -143,25 +142,10 @@ public class Player {
         return findOwnedGame(gameReference) != null;
     }
 
-    private static void validatePlayerId(PlayerId playerId) {
-        if (playerId == null) {
-            throw new InvalidPlayerException("Player ID cannot be null");
-        }
-    }
-
 
     private static void validateJoinedDate(LocalDate joinedDate) {
-        if (joinedDate == null) {
-            throw new InvalidPlayerException("Joined date cannot be null");
-        }
         if (joinedDate.isAfter(LocalDate.now())) {
             throw new InvalidPlayerException("Joined date cannot be in the future");
-        }
-    }
-
-    private void validateGameReference(GameReference gameReference) {
-        if (gameReference == null) {
-            throw new InvalidGameForPlayerException("Game reference cannot be null");
         }
     }
 
@@ -203,12 +187,6 @@ public class Player {
     }
 
 
-    private void validateAchievementId(AchievementId achievementId) {
-        if (achievementId == null) {
-            throw new InvalidAchievementForPlayerException("Achievement ID cannot be null");
-        }
-    }
-
     private void validatePlatformAchievementNotAlreadyUnlocked(AchievementId achievementId) {
         boolean alreadyUnlocked = unlockedPlatformAchievements.stream()
                 .anyMatch(ufa -> ufa.achievementId().equals(achievementId));
@@ -221,11 +199,6 @@ public class Player {
         }
     }
 
-    private void validateAchievementCode(String achievementCode) {
-        if (achievementCode == null || achievementCode.isEmpty()) {
-            throw new InvalidAchievementForPlayerException("Achievement code cannot be empty");
-        }
-    }
 
     private void validateGameOwnedForAchievement(GameReference gameReference) {
         if (!ownsGame(gameReference)) {
@@ -251,6 +224,14 @@ public class Player {
 
     public PlayerId getPlayerId() {
         return playerId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     public LocalDate getJoinedDate() {
