@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -98,6 +99,7 @@ public class GamesController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PutMapping("/{gameId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GameDto> updateGame(
             @NotNull @PathVariable UUID gameId,
             @Valid @RequestBody UpdateGameRequest request) {
@@ -120,6 +122,7 @@ public class GamesController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PutMapping("/{gameId}/pass")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GameDto> passGameReview(
            @NotNull @PathVariable UUID gameId) {
         Game acceptedGame = passGameReviewPort.passGameReview(
@@ -141,6 +144,7 @@ public class GamesController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PutMapping("/{gameId}/fail")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GameDto> failGameReview(
             @NotNull @PathVariable UUID gameId) {
         Game rejectedGame = failGameReviewPort.failGameReview(
