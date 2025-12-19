@@ -3,7 +3,6 @@ package be.kdg.team11.content.adapter.in;
 import be.kdg.team11.content.adapter.in.mapper.AchievementMapper;
 import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
-import be.kdg.team11.content.core.LoadAllAchievementsUseCaseImpl;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
 import be.kdg.team11.content.port.out.LoadAchievementsPort;
