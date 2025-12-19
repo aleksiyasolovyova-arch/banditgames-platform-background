@@ -49,6 +49,8 @@ public class PlayerJpaMapper {
 
         return new Player(
                 playerId,
+                entity.getUsername(),
+                entity.getPictureUrl(),
                 entity.getJoinedDate(),
                 unlockedPlatformAchievements,
                 unlockedGameAchievements,
@@ -59,6 +61,8 @@ public class PlayerJpaMapper {
     public PlayerJpaEntity toJpaEntity(Player player) {
         PlayerJpaEntity entity = new PlayerJpaEntity();
         entity.setPlayerId(player.getPlayerId().playerId());
+        entity.setUsername(player.getUsername());
+        entity.setPictureUrl(player.getPictureUrl());
         entity.setJoinedDate(player.getJoinedDate());
 
         Set<UnlockedPlatformAchievementEmbeddable> platformAchievements =

@@ -17,6 +17,12 @@ public class PlayerJpaEntity {
     private UUID playerId;
 
     @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String pictureUrl;
+
+    @Column(nullable = false)
     private LocalDate joinedDate;
 
     @ElementCollection
@@ -40,6 +46,22 @@ public class PlayerJpaEntity {
 
     public void setPlayerId(UUID playerId) {
         this.playerId = playerId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public LocalDate getJoinedDate() {
