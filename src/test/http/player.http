@@ -13,3 +13,7 @@ Content-Type: application/json
 "username": "kkkk",
 "pictureUrl": "5"
 }
+
+###
+
+POST http://localhost:8080/players/buy-game/550e8700-e29b-41d4-a716-446655440010
