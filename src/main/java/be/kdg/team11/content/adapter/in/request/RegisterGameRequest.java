@@ -2,6 +2,7 @@ package be.kdg.team11.content.adapter.in.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,15 +19,16 @@ public record RegisterGameRequest(
         String description,
 
         @NotNull(message = "Game price cannot be null")
-        @DecimalMin(value = "0.0", inclusive = true, message = "Game price cannot be negative")
         BigDecimal price,
 
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")
+        @URL(message = "Picture URL must be a valid URL")
         String pictureUrl,
 
         @NotNull(message = "Game URL cannot be null")
         @NotBlank(message = "Game URL cannot be blank")
+        @URL(message = "Game URL must be a valid URL")
         String gameUrl,
 
         @NotNull(message = "Game creator name cannot be null")

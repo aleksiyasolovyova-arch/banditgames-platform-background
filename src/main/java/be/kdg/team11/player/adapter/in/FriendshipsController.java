@@ -7,11 +7,14 @@ import be.kdg.team11.player.domain.friendship.Friendship;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+//TODO Add technical validation
 
 @RestController
 @RequestMapping("/friendships")
@@ -87,7 +90,7 @@ public class FriendshipsController {
      */
     @PutMapping("/{friendshipId}/befriend")
     public ResponseEntity<FriendshipDto> acceptFriendship(
-            @PathVariable UUID friendshipId
+            @NotNull @PathVariable UUID friendshipId
     ) {
         //TODO replace with value from JWT
         UUID recipientId = UUID.randomUUID();
@@ -116,7 +119,7 @@ public class FriendshipsController {
      */
     @PutMapping("/{friendshipId}/decline")
     public ResponseEntity<FriendshipDto> declineFriendship(
-            @PathVariable UUID friendshipId
+            @NotNull @PathVariable UUID friendshipId
     ) {
         //TODO replace with value from JWT
         UUID recipientId = UUID.randomUUID();
@@ -146,7 +149,7 @@ public class FriendshipsController {
      */
     @PostMapping("/{friendshipId}/end")
     public ResponseEntity<FriendshipDto> endFriendship(
-            @PathVariable UUID friendshipId
+           @NotNull @PathVariable UUID friendshipId
     ) {
         //TODO replace with value from JWT
         UUID initiatedBy = UUID.randomUUID();

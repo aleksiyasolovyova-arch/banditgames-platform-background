@@ -29,7 +29,6 @@ public class Friendship {
  * All parameters are required and must be valid.
  */
     public Friendship(FriendshipId friendshipId, Pair<PlayerId, PlayerId> playerIdPair, FriendshipState friendshipState) {
-        validateFriendshipId(friendshipId);
         validatePlayerIdsDifferent(playerIdPair);
 
         this.friendshipId = friendshipId;
@@ -150,11 +149,6 @@ public class Friendship {
     }
 
 
-    private static void validateFriendshipId(FriendshipId friendshipId) {
-        if (friendshipId == null) {
-            throw new InvalidFriendshipException("Friendship ID cannot be null");
-        }
-    }
 
     private static void validatePlayerIdsDifferent(Pair<PlayerId, PlayerId> playerIdPair) {
         if (playerIdPair.getFirst().equals(playerIdPair.getSecond())) {

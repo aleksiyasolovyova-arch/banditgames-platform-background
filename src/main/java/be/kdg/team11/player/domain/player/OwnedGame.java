@@ -1,6 +1,5 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDate;
@@ -17,12 +16,6 @@ public class OwnedGame {
      * Private constructor - use factory method instead.
      */
     private OwnedGame(GameReference game, LocalDate dateBought) {
-        if (game == null) {
-            throw new InvalidGameForPlayerException("Game reference cannot be null");
-        }
-        if (dateBought == null) {
-            throw new InvalidGameForPlayerException("Date bought cannot be null");
-        }
         this.game = game;
         this.dateBought = dateBought;
         this.favorite = false;

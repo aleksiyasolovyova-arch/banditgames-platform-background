@@ -1,7 +1,5 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.lobby.exceptions.LobbyNotFoundException;
-import be.kdg.team11.player.domain.player.exceptions.InvalidPlayerException;
 import be.kdg.team11.player.domain.player.exceptions.PlayerNotFoundException;
 
 import java.util.UUID;
@@ -10,12 +8,6 @@ public record PlayerId(
         UUID playerId
 ) {
     private static final String AI_ID = "00000000-0000-0000-0000-000000a1face";
-
-    public PlayerId {
-        if (playerId == null) {
-            throw new InvalidPlayerException("Player ID cannot be null");
-        }
-    }
 
     public static PlayerId of(UUID playerId) {
         return new PlayerId(playerId);

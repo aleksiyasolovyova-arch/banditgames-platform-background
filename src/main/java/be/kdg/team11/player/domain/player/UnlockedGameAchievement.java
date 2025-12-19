@@ -1,7 +1,5 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.player.exceptions.InvalidAchievementForPlayerException;
-import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDateTime;
@@ -12,17 +10,6 @@ public record UnlockedGameAchievement(
         String code,
         LocalDateTime unlockedAt
 ) {
-    public UnlockedGameAchievement {
-        if (gameReference == null) {
-            throw new InvalidGameForPlayerException("Game reference cannot be null");
-        }
-        if (code == null || code.isEmpty()) {
-            throw new InvalidAchievementForPlayerException("Achievement code cannot be empty");
-        }
-        if (unlockedAt == null) {
-            throw new InvalidAchievementForPlayerException("Unlocked at time cannot be null");
-        }
-    }
 
     /**
      * Factory method for creating a newly unlocked game achievement.

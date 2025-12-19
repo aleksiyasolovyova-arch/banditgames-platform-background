@@ -2,7 +2,6 @@ package be.kdg.team11.content.domain.achievement;
 
 import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
-import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 
@@ -35,10 +34,6 @@ public class Achievement {
 
 
     public static Achievement create(String name, String description, Url pictureUrl, AchievementType type, long requiredValue) {
-        validateAchievementName(name);
-        validateAchievementDescription(description);
-        validateAchievementPictureUrl(pictureUrl);
-        validateAchievementType(type);
         validateAchievementRequiredValue(requiredValue);
 
         Achievement achievement = new Achievement(
@@ -77,48 +72,6 @@ public class Achievement {
         return type.isMetBy(requiredValue, statistics);
     }
 
-
-    private static void validateAchievementName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidAchievementException(
-                    "Achievement name cannot be null or empty"
-            );
-        }
-        if (name.length() > 100) {
-            throw new InvalidAchievementException(
-                    "Achievement name cannot exceed 100 characters, received: " + name.length()
-            );
-        }
-    }
-
-    private static void validateAchievementDescription(String description) {
-        if (description == null || description.isBlank()) {
-            throw new InvalidAchievementException(
-                    "Achievement description cannot be null or empty"
-            );
-        }
-        if (description.length() > 500) {
-            throw new InvalidAchievementException(
-                    "Achievement description cannot exceed 500 characters, received: " + description.length()
-            );
-        }
-    }
-
-    private static void validateAchievementPictureUrl(Url pictureUrl) {
-        if (pictureUrl == null) {
-            throw new InvalidAchievementException(
-                    "Achievement picture URL cannot be null"
-            );
-        }
-    }
-
-    private static void validateAchievementType(AchievementType type) {
-        if (type == null) {
-            throw new InvalidAchievementTypeException(
-                    "Achievement type cannot be null"
-            );
-        }
-    }
 
     private static void validateAchievementRequiredValue(long requiredValue) {
         if (requiredValue < 0) {

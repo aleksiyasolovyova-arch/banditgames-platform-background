@@ -33,13 +33,8 @@ public record PlayerStatistics(
             Long bestRecordTime,
             UUID playerId
     ) {
+        validateStatistics(totalGamesPlayed, totalWins, totalFriends, bestRecordTime);
         return new PlayerStatistics(totalGamesPlayed, totalWins, totalFriends, bestRecordTime, playerId);
-    }
-
-    private static void validatePlayerId(UUID playerId) {
-        if (playerId == null) {
-            throw new InvalidAchievementException("Player ID cannot be null in statistics");
-        }
     }
 
     private static void validateStatistics(
