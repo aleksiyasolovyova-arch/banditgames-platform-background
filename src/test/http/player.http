@@ -1,0 +1,15 @@
+POST http://localhost:8080/players
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "pictureUrl": "https://example.com/pictures/john_doe.jpg"
+}
+###
+POST http://localhost:8080/players
+Content-Type: application/json
+
+{
+"username": "kkkk",
+"pictureUrl": "5"
+}

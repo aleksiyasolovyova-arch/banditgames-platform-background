@@ -1,14 +1,18 @@
 package be.kdg.team11.player.adapter.out;
 
 import be.kdg.team11.player.adapter.out.jpa.GameReferenceJpaRepository;
+import be.kdg.team11.player.adapter.out.jpa.entity.GameReferenceJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.GameReferenceJpaMapper;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.player.port.out.GameReferenceExistsPort;
+import be.kdg.team11.player.port.out.LoadGameReferencePort;
 import be.kdg.team11.player.port.out.SaveGameReferencePort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGameReferencePort {
+public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGameReferencePort, LoadGameReferencePort {
     private final GameReferenceJpaRepository gameReferenceJpaRepository;
     private final GameReferenceJpaMapper gameReferenceJpaMapper;
 
@@ -26,5 +30,13 @@ public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGa
     @Override
     public GameReference save(GameReference gameReference) {
         return gameReferenceJpaMapper.toDomain(gameReferenceJpaRepository.save(gameReferenceJpaMapper.toJpaEntity(gameReference)));
+    }
+
+    @Override
+    public List<GameReference> loadAll() {
+        return gameReferenceJpaRepository.findAll()
+                .stream()
+                .map(gameReferenceJpaMapper::toDomain)
+                .toList();
     }
 }
