@@ -12,7 +12,6 @@ import be.kdg.team11.sharedkernel.events.player.PlayerUnfavoritedGameEvent;
 
 import java.time.LocalDate;
 import java.util.*;
-//TODO move validation of favoriting in the owned games entity
 /**
  * Aggregate Root for the Player subdomain.
  * Represents a player with their games, achievements, and profile information.
@@ -82,8 +81,6 @@ public class Player {
      */
     public void favoriteGame(GameReference gameReference) {
         OwnedGame ownedGame = validateGameOwned(gameReference);
-        validateGameNotAlreadyFavorited(ownedGame, gameReference);
-
         ownedGame.favorite();
 
         PlayerFavoritedGameEvent event = new PlayerFavoritedGameEvent(
@@ -100,8 +97,6 @@ public class Player {
     public void unfavoriteGame(GameReference gameReference) {
 
         OwnedGame ownedGame = validateGameOwned(gameReference);
-        validateGameIsFavorite(ownedGame, gameReference);
-
         ownedGame.unfavorite();
         PlayerUnfavoritedGameEvent event = new PlayerUnfavoritedGameEvent(
                 playerId.playerId(),
@@ -167,23 +162,6 @@ public class Player {
             );
         }
         return ownedGame;
-    }
-
-
-    private void validateGameNotAlreadyFavorited(OwnedGame ownedGame, GameReference gameReference) {
-        if (ownedGame.isFavorite()) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Game %s is already favorited", gameReference.gameId())
-            );
-        }
-    }
-
-    private void validateGameIsFavorite(OwnedGame ownedGame, GameReference gameReference) {
-        if (!ownedGame.isFavorite()) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Game %s is not favorited", gameReference.gameId())
-            );
-        }
     }
 
 
