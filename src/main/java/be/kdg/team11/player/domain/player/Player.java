@@ -12,7 +12,7 @@ import be.kdg.team11.sharedkernel.events.player.PlayerUnfavoritedGameEvent;
 
 import java.time.LocalDate;
 import java.util.*;
-
+//TODO move validation of favoriting in the owned games entity
 /**
  * Aggregate Root for the Player subdomain.
  * Represents a player with their games, achievements, and profile information.

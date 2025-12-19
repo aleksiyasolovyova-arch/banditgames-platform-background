@@ -1,6 +1,5 @@
 package be.kdg.team11.content.domain.game;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.sharedkernel.events.*;
@@ -23,8 +22,8 @@ public class Game {
     private final String name;
     private final String description;
     private final BigDecimal price;
-    private Url pictureUrl;
-    private Url gameUrl;
+    private String pictureUrl;
+    private String gameUrl;
     private final String gameCreatorName;
     private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
@@ -38,8 +37,8 @@ public class Game {
             String name,
             String description,
             BigDecimal price,
-            Url pictureUrl,
-            Url gameUrl,
+            String pictureUrl,
+            String gameUrl,
             String gameCreatorName,
             GameReviewState reviewState,
             List<Rule> rules,
@@ -57,7 +56,7 @@ public class Game {
         this.achievements.addAll(achievements);
     }
 
-    public static Game register(String name, String description, BigDecimal price, Url pictureUrl, Url gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
+    public static Game register(String name, String description, BigDecimal price, String pictureUrl, String gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
         validateGamePrice(price);
 
         Game game = new Game(
@@ -89,8 +88,8 @@ public class Game {
                 name,
                 description,
                 price,
-                pictureUrl.toString(),
-                gameUrl.toString(),
+                pictureUrl,
+                gameUrl,
                 gameCreatorName,
                 ruleRecords,
                 achievementRecords
@@ -127,12 +126,12 @@ public class Game {
      * Allows updating icon/screenshot and playable game links without recreating the aggregate.
      *
      */
-    public void modifyUrls(Url pictureUrl, Url gameUrl) {
+    public void modifyUrls(String pictureUrl, String gameUrl) {
 
         GameUrlsModifiedEvent event = new GameUrlsModifiedEvent(
                 this.gameId.gameId(),
-                pictureUrl.toString(),
-                gameUrl.toString()
+                pictureUrl,
+                gameUrl
         );
 
         this.pictureUrl = pictureUrl;
@@ -169,7 +168,7 @@ public class Game {
         return price;
     }
 
-    public Url getPictureUrl() {
+    public String getPictureUrl() {
         return pictureUrl;
     }
 
@@ -177,7 +176,7 @@ public class Game {
         return gameCreatorName;
     }
 
-    public Url getGameUrl() {
+    public String getGameUrl() {
         return gameUrl;
     }
 

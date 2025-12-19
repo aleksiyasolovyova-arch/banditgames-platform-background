@@ -1,6 +1,5 @@
 package be.kdg.team11.content.core;
 
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameAchievement;
 import be.kdg.team11.content.domain.game.Rule;
@@ -24,8 +23,6 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
 
     @Override
     public Game register(RegisterGameCommand command) {
-        Url pictureUrl = Url.of(command.pictureUrl());
-        Url gameUrl = Url.of(command.gameUrl());
         List<Rule> rules = command.rules().stream()
                 .map(Rule::of)
                 .toList();
@@ -36,8 +33,8 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
                 command.name(),
                 command.description(),
                 command.price(),
-                pictureUrl,
-                gameUrl,
+                command.pictureUrl(),
+                command.gameUrl(),
                 command.gameCreatorName(),
                 rules,
                 achievements

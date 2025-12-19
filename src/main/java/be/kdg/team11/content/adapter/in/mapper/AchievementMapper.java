@@ -24,7 +24,7 @@ public class AchievementMapper {
                 achievement.getAchievementId().achievementId(),
                 achievement.getName(),
                 achievement.getDescription(),
-                achievement.getPictureUrl().value(),
+                achievement.getPictureUrl(),
                 achievement.getType().name(),
                 achievement.getRequiredValue()
         );

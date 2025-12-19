@@ -1,7 +1,6 @@
 package be.kdg.team11.gametests;
 
 import be.kdg.team11.content.core.ModifyGameUrlsUseCaseImpl;
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;

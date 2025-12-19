@@ -1,7 +1,6 @@
 package be.kdg.team11.content.adapter.out.mapper;
 
 import be.kdg.team11.content.adapter.out.jpa.AchievementJpaEntity;
-import be.kdg.team11.content.domain.Url;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.domain.achievement.AchievementId;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ public class AchievementJpaMapper {
         entity.setAchievementId(achievement.getAchievementId().achievementId());
         entity.setName(achievement.getName());
         entity.setDescription(achievement.getDescription());
-        entity.setPictureUrl(achievement.getPictureUrl().value());
+        entity.setPictureUrl(achievement.getPictureUrl());
         entity.setType(achievement.getType());
         entity.setRequiredValue(achievement.getRequiredValue());
         return entity;
@@ -25,7 +24,7 @@ public class AchievementJpaMapper {
                 new AchievementId(entity.getAchievementId()),
                 entity.getName(),
                 entity.getDescription(),
-                new Url(entity.getPictureUrl()),
+                entity.getPictureUrl(),
                 entity.getType(),
                 entity.getRequiredValue()
         );

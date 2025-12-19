@@ -39,8 +39,8 @@ public class GameMapper {
                 game.getName(),
                 game.getDescription(),
                 game.getPrice(),
-                game.getPictureUrl().value(),
-                game.getGameUrl().value(),
+                game.getPictureUrl(),
+                game.getGameUrl(),
                 game.getGameCreatorName(),
                 game.getReviewState().name(),
                 game.getRules().stream()
