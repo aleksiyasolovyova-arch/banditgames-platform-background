@@ -20,6 +20,8 @@ import java.util.*;
  */
 public class Player {
     private final PlayerId playerId;
+    private final String username;
+    private final String pictureUrl;
     private final LocalDate joinedDate;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
@@ -30,10 +32,12 @@ public class Player {
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Set<OwnedGame> ownedGames) {
+    public Player(PlayerId playerId,String username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Set<OwnedGame> ownedGames) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
+        this.username = username;
+        this.pictureUrl = pictureUrl;
         this.joinedDate = joinedDate;
         this.unlockedPlatformAchievements.addAll(unlockedPlatformAchievements);
         this.unlockedGameAchievements.addAll(unlockedGameAchievements);
@@ -44,15 +48,18 @@ public class Player {
      * Factory method for creating a new player.
      * Initial state: no games, no achievements.
      */
-    public static Player create(PlayerId playerId) {
+    public static Player create(PlayerId playerId, String username, String pictureUrl) {
 
-        Player player = new Player(playerId,
+        Player player = new Player(
+                playerId,
+                username,
+                pictureUrl,
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet());
 
-        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(), player.joinedDate);
+        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username,pictureUrl, player.joinedDate);
         player.eventStore.add(event);
 
         return player;
@@ -217,6 +224,14 @@ public class Player {
 
     public PlayerId getPlayerId() {
         return playerId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     public LocalDate getJoinedDate() {
