@@ -37,7 +37,8 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
                 command.gameUrl(),
                 command.gameCreatorName(),
                 rules,
-                achievements
+                achievements,
+                command.playableWithAI()
         );
 
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));

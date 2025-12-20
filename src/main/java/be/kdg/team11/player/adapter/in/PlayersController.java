@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -61,6 +62,7 @@ public class PlayersController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> createPlayer(@AuthenticationPrincipal Jwt token) {
         Player createdPlayer = createPlayerPort.create(
                 new CreatePlayerCommand(UUID.fromString(token.getSubject()), token.getClaimAsString(StandardClaimNames.PREFERRED_USERNAME))
@@ -70,6 +72,7 @@ public class PlayersController {
     }
 
     @PatchMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> changePlayerPictureUrl(
             @AuthenticationPrincipal Jwt token,
             @Valid @RequestBody ChangePlayerPictureUrlRequest request
@@ -103,11 +106,12 @@ public class PlayersController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping("/buy-game/{gameId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> buyGame(
-            @NotNull @PathVariable UUID gameId) {
+            @NotNull @PathVariable UUID gameId,
+            @AuthenticationPrincipal Jwt token) {
 
-        //TODO replace with value from JWT
-        UUID playerId = UUID.fromString("4e080e79-d43a-4705-85db-6d44c03f7d81");
+        UUID playerId = UUID.fromString(token.getSubject());
 
         Player updatedPlayer = buyGamePort.buyGame(new BuyGameCommand(playerId, gameId));
         PlayerDto response = playerMapper.toResponse(updatedPlayer);
@@ -135,11 +139,12 @@ public class PlayersController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping("/favorite-game/{gameId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> favoriteGame(
-            @NotNull @PathVariable UUID gameId) {
+            @NotNull @PathVariable UUID gameId,
+            @AuthenticationPrincipal Jwt token) {
 
-        //TODO replace with value from JWT
-        UUID playerId = UUID.fromString("4e080e79-d43a-4705-85db-6d44c03f7d81");
+        UUID playerId = UUID.fromString(token.getSubject());
 
         Player updatedPlayer = favoriteGamePort.favoriteGame(new FavoriteGameCommand(playerId, gameId));
         PlayerDto response = playerMapper.toResponse(updatedPlayer);
@@ -167,10 +172,12 @@ public class PlayersController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping("/unfavorite-game/{gameId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> unfavoriteGame(
-            @PathVariable UUID gameId) {
-        //TODO replace with value from JWT
-        UUID playerId = UUID.fromString("4e080e79-d43a-4705-85db-6d44c03f7d81");
+            @PathVariable UUID gameId,
+            @AuthenticationPrincipal Jwt token) {
+
+        UUID playerId = UUID.fromString(token.getSubject());
 
         Player updatedPlayer = unfavoriteGamePort.unfavoriteGame(new UnfavoriteGameCommand(playerId, gameId));
         PlayerDto response = playerMapper.toResponse(updatedPlayer);
