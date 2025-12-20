@@ -39,7 +39,8 @@ Content-Type: application/json
       "code": "PERFECT_GAME",
       "description": "Complete a game without making any mistakes"
     }
-  ]
+  ],
+  "playableWithAI": false
 }
 
 ### 1.2 Bad Request - Empty name (400 Bad Request)

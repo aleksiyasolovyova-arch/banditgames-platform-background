@@ -42,6 +42,7 @@ public class GameJpaMapper {
                 })
                 .collect(Collectors.toList());
         entity.setAchievementEmbeddables(achievementEmbeddables);
+        entity.setPlayableWithAI(game.isPlayableWithAI());
 
         return entity;
     }
@@ -70,7 +71,8 @@ public class GameJpaMapper {
                 entity.getGameCreatorName(),
                 entity.getReviewState(),
                 rules,
-                achievements
+                achievements,
+                entity.isPlayableWithAI()
         );
     }
 }

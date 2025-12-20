@@ -30,7 +30,7 @@ public class GamesController {
 
 
     /**
-     * REQUEST BODY (For all endpoints):
+     * REQUEST BODY:
      * - name (String, required): Game name (1-255 chars)
      * - description (String, required): Game description (1-500 chars)
      * - price (BigDecimal, required): Game price (non-negative)
@@ -42,6 +42,7 @@ public class GamesController {
      * - achievements (List<GameAchievementRequest>, required): Linked achievements (at least one required)
      * - code (String, required): Achievement code (1-100 chars)
      * - description (String, required): Achievement description (1-500 chars)
+     * - playableWithAI (boolean, required): Whether the game can be played with an AI
      */
 
     public GamesController(RegisterGamePort registerGamePort,
@@ -75,6 +76,7 @@ public class GamesController {
      * - achievements (List<GameAchievementDto>): List of game-specific achievements
      *   - code (String): Achievement code
      *   - description (String): Achievement description
+     * - playableWithAI (boolean): Whether the game can be played with an AI
      * HTTP Status Codes:
      * - 200 OK: Games retrieved successfully
      * - 500 Internal Server Error: Unexpected server error
@@ -103,6 +105,7 @@ public class GamesController {
      * - registrationState (String): Current state (e.g., "PENDING", "ACCEPTED", "REJECTED")
      * - rules (List<RuleDto>): Game rules
      * - achievements (List<GameAchievementDto>): Linked achievements
+     * - playableWithAI (boolean): Whether the game can be played with an AI
      * HTTP Status Codes:
      * - 201 Created: Game successfully registered
      * - 400 Bad Request: Validation failed (invalid/missing fields)

@@ -28,6 +28,7 @@ public class Game {
     private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
+    private final boolean playableWithAI;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
@@ -42,7 +43,8 @@ public class Game {
             String gameCreatorName,
             GameReviewState reviewState,
             List<Rule> rules,
-            List<GameAchievement> achievements
+            List<GameAchievement> achievements,
+            boolean playableWithAI
     ) {
         this.gameId = gameId;
         this.name = name;
@@ -54,9 +56,18 @@ public class Game {
         this.reviewState = reviewState;
         this.rules.addAll(rules);
         this.achievements.addAll(achievements);
+        this.playableWithAI = playableWithAI;
     }
 
-    public static Game register(String name, String description, BigDecimal price, String pictureUrl, String gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
+    public static Game register(String name,
+                                String description,
+                                BigDecimal price,
+                                String pictureUrl,
+                                String gameUrl,
+                                String gameCreatorName,
+                                List<Rule> rules,
+                                List<GameAchievement> achievements,
+                                boolean playableWithAI) {
         validateGamePrice(price);
 
         Game game = new Game(
@@ -69,7 +80,9 @@ public class Game {
                 gameCreatorName,
                 GameReviewState.PENDING,
                 rules,
-                achievements
+                achievements,
+                playableWithAI
+
         );
 
         List<GameRegisteredEvent.RuleRecord> ruleRecords = rules.stream()
@@ -141,6 +154,7 @@ public class Game {
     }
 
 
+
     private static void validateGamePrice(BigDecimal price) {
 
         if (price.compareTo(BigDecimal.ZERO) < 0) {
@@ -190,6 +204,10 @@ public class Game {
 
     public List<GameAchievement> getAchievements() {
         return Collections.unmodifiableList(achievements);
+    }
+
+    public boolean isPlayableWithAI() {
+        return playableWithAI;
     }
 
     public List<DomainEvent> getEventStore() {
