@@ -26,6 +26,7 @@ public class GamesController {
     private final FailGameReviewPort failGameReviewPort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final ShowAllGamesPort showAllGamesPort;
+    private final TogglePlayableWithAIPort togglePlayableWithAIPort;
     private final GameMapper gameMapper;
 
 
@@ -50,12 +51,14 @@ public class GamesController {
                            FailGameReviewPort failGameReviewPort,
                            ModifyGameUrlsPort modifyGameUrlsPort,
                            ShowAllGamesPort showAllGamesPort,
+                           TogglePlayableWithAIPort togglePlayableWithAIPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.passGameReviewPort = passGameReviewPort;
         this.failGameReviewPort = failGameReviewPort;
         this.modifyGameUrlsPort = modifyGameUrlsPort;
         this.showAllGamesPort = showAllGamesPort;
+        this.togglePlayableWithAIPort = togglePlayableWithAIPort;
         this.gameMapper = gameMapper;
     }
 
@@ -188,6 +191,17 @@ public class GamesController {
                 new FailGameReviewCommand(gameId)
         );
         GameDto response = gameMapper.toResponse(rejectedGame);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("{gameId}/toggle")
+  //  @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<GameDto> togglePlayableWithAI(
+            @NotNull @PathVariable UUID gameId
+    ){
+        Game game = togglePlayableWithAIPort.togglePlayableWithAI(new TogglePlayableWithAICommand(gameId));
+        GameDto response = gameMapper.toResponse(game);
         return ResponseEntity.ok(response);
     }
 

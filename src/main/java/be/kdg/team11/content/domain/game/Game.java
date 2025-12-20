@@ -3,10 +3,7 @@ package be.kdg.team11.content.domain.game;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.sharedkernel.events.*;
-import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
-import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
-import be.kdg.team11.sharedkernel.events.game.FailedGameReviewEvent;
-import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
+import be.kdg.team11.sharedkernel.events.game.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ public class Game {
     private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
-    private final boolean playableWithAI;
+    private boolean playableWithAI;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
@@ -153,6 +150,14 @@ public class Game {
         this.eventStore.add(event);
     }
 
+    public void togglePlayableWithAI() {
+        this.playableWithAI = !this.playableWithAI;
+        GameToggledPlayableWithAIEvent event = new GameToggledPlayableWithAIEvent(
+                this.gameId.gameId(),
+                this.playableWithAI
+        );
+        this.eventStore.add(event);
+    }
 
 
     private static void validateGamePrice(BigDecimal price) {

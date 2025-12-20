@@ -287,3 +287,6 @@ PUT {{baseUrl}}/games/{{existingGameId}}/reject
 GET http://localhost:8080/games
 Content-Type: application/json
 
+###
+PUT {{baseUrl}}/games/9208f9e7-0ec2-4cfd-a56f-800613cdb3cd/toggle
+
