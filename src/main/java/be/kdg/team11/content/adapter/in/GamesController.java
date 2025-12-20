@@ -85,6 +85,7 @@ public class GamesController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<GameDto>> loadAllGames() {
         List<Game> games = showAllGamesPort.showAll();
         List<GameDto> response = games.stream()
@@ -196,7 +197,7 @@ public class GamesController {
 
 
     @PutMapping("{gameId}/toggle")
-  //  @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GameDto> togglePlayableWithAI(
             @NotNull @PathVariable UUID gameId
     ){
