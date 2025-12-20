@@ -1,7 +1,7 @@
 package be.kdg.team11.player.adapter.in;
 
 import be.kdg.team11.player.adapter.in.mapper.PlayerMapper;
-import be.kdg.team11.player.adapter.in.request.CreatePlayerRequest;
+import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.in.*;
@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,23 +25,26 @@ public class PlayersController {
     private final FavouriteGamePort favoriteGamePort;
     private final UnfavoriteGamePort unfavoriteGamePort;
     private final PlayerMapper playerMapper;
+    private final ChangePlayerPictureUrlPort changePlayerPictureUrlPort;
 
     public PlayersController(CreatePlayerPort createPlayerPort,
                              BuyGamePort buyGamePort,
                              FavouriteGamePort favoriteGamePort,
                              UnfavoriteGamePort unfavoriteGamePort,
-                             PlayerMapper playerMapper) {
+                             PlayerMapper playerMapper,
+                             ChangePlayerPictureUrlPort changePlayerPictureUrlPort) {
         this.createPlayerPort = createPlayerPort;
         this.buyGamePort = buyGamePort;
         this.favoriteGamePort = favoriteGamePort;
         this.unfavoriteGamePort = unfavoriteGamePort;
         this.playerMapper = playerMapper;
+        this.changePlayerPictureUrlPort = changePlayerPictureUrlPort;
     }
 
     /**
      * Creates a new player in the system.
      * FULL PATH: /players (POST)
-     * REQUEST BODY (CreatePlayerRequest):
+     * REQUEST BODY (ChangePlayerPictureUrlRequest):
      * - username (String, required): Player username (1-50 chars)
      * - pictureUrl (String, required): URL to player profile picture
      * RESPONSE BODY (PlayerDto):
@@ -55,12 +61,25 @@ public class PlayersController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping
-    public ResponseEntity<PlayerDto> createPlayer(@Valid @RequestBody CreatePlayerRequest request) {
+    public ResponseEntity<PlayerDto> createPlayer(@AuthenticationPrincipal Jwt token) {
         Player createdPlayer = createPlayerPort.create(
-                playerMapper.toCreateCommand(request)
+                new CreatePlayerCommand(UUID.fromString(token.getSubject()), token.getClaimAsString(StandardClaimNames.PREFERRED_USERNAME))
         );
         PlayerDto response = playerMapper.toResponse(createdPlayer);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping
+    public ResponseEntity<PlayerDto> changePlayerPictureUrl(
+            @AuthenticationPrincipal Jwt token,
+            @Valid @RequestBody ChangePlayerPictureUrlRequest request
+            ){
+        Player updatedPlayer = changePlayerPictureUrlPort.changePictureUrl(
+                new ChangePlayerPictureUrlCommand(
+                        UUID.fromString(token.getSubject()), request.pictureUrl()
+                )
+        );
+        return ResponseEntity.ok(playerMapper.toResponse(updatedPlayer));
     }
 
     /**
