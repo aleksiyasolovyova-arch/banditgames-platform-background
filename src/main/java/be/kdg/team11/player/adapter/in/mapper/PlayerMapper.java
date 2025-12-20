@@ -1,23 +1,15 @@
 package be.kdg.team11.player.adapter.in.mapper;
 
-import be.kdg.team11.player.adapter.in.request.CreatePlayerRequest;
+import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
 import be.kdg.team11.player.domain.player.Player;
-import be.kdg.team11.player.port.in.CreatePlayerCommand;
+import be.kdg.team11.player.port.in.ChangePlayerPictureUrlCommand;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
 public class PlayerMapper {
-    public CreatePlayerCommand toCreateCommand(CreatePlayerRequest request) {
-        return new CreatePlayerCommand(
-                request.username(),
-                request.pictureUrl()
-        );
-    }
-
-
     public PlayerDto toResponse(Player player) {
         return new PlayerDto(
                 player.getPlayerId().playerId(),

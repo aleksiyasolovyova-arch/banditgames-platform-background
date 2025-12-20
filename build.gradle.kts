@@ -40,6 +40,9 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api")
 	implementation("org.hibernate.validator:hibernate-validator")
     implementation(kotlin("stdlib-jdk8"))
+
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 }
 
 dependencyManagement {

@@ -1,5 +1,6 @@
 package be.kdg.team11.player.domain.player;
 
+import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 
 import java.time.LocalDate;
@@ -30,10 +31,21 @@ public class OwnedGame {
     }
 
     public void favorite() {
+        if (favorite) {
+            throw new InvalidGameForPlayerException(
+                    String.format("Game %s is already favorited", game.gameId())
+            );
+        }
         this.favorite = true;
     }
 
+
     public void unfavorite() {
+        if (!favorite) {
+            throw new InvalidGameForPlayerException(
+                    String.format("Game %s is not favorited", game.gameId())
+            );
+        }
         this.favorite = false;
     }
 

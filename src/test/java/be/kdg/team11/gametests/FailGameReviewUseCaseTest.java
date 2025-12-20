@@ -61,7 +61,7 @@ class FailGameReviewUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw GameNotFoundException when game doesn't exist")
+    @DisplayName("Should throw GameReferenceNotFoundException when game doesn't exist")
     void testFailGame_NotFound() {
         // Arrange
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.empty());

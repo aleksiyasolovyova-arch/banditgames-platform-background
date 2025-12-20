@@ -281,3 +281,8 @@ PUT {{baseUrl}}/games/{{existingGameId}}/reject
 
 ### 4.4 Bad Request - Cannot reject already rejected game (400 Bad Request)
 PUT {{baseUrl}}/games/{{existingGameId}}/reject
+
+###
+GET http://localhost:8080/games
+Content-Type: application/json
+

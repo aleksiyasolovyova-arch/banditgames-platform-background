@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -61,10 +63,11 @@ public class FriendshipsController {
      */
     @PostMapping
     public ResponseEntity<FriendshipDto> requestFriendship(
-            @Valid @RequestBody RequestFriendshipRequest request
+            @Valid @RequestBody RequestFriendshipRequest request,
+            @AuthenticationPrincipal Jwt token
     ) {
         //TODO replace with value from JWT
-        UUID requesterId = UUID.randomUUID();
+        UUID requesterId = UUID.fromString(token.getSubject());
 
         RequestFriendshipCommand command = friendshipMapper.toRequestCommand(requesterId, request);
         Friendship createdFriendship = requestFriendshipPort.requestFriendship(command);

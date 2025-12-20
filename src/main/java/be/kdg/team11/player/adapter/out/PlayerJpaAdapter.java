@@ -9,11 +9,12 @@ import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.port.out.LoadPlayerPort;
 import be.kdg.team11.player.port.out.SavePlayerPort;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Component
 public class PlayerJpaAdapter implements SavePlayerPort, LoadPlayerPort {
     private final PlayerJpaRepository playerJpaRepository;
     private final PlayerJpaMapper playerJpaMapper;

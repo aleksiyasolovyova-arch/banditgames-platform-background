@@ -5,23 +5,21 @@ import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerExcepti
 import be.kdg.team11.player.domain.player.exceptions.InvalidPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
-import be.kdg.team11.sharedkernel.events.player.PlayerBoughtGameEvent;
-import be.kdg.team11.sharedkernel.events.player.PlayerCreatedEvent;
-import be.kdg.team11.sharedkernel.events.player.PlayerFavoritedGameEvent;
-import be.kdg.team11.sharedkernel.events.player.PlayerUnfavoritedGameEvent;
+import be.kdg.team11.sharedkernel.events.player.*;
 
 import java.time.LocalDate;
 import java.util.*;
-//TODO move validation of favoriting in the owned games entity
 /**
  * Aggregate Root for the Player subdomain.
  * Represents a player with their games, achievements, and profile information.
  * Manages the complete lifecycle: registration, game purchases, achievements.
  */
 public class Player {
+    private static final String DEFAULT_PICTURE_URL="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg";
+
     private final PlayerId playerId;
     private final String username;
-    private final String pictureUrl;
+    private String pictureUrl;
     private final LocalDate joinedDate;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
@@ -48,21 +46,27 @@ public class Player {
      * Factory method for creating a new player.
      * Initial state: no games, no achievements.
      */
-    public static Player create(PlayerId playerId, String username, String pictureUrl) {
+    public static Player create(PlayerId playerId, String username) {
 
         Player player = new Player(
                 playerId,
                 username,
-                pictureUrl,
+                DEFAULT_PICTURE_URL,
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet());
 
-        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username,pictureUrl, player.joinedDate);
+        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username, DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
 
         return player;
+    }
+
+    public void changePictureUrl(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+        PlayerChangedPictureUrlEvent event = new PlayerChangedPictureUrlEvent(playerId.playerId(),pictureUrl);
+        this.eventStore.add(event);
     }
 
     public void buyGame(GameReference gameReference) {
@@ -82,8 +86,6 @@ public class Player {
      */
     public void favoriteGame(GameReference gameReference) {
         OwnedGame ownedGame = validateGameOwned(gameReference);
-        validateGameNotAlreadyFavorited(ownedGame, gameReference);
-
         ownedGame.favorite();
 
         PlayerFavoritedGameEvent event = new PlayerFavoritedGameEvent(
@@ -100,8 +102,6 @@ public class Player {
     public void unfavoriteGame(GameReference gameReference) {
 
         OwnedGame ownedGame = validateGameOwned(gameReference);
-        validateGameIsFavorite(ownedGame, gameReference);
-
         ownedGame.unfavorite();
         PlayerUnfavoritedGameEvent event = new PlayerUnfavoritedGameEvent(
                 playerId.playerId(),
@@ -167,23 +167,6 @@ public class Player {
             );
         }
         return ownedGame;
-    }
-
-
-    private void validateGameNotAlreadyFavorited(OwnedGame ownedGame, GameReference gameReference) {
-        if (ownedGame.isFavorite()) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Game %s is already favorited", gameReference.gameId())
-            );
-        }
-    }
-
-    private void validateGameIsFavorite(OwnedGame ownedGame, GameReference gameReference) {
-        if (!ownedGame.isFavorite()) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Game %s is not favorited", gameReference.gameId())
-            );
-        }
     }
 
 

@@ -26,13 +26,12 @@ public class CreatePlayerUseCaseImpl implements CreatePlayerPort {
 
     @Override
     public Player create(CreatePlayerCommand command) {
-        PlayerId playerId = PlayerId.create();
+        PlayerId playerId = PlayerId.of(command.playerId());
 
         // Create the player (initially without games)
         Player player = Player.create(
                 playerId,
-                command.username(),
-                command.pictureUrl()
+                command.username()
         );
 
         // TODO: TESTING ONLY - Remove this in production

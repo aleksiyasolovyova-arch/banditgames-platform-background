@@ -6,13 +6,15 @@ import be.kdg.team11.content.adapter.out.mapper.GameJpaMapper;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.port.out.LoadGamePort;
+import be.kdg.team11.content.port.out.LoadGamesPort;
 import be.kdg.team11.content.port.out.SaveGamePort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
-public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
+public class GameJpaAdapter implements SaveGamePort, LoadGamePort , LoadGamesPort {
     private final GameJpaRepository gameJpaRepository;
     private final GameJpaMapper gameJpaMapper;
 
@@ -34,4 +36,8 @@ public class GameJpaAdapter implements SaveGamePort, LoadGamePort {
                 .map(gameJpaMapper::toDomain);
     }
 
+    @Override
+    public List<Game> loadAll() {
+        return gameJpaRepository.findAll().stream().map(gameJpaMapper::toDomain).toList();
+    }
 }
