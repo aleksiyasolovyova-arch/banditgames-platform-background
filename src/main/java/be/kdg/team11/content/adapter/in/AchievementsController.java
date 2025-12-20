@@ -3,7 +3,6 @@ package be.kdg.team11.content.adapter.in;
 import be.kdg.team11.content.adapter.in.mapper.AchievementMapper;
 import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
-import be.kdg.team11.content.core.LoadAllAchievementsUseCaseImpl;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
 import be.kdg.team11.content.port.out.LoadAchievementsPort;
@@ -12,6 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("achievements")
@@ -75,6 +79,7 @@ public class AchievementsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AchievementDto> createAchievement(
             @Valid @RequestBody CreateAchievementRequest request) {
         Achievement createdAchievement = createAchievementPort.createAchievement(
