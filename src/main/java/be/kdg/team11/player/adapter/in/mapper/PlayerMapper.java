@@ -25,13 +25,6 @@ public class PlayerMapper {
                 player.getUsername(),
                 player.getPictureUrl(),
                 player.getJoinedDate(),
-                player.getOwnedGames().stream()
-                        .map(ownedGame -> new PlayerDto.OwnedGameDto(
-                                ownedGame.getGame().gameId(),
-                                ownedGame.isFavorite(),
-                                ownedGame.getDateBought()
-                        ))
-                        .collect(Collectors.toSet()),
                 player.getUnlockedPlatformAchievements().stream()
                         .map(achievement -> new PlayerDto.UnlockedPlatformAchievementDto(
                                 achievement.achievementId().achievementId(),
@@ -44,7 +37,8 @@ public class PlayerMapper {
                                 achievement.code(),
                                 achievement.unlockedAt()
                         ))
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toSet()),
+                player.getFavoriteGame().gameId()
         );
     }
 }

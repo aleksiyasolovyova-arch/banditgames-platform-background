@@ -1,6 +1,5 @@
 package be.kdg.team11.player.adapter.out.jpa.entity;
 
-import be.kdg.team11.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
 import jakarta.persistence.*;
@@ -33,9 +32,8 @@ public class PlayerJpaEntity {
     @CollectionTable(name = "player_game_achievements", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
     private Set<UnlockedGameAchievementEmbeddable> unlockedGameAchievements = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "player_owned_games", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
-    private Set<OwnedGameEmbeddable> ownedGames = new HashSet<>();
+    @Column()
+    private UUID favoriteGameId;
 
     public PlayerJpaEntity() {
     }
@@ -88,11 +86,11 @@ public class PlayerJpaEntity {
         this.unlockedGameAchievements = unlockedGameAchievements;
     }
 
-    public Set<OwnedGameEmbeddable> getOwnedGames() {
-        return ownedGames;
+    public UUID getFavoriteGameId() {
+        return favoriteGameId;
+    }
+    public void setFavoriteGameId(UUID favoriteGameId) {
+        this.favoriteGameId = favoriteGameId;
     }
 
-    public void setOwnedGames(Set<OwnedGameEmbeddable> ownedGames) {
-        this.ownedGames = ownedGames;
-    }
-}
+   }

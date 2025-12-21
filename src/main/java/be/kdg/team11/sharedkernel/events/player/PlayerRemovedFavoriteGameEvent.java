@@ -5,15 +5,12 @@ import be.kdg.team11.sharedkernel.events.DomainEvent;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record PlayerFavoritedGameEvent(
+public record PlayerRemovedFavoriteGameEvent(
         UUID playerId,
-        UUID gameId,
         LocalDate eventPit
-) implements DomainEvent {
-    public PlayerFavoritedGameEvent(UUID playerId,
-                                    UUID gameId) {
+)implements DomainEvent {
+    public PlayerRemovedFavoriteGameEvent(UUID playerId) {
         this(playerId,
-                gameId,
                 LocalDate.now());
     }
 }

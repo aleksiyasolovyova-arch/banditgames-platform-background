@@ -1,10 +1,10 @@
 package be.kdg.team11.player.adapter.out.mapper;
 
-import be.kdg.team11.player.adapter.out.jpa.embeddable.OwnedGameEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedGameAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.embeddable.UnlockedPlatformAchievementEmbeddable;
 import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import be.kdg.team11.player.domain.player.*;
+import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -27,25 +27,15 @@ public class PlayerJpaMapper {
         Set<UnlockedGameAchievement> unlockedGameAchievements =
                 entity.getUnlockedGameAchievements().stream()
                         .map(e -> new UnlockedGameAchievement(
-                                new be.kdg.team11.player.domain.projections.GameReference(e.getGameReference()),
+                                new GameReference(e.getGameReference()),
                                 e.getCode(),
                                 e.getUnlockedAt()
                         ))
                         .collect(Collectors.toSet());
 
-        Set<OwnedGame> ownedGames =
-                entity.getOwnedGames().stream()
-                        .map(e -> {
-                            OwnedGame game = OwnedGame.bought(
-                                    new be.kdg.team11.player.domain.projections.GameReference(e.getGameReference()),
-                                    e.getDateBought()
-                            );
-                            if (e.isFavorite()) {
-                                game.favorite();
-                            }
-                            return game;
-                        })
-                        .collect(Collectors.toSet());
+        GameReference favoriteGame = entity.getFavoriteGameId() != null ? new GameReference(entity.getFavoriteGameId()) : null;
+
+
 
         return new Player(
                 playerId,
@@ -54,7 +44,7 @@ public class PlayerJpaMapper {
                 entity.getJoinedDate(),
                 unlockedPlatformAchievements,
                 unlockedGameAchievements,
-                ownedGames
+                favoriteGame
         );
     }
 
@@ -89,18 +79,7 @@ public class PlayerJpaMapper {
                         })
                         .collect(Collectors.toSet());
         entity.setUnlockedGameAchievements(gameAchievements);
-
-        Set<OwnedGameEmbeddable> ownedGames =
-                player.getOwnedGames().stream()
-                        .map(g -> {
-                            OwnedGameEmbeddable e = new OwnedGameEmbeddable();
-                            e.setGameReference(g.getGame().gameId());
-                            e.setFavorite(g.isFavorite());
-                            e.setDateBought(g.getDateBought());
-                            return e;
-                        })
-                        .collect(Collectors.toSet());
-        entity.setOwnedGames(ownedGames);
+        entity.setFavoriteGameId(player.getFavoriteGame().gameId());
 
         return entity;
     }
