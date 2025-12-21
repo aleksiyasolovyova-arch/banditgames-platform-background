@@ -29,7 +29,8 @@ public class GameMapper {
                                 achievementReq.code(),
                                 achievementReq.description()
                         ))
-                        .toList()
+                        .toList(),
+                request.playableWithAI()
         );
     }
 
@@ -51,7 +52,8 @@ public class GameMapper {
                                 achievement.code(),
                                 achievement.description()
                         ))
-                        .toList()
+                        .toList(),
+                game.isPlayableWithAI()
         );
     }
 

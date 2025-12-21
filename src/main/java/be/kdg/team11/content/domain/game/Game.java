@@ -3,10 +3,7 @@ package be.kdg.team11.content.domain.game;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.sharedkernel.events.*;
-import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
-import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
-import be.kdg.team11.sharedkernel.events.game.FailedGameReviewEvent;
-import be.kdg.team11.sharedkernel.events.game.GameUrlsModifiedEvent;
+import be.kdg.team11.sharedkernel.events.game.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +25,7 @@ public class Game {
     private GameReviewState reviewState;
     private final List<Rule> rules = new ArrayList<>();
     private final List<GameAchievement> achievements = new ArrayList<>();
+    private boolean playableWithAI;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
@@ -42,7 +40,8 @@ public class Game {
             String gameCreatorName,
             GameReviewState reviewState,
             List<Rule> rules,
-            List<GameAchievement> achievements
+            List<GameAchievement> achievements,
+            boolean playableWithAI
     ) {
         this.gameId = gameId;
         this.name = name;
@@ -54,9 +53,18 @@ public class Game {
         this.reviewState = reviewState;
         this.rules.addAll(rules);
         this.achievements.addAll(achievements);
+        this.playableWithAI = playableWithAI;
     }
 
-    public static Game register(String name, String description, BigDecimal price, String pictureUrl, String gameUrl, String gameCreatorName, List<Rule> rules, List<GameAchievement> achievements) {
+    public static Game register(String name,
+                                String description,
+                                BigDecimal price,
+                                String pictureUrl,
+                                String gameUrl,
+                                String gameCreatorName,
+                                List<Rule> rules,
+                                List<GameAchievement> achievements,
+                                boolean playableWithAI) {
         validateGamePrice(price);
 
         Game game = new Game(
@@ -69,7 +77,9 @@ public class Game {
                 gameCreatorName,
                 GameReviewState.PENDING,
                 rules,
-                achievements
+                achievements,
+                playableWithAI
+
         );
 
         List<GameRegisteredEvent.RuleRecord> ruleRecords = rules.stream()
@@ -140,6 +150,15 @@ public class Game {
         this.eventStore.add(event);
     }
 
+    public void togglePlayableWithAI() {
+        this.playableWithAI = !this.playableWithAI;
+        GameToggledPlayableWithAIEvent event = new GameToggledPlayableWithAIEvent(
+                this.gameId.gameId(),
+                this.playableWithAI
+        );
+        this.eventStore.add(event);
+    }
+
 
     private static void validateGamePrice(BigDecimal price) {
 
@@ -190,6 +209,10 @@ public class Game {
 
     public List<GameAchievement> getAchievements() {
         return Collections.unmodifiableList(achievements);
+    }
+
+    public boolean isPlayableWithAI() {
+        return playableWithAI;
     }
 
     public List<DomainEvent> getEventStore() {

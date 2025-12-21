@@ -47,6 +47,7 @@ public class AchievementsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AchievementDto>> loadAllAchievements() {
         List<Achievement> achievements = loadAllAchievementsPort.loadAll();
         List<AchievementDto> response = achievements.stream()

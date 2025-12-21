@@ -53,6 +53,9 @@ public class GameJpaEntity {
     )
     private List<GameAchievementEmbeddable> achievementEmbeddables = new ArrayList<>();
 
+    @Column(nullable = false)
+    private boolean playableWithAI;
+
     public GameJpaEntity() {
     }
 
@@ -134,5 +137,13 @@ public class GameJpaEntity {
 
     public void setAchievementEmbeddables(List<GameAchievementEmbeddable> achievementEmbeddables) {
         this.achievementEmbeddables = achievementEmbeddables;
+    }
+
+    public boolean isPlayableWithAI() {
+        return playableWithAI;
+    }
+
+    public void setPlayableWithAI(boolean playableWithAI) {
+        this.playableWithAI = playableWithAI;
     }
 }

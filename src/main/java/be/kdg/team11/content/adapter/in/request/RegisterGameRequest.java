@@ -42,8 +42,11 @@ public record RegisterGameRequest(
 
         @NotEmpty(message = "At least one achievement must be provided")
         @Valid
-        List<GameAchievementRequest> achievements
-) {
+        List<GameAchievementRequest> achievements,
+
+        @NotNull(message = "Playable with AI cannot be null")
+        boolean playableWithAI
+        ) {
 
     public record RuleRequest(
             @NotNull(message = "Rule description cannot be null")

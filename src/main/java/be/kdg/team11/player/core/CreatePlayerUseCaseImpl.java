@@ -34,12 +34,6 @@ public class CreatePlayerUseCaseImpl implements CreatePlayerPort {
                 command.username()
         );
 
-        // TODO: TESTING ONLY - Remove this in production
-        // Add all existing games as owned games for testing purposes
-        List<GameReference> gameReferences = loadGameReferencePort.loadAll();
-        for (GameReference gameReference : gameReferences) {
-            player.buyGame(gameReference);
-        }
 
         // Save player through all ports
         savePlayerPorts.forEach(savePlayerPort -> savePlayerPort.save(player));

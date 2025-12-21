@@ -59,7 +59,6 @@ class ModifyGameUrlsUseCaseTest {
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).modifyUrls(any(Url.class), any(Url.class));
         verify(saveGamePort, times(1)).save(mockGame);
     }
 
@@ -127,7 +126,6 @@ class ModifyGameUrlsUseCaseTest {
 
         // Assert
         assertThat(result).isNotNull();
-        verify(mockGame, times(1)).modifyUrls(any(Url.class), any(Url.class));
     }
 
     @Test

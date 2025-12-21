@@ -2,6 +2,6 @@ package be.kdg.team11.player.port.in;
 
 import be.kdg.team11.player.domain.player.Player;
 
-public interface FavouriteGamePort {
-    Player favoriteGame(FavoriteGameCommand command);
+public interface ShowPlayerInfoPort {
+    Player showInfo(ShowPlayerInfoCommand command);
 }

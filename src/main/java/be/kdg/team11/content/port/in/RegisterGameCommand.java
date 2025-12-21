@@ -11,7 +11,8 @@ public record RegisterGameCommand(
         String gameUrl,
         String gameCreatorName,
         List<String> rules,
-        List<GameAchievementCommand> achievements
+        List<GameAchievementCommand> achievements,
+        boolean playableWithAI
 ) {
     public record GameAchievementCommand(
             String code,

@@ -10,13 +10,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
-//TODO Add technical validation
 
 @RestController
 @RequestMapping("/friendships")
@@ -62,11 +61,11 @@ public class FriendshipsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FriendshipDto> requestFriendship(
             @Valid @RequestBody RequestFriendshipRequest request,
             @AuthenticationPrincipal Jwt token
     ) {
-        //TODO replace with value from JWT
         UUID requesterId = UUID.fromString(token.getSubject());
 
         RequestFriendshipCommand command = friendshipMapper.toRequestCommand(requesterId, request);
@@ -92,11 +91,12 @@ public class FriendshipsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PutMapping("/{friendshipId}/befriend")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FriendshipDto> acceptFriendship(
-            @NotNull @PathVariable UUID friendshipId
+            @NotNull @PathVariable UUID friendshipId,
+            @AuthenticationPrincipal Jwt token
     ) {
-        //TODO replace with value from JWT
-        UUID recipientId = UUID.randomUUID();
+        UUID recipientId =UUID.fromString(token.getSubject());
 
         BefriendPlayerCommand command = friendshipMapper.toBefriendCommand(friendshipId, recipientId);
         Friendship acceptedFriendship = befriendPlayerPort.befriendPlayer(command);
@@ -121,11 +121,13 @@ public class FriendshipsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PutMapping("/{friendshipId}/decline")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FriendshipDto> declineFriendship(
-            @NotNull @PathVariable UUID friendshipId
+            @NotNull @PathVariable UUID friendshipId,
+            @AuthenticationPrincipal Jwt token
     ) {
-        //TODO replace with value from JWT
-        UUID recipientId = UUID.randomUUID();
+
+        UUID recipientId = UUID.fromString(token.getSubject());
 
 
         DeclineFriendshipCommand command = friendshipMapper.toDeclineCommand(friendshipId, recipientId);
@@ -151,11 +153,13 @@ public class FriendshipsController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping("/{friendshipId}/end")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FriendshipDto> endFriendship(
-           @NotNull @PathVariable UUID friendshipId
+           @NotNull @PathVariable UUID friendshipId,
+           @AuthenticationPrincipal Jwt token
     ) {
-        //TODO replace with value from JWT
-        UUID initiatedBy = UUID.randomUUID();
+
+        UUID initiatedBy = UUID.fromString(token.getSubject());
 
         EndFriendshipCommand command = friendshipMapper.toEndCommand(friendshipId, initiatedBy);
         Friendship endedFriendship = endFriendshipPort.endFriendship(command);

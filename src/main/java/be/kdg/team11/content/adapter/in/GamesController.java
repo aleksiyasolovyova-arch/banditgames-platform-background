@@ -26,11 +26,12 @@ public class GamesController {
     private final FailGameReviewPort failGameReviewPort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final ShowAllGamesPort showAllGamesPort;
+    private final TogglePlayableWithAIPort togglePlayableWithAIPort;
     private final GameMapper gameMapper;
 
 
     /**
-     * REQUEST BODY (For all endpoints):
+     * REQUEST BODY:
      * - name (String, required): Game name (1-255 chars)
      * - description (String, required): Game description (1-500 chars)
      * - price (BigDecimal, required): Game price (non-negative)
@@ -42,6 +43,7 @@ public class GamesController {
      * - achievements (List<GameAchievementRequest>, required): Linked achievements (at least one required)
      * - code (String, required): Achievement code (1-100 chars)
      * - description (String, required): Achievement description (1-500 chars)
+     * - playableWithAI (boolean, required): Whether the game can be played with an AI
      */
 
     public GamesController(RegisterGamePort registerGamePort,
@@ -49,12 +51,14 @@ public class GamesController {
                            FailGameReviewPort failGameReviewPort,
                            ModifyGameUrlsPort modifyGameUrlsPort,
                            ShowAllGamesPort showAllGamesPort,
+                           TogglePlayableWithAIPort togglePlayableWithAIPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.passGameReviewPort = passGameReviewPort;
         this.failGameReviewPort = failGameReviewPort;
         this.modifyGameUrlsPort = modifyGameUrlsPort;
         this.showAllGamesPort = showAllGamesPort;
+        this.togglePlayableWithAIPort = togglePlayableWithAIPort;
         this.gameMapper = gameMapper;
     }
 
@@ -75,11 +79,13 @@ public class GamesController {
      * - achievements (List<GameAchievementDto>): List of game-specific achievements
      *   - code (String): Achievement code
      *   - description (String): Achievement description
+     * - playableWithAI (boolean): Whether the game can be played with an AI
      * HTTP Status Codes:
      * - 200 OK: Games retrieved successfully
      * - 500 Internal Server Error: Unexpected server error
      */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<GameDto>> loadAllGames() {
         List<Game> games = showAllGamesPort.showAll();
         List<GameDto> response = games.stream()
@@ -103,6 +109,7 @@ public class GamesController {
      * - registrationState (String): Current state (e.g., "PENDING", "ACCEPTED", "REJECTED")
      * - rules (List<RuleDto>): Game rules
      * - achievements (List<GameAchievementDto>): Linked achievements
+     * - playableWithAI (boolean): Whether the game can be played with an AI
      * HTTP Status Codes:
      * - 201 Created: Game successfully registered
      * - 400 Bad Request: Validation failed (invalid/missing fields)
@@ -185,6 +192,17 @@ public class GamesController {
                 new FailGameReviewCommand(gameId)
         );
         GameDto response = gameMapper.toResponse(rejectedGame);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("{gameId}/toggle")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<GameDto> togglePlayableWithAI(
+            @NotNull @PathVariable UUID gameId
+    ){
+        Game game = togglePlayableWithAIPort.togglePlayableWithAI(new TogglePlayableWithAICommand(gameId));
+        GameDto response = gameMapper.toResponse(game);
         return ResponseEntity.ok(response);
     }
 
