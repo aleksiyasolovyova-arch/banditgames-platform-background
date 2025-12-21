@@ -3,6 +3,7 @@ package be.kdg.team11.player.adapter.in;
 import be.kdg.team11.player.adapter.in.mapper.PlayerMapper;
 import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
+import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public class PlayersController {
     private final FavouriteGamePort favoriteGamePort;
     private final UnfavoriteGamePort unfavoriteGamePort;
     private final PlayerMapper playerMapper;
+    private final ShowPlayerInfoPort showPlayerInfoPort;
     private final ChangePlayerPictureUrlPort changePlayerPictureUrlPort;
 
     public PlayersController(CreatePlayerPort createPlayerPort,
@@ -33,13 +35,34 @@ public class PlayersController {
                              FavouriteGamePort favoriteGamePort,
                              UnfavoriteGamePort unfavoriteGamePort,
                              PlayerMapper playerMapper,
+                             ShowPlayerInfoPort showPlayerInfoPort,
                              ChangePlayerPictureUrlPort changePlayerPictureUrlPort) {
         this.createPlayerPort = createPlayerPort;
         this.buyGamePort = buyGamePort;
         this.favoriteGamePort = favoriteGamePort;
         this.unfavoriteGamePort = unfavoriteGamePort;
         this.playerMapper = playerMapper;
+        this.showPlayerInfoPort = showPlayerInfoPort;
         this.changePlayerPictureUrlPort = changePlayerPictureUrlPort;
+    }
+
+    /**
+     * show player info for nav bar
+     * FULL PATH: /players (GET)
+     * RESPONSE BODY (PlayerInfoDto):
+     * - playerId (UUID): Unique player identifier
+     * - username (String): Player username
+     * - pictureUrl (String): Player profile picture URL
+    * HTTP Status Codes:
+     * - 200 OK: Player info retrieved successfully
+     * - 500 Internal Server Error: Unexpected server error
+     */
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<PlayerInfoDto> getPlayerInfo(@AuthenticationPrincipal Jwt token) {
+        UUID playerId = UUID.fromString(token.getSubject());
+        Player player = showPlayerInfoPort.showInfo(new ShowPlayerInfoCommand(playerId));
+        return ResponseEntity.ok(playerMapper.toInfoResponse(player));
     }
 
     /**

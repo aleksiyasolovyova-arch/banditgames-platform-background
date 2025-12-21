@@ -47,7 +47,8 @@ class RegisterGameUseCaseTest {
                 List.of(
                         new RegisterGameCommand.GameAchievementCommand("FIRST_MOVE", "Make your first move"),
                         new RegisterGameCommand.GameAchievementCommand("CHECKMATE", "Deliver checkmate")
-                )
+                ),
+                true
         );
 
         // Act
@@ -82,7 +83,8 @@ class RegisterGameUseCaseTest {
                 "https://example.com/play",
                 "Creator",
                 List.of("Rule 1"),
-                List.of(new RegisterGameCommand.GameAchievementCommand("ACH", "Description"))
+                List.of(new RegisterGameCommand.GameAchievementCommand("ACH", "Description")),
+                true
         );
 
         // Act
@@ -105,7 +107,8 @@ class RegisterGameUseCaseTest {
                 "https://example.com/play",
                 "C",
                 List.of("Rule 1"),
-                List.of(new RegisterGameCommand.GameAchievementCommand("A", "D"))
+                List.of(new RegisterGameCommand.GameAchievementCommand("A", "D")),
+                true
         );
 
         // Act
@@ -135,7 +138,8 @@ class RegisterGameUseCaseTest {
                 "https://example.com/play",
                 "Creator",
                 rules,
-                List.of(new RegisterGameCommand.GameAchievementCommand("ACH", "Desc"))
+                List.of(new RegisterGameCommand.GameAchievementCommand("ACH", "Desc")),
+                true
         );
 
         // Act
@@ -164,7 +168,8 @@ class RegisterGameUseCaseTest {
                 "https://example.com/play",
                 "Creator",
                 List.of("Rule 1"),
-                achievements
+                achievements,
+                true
         );
 
         // Act

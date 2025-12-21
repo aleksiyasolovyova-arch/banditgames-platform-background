@@ -38,7 +38,7 @@ class PassGameReviewUseCaseTest {
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new PassGameReviewReviewUseCaseImpl(List.of(loadGamePort), List.of(saveGamePort));
+        useCase = new PassGameReviewReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
     }
 
     @Test
@@ -79,7 +79,7 @@ class PassGameReviewUseCaseTest {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new PassGameReviewReviewUseCaseImpl(List.of(loadGamePort), List.of(port1, port2));
+        useCase = new PassGameReviewReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
@@ -98,14 +98,12 @@ class PassGameReviewUseCaseTest {
     @DisplayName("Should accept game with multiple load ports")
     void testPassGame_MultipleLoadPorts() {
         // Arrange
-        LoadGamePort port1 = mock(LoadGamePort.class);
-        LoadGamePort port2 = mock(LoadGamePort.class);
+        LoadGamePort port = mock(LoadGamePort.class);
         Game mockGame = mock(Game.class);
 
-        when(port1.loadBy(any(GameId.class))).thenReturn(Optional.empty());
-        when(port2.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
+        when(port.loadBy(any(GameId.class))).thenReturn(Optional.empty());
 
-        useCase = new PassGameReviewReviewUseCaseImpl(List.of(port1, port2), List.of(saveGamePort));
+        useCase = new PassGameReviewReviewUseCaseImpl(port, List.of(saveGamePort));
 
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 

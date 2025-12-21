@@ -15,14 +15,14 @@ import java.util.List;
 @Service
 @Transactional
 public class EndFriendshipUseCaseImpl implements EndFriendshipPort {
-    private final List<LoadFriendshipPort> loadFriendshipPorts;
+    private final LoadFriendshipPort loadFriendshipPort;
     private final List<SaveFriendshipPort> saveFriendshipPorts;
 
     public EndFriendshipUseCaseImpl(
-            List<LoadFriendshipPort> loadFriendshipPorts,
+            LoadFriendshipPort loadFriendshipPort,
             List<SaveFriendshipPort> saveFriendshipPorts
     ) {
-        this.loadFriendshipPorts = loadFriendshipPorts;
+        this.loadFriendshipPort = loadFriendshipPort;
         this.saveFriendshipPorts = saveFriendshipPorts;
     }
 
@@ -31,11 +31,7 @@ public class EndFriendshipUseCaseImpl implements EndFriendshipPort {
         FriendshipId friendshipId = FriendshipId.of(command.friendshipId());
         PlayerId initiatedByPlayerId = PlayerId.of(command.initiatedBy());
 
-        Friendship friendship = loadFriendshipPorts.stream()
-                .flatMap(port -> port.loadBy(friendshipId).stream())
-                .findFirst()
-                .orElseThrow(() -> FriendshipId.notFound(friendshipId));
-
+        Friendship friendship = loadFriendshipPort.loadBy(friendshipId).orElseThrow(() -> FriendshipId.notFound(friendshipId));
         friendship.end(initiatedByPlayerId);
 
         saveFriendshipPorts.forEach(port -> port.save(friendship));
