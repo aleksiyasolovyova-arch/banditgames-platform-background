@@ -14,23 +14,19 @@ import java.util.List;
 @Service
 @Transactional
 public class PassGameReviewReviewUseCaseImpl implements PassGameReviewPort {
-    private final List<LoadGamePort> loadGamePorts;
+    private final LoadGamePort loadGamePort;
     private final List<SaveGamePort> saveGamePorts;
 
-    public PassGameReviewReviewUseCaseImpl(List<LoadGamePort> loadGamePorts,
+    public PassGameReviewReviewUseCaseImpl(LoadGamePort loadGamePort,
                                            List<SaveGamePort> saveGamePorts) {
-        this.loadGamePorts = loadGamePorts;
+        this.loadGamePort = loadGamePort;
         this.saveGamePorts = saveGamePorts;
     }
 
     @Override
     public Game passGameReview(PassGameReviewCommand command) {
         GameId gameId = GameId.of(command.gameId());
-        Game game = loadGamePorts.stream()
-                .flatMap(port -> port.loadBy(gameId).stream())
-                .findFirst()
-                .orElseThrow(() -> GameId.notFound(gameId));
-        game.pass();
+        Game game = loadGamePort.loadBy(gameId).orElseThrow(() -> GameId.notFound(gameId));
 
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 

@@ -14,14 +14,14 @@ import java.util.List;
 @Service
 @Transactional
 public class BefriendPlayerUseCaseImpl implements BefriendPlayerPort {
-    private final List<LoadFriendshipPort> loadFriendshipPorts;
+    private final LoadFriendshipPort loadFriendshipPort;
     private final List<SaveFriendshipPort> saveFriendshipPorts;
 
     public BefriendPlayerUseCaseImpl(
-            List<LoadFriendshipPort> loadFriendshipPorts,
+            LoadFriendshipPort loadFriendshipPort,
             List<SaveFriendshipPort> saveFriendshipPorts
     ) {
-        this.loadFriendshipPorts = loadFriendshipPorts;
+        this.loadFriendshipPort = loadFriendshipPort;
         this.saveFriendshipPorts = saveFriendshipPorts;
     }
 
@@ -29,11 +29,7 @@ public class BefriendPlayerUseCaseImpl implements BefriendPlayerPort {
     public Friendship befriendPlayer(BefriendPlayerCommand command) {
         FriendshipId friendshipId = FriendshipId.of(command.friendshipId());
 
-        Friendship friendship = loadFriendshipPorts.stream()
-                .flatMap(port -> port.loadBy(friendshipId).stream())
-                .findFirst()
-                .orElseThrow(() -> FriendshipId.notFound(friendshipId));
-
+        Friendship friendship = loadFriendshipPort.loadBy(friendshipId).orElseThrow(() -> FriendshipId.notFound(friendshipId));
         friendship.befriend();
 
         saveFriendshipPorts.forEach(port -> port.save(friendship));
