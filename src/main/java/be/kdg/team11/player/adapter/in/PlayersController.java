@@ -23,22 +23,19 @@ import java.util.UUID;
 public class PlayersController {
 
     private final CreatePlayerPort createPlayerPort;
-    private final BuyGamePort buyGamePort;
-    private final FavouriteGamePort favoriteGamePort;
-    private final UnfavoriteGamePort unfavoriteGamePort;
+    private final ChangeFavouriteGamePort favoriteGamePort;
+    private final RemoveFavoriteGamePort unfavoriteGamePort;
     private final PlayerMapper playerMapper;
     private final ShowPlayerInfoPort showPlayerInfoPort;
     private final ChangePlayerPictureUrlPort changePlayerPictureUrlPort;
 
     public PlayersController(CreatePlayerPort createPlayerPort,
-                             BuyGamePort buyGamePort,
-                             FavouriteGamePort favoriteGamePort,
-                             UnfavoriteGamePort unfavoriteGamePort,
+                             ChangeFavouriteGamePort favoriteGamePort,
+                             RemoveFavoriteGamePort unfavoriteGamePort,
                              PlayerMapper playerMapper,
                              ShowPlayerInfoPort showPlayerInfoPort,
                              ChangePlayerPictureUrlPort changePlayerPictureUrlPort) {
         this.createPlayerPort = createPlayerPort;
-        this.buyGamePort = buyGamePort;
         this.favoriteGamePort = favoriteGamePort;
         this.unfavoriteGamePort = unfavoriteGamePort;
         this.playerMapper = playerMapper;
@@ -76,9 +73,9 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - ownedGames (Set): Player's owned games (initially all games for testing)
      * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Platform-wide achievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>):
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific achievements with unlock timestamps
+     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 201 Created: Player successfully created
      * - 400 Bad Request: Validation failed (invalid/missing fields)
@@ -94,7 +91,7 @@ public class PlayersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PatchMapping
+    @PutMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> changePlayerPictureUrl(
             @AuthenticationPrincipal Jwt token,
@@ -109,41 +106,8 @@ public class PlayersController {
     }
 
     /**
-     * Player buys a game.
-     * FULL PATH: /players/buy-game/{gameId} (POST)
-     * PATH PARAMETER:
-     * - gameId (UUID): ID of the game to buy
-     * JWT TOKEN: Extracts playerId from authenticated user
-     * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
-     * - username (String): Player username
-     * - pictureUrl (String): Player profile picture URL
-     * - joinedDate (LocalDate): Date player joined
-     * - ownedGames (Set<OwnedGameDto>): Updated list of owned games including newly bought game
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
-     * HTTP Status Codes:
-     * - 200 OK: Game successfully purchased
-     * - 400 Bad Request: Invalid game ID format
-     * - 404 Not Found: Player or game with given ID doesn't exist
-     * - 500 Internal Server Error: Unexpected server error
-     */
-    @PostMapping("/buy-game/{gameId}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PlayerDto> buyGame(
-            @NotNull @PathVariable UUID gameId,
-            @AuthenticationPrincipal Jwt token) {
-
-        UUID playerId = UUID.fromString(token.getSubject());
-
-        Player updatedPlayer = buyGamePort.buyGame(new BuyGameCommand(playerId, gameId));
-        PlayerDto response = playerMapper.toResponse(updatedPlayer);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
      * Player marks a game as favorite.
-     * FULL PATH: /players/favorite-game/{gameId} (POST)
+     * FULL PATH: /players/change-favorite-game/{gameId} (POST)
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to mark as favorite
      * JWT TOKEN: Extracts playerId from authenticated user
@@ -152,57 +116,54 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - ownedGames (Set<OwnedGameDto>): Updated list with favorite status set to true for the game
      * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully marked as favorite
      * - 400 Bad Request: Invalid game ID format
      * - 404 Not Found: Player or game with given ID doesn't exist
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PostMapping("/favorite-game/{gameId}")
+    @PostMapping("/change-favorite-game/{gameId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PlayerDto> favoriteGame(
+    public ResponseEntity<PlayerDto> changeFavoriteGame(
             @NotNull @PathVariable UUID gameId,
             @AuthenticationPrincipal Jwt token) {
 
         UUID playerId = UUID.fromString(token.getSubject());
 
-        Player updatedPlayer = favoriteGamePort.favoriteGame(new FavoriteGameCommand(playerId, gameId));
+        Player updatedPlayer = favoriteGamePort.favoriteGame(new ChangeFavoriteGameCommand(playerId, gameId));
         PlayerDto response = playerMapper.toResponse(updatedPlayer);
         return ResponseEntity.ok(response);
     }
 
     /**
      * Player removes a game from favorites.
-     * FULL PATH: /players/unfavorite-game/{gameId} (POST)
-     * PATH PARAMETER:
-     * - gameId (UUID): ID of the game to remove from favorites
+     * FULL PATH: /players/removeFavorite-game (POST)
      * JWT TOKEN: Extracts playerId from authenticated user
      * RESPONSE BODY (PlayerDto):
      * - playerId (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - ownedGames (Set<OwnedGameDto>): Updated list with favorite status set to false for the game
      * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully removed from favorites
      * - 400 Bad Request: Invalid game ID format
      * - 404 Not Found: Player or game with given ID doesn't exist
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PostMapping("/unfavorite-game/{gameId}")
+    @PostMapping("/removeFavorite-game")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PlayerDto> unfavoriteGame(
-            @PathVariable UUID gameId,
+    public ResponseEntity<PlayerDto> removeFavoriteGame(
             @AuthenticationPrincipal Jwt token) {
 
         UUID playerId = UUID.fromString(token.getSubject());
 
-        Player updatedPlayer = unfavoriteGamePort.unfavoriteGame(new UnfavoriteGameCommand(playerId, gameId));
+        Player updatedPlayer = unfavoriteGamePort.unfavoriteGame(new RemoveFavoriteGameCommand(playerId));
         PlayerDto response = playerMapper.toResponse(updatedPlayer);
         return ResponseEntity.ok(response);
     }

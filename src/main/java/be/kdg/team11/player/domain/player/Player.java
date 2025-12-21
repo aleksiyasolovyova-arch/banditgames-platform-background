@@ -1,7 +1,6 @@
 package be.kdg.team11.player.domain.player;
 
 import be.kdg.team11.player.domain.player.exceptions.InvalidAchievementForPlayerException;
-import be.kdg.team11.player.domain.player.exceptions.InvalidGameForPlayerException;
 import be.kdg.team11.player.domain.player.exceptions.InvalidPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
@@ -23,14 +22,15 @@ public class Player {
     private final LocalDate joinedDate;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
-    private final Set<OwnedGame> ownedGames = new HashSet<>();
     private final List<DomainEvent> eventStore = new ArrayList<>();
+
+    private GameReference favoriteGame;
 
 
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId,String username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Set<OwnedGame> ownedGames) {
+    public Player(PlayerId playerId,String username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
@@ -39,7 +39,7 @@ public class Player {
         this.joinedDate = joinedDate;
         this.unlockedPlatformAchievements.addAll(unlockedPlatformAchievements);
         this.unlockedGameAchievements.addAll(unlockedGameAchievements);
-        this.ownedGames.addAll(ownedGames);
+        this.favoriteGame = favoriteGame;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Player {
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
-                Collections.emptySet());
+                null);
 
         PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username, DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
@@ -69,45 +69,29 @@ public class Player {
         this.eventStore.add(event);
     }
 
-    public void buyGame(GameReference gameReference) {
-        validateGameNotAlreadyOwned(gameReference);
-
-        ownedGames.add(OwnedGame.bought(gameReference, LocalDate.now()));
-        PlayerBoughtGameEvent event = new PlayerBoughtGameEvent(
-                playerId.playerId(),
-                gameReference.gameId(),
-                LocalDate.now());
-
-    }
-
     /**
      * Player marks a game as favorite.
-     * Throws InvalidGameForPlayerException if game operation fails.
      */
-    public void favoriteGame(GameReference gameReference) {
-        OwnedGame ownedGame = validateGameOwned(gameReference);
-        ownedGame.favorite();
+    public void changeFavoriteGame(GameReference gameReference) {
+        this.favoriteGame = gameReference;
 
-        PlayerFavoritedGameEvent event = new PlayerFavoritedGameEvent(
-                playerId.playerId(),
+        PlayerChangedFavoriteGameEvent event = new PlayerChangedFavoriteGameEvent(
+                this.playerId.playerId(),
                 gameReference.gameId()
         );
-        eventStore.add(event);
+        this.eventStore.add(event);
     }
 
     /**
      * Player removes a game from favorites.
-     * Throws InvalidGameForPlayerException if game operation fails.
      */
-    public void unfavoriteGame(GameReference gameReference) {
+    public void removeFavoriteGame() {
+        this.favoriteGame = null;
 
-        OwnedGame ownedGame = validateGameOwned(gameReference);
-        ownedGame.unfavorite();
-        PlayerUnfavoritedGameEvent event = new PlayerUnfavoritedGameEvent(
-                playerId.playerId(),
-                gameReference.gameId()
+        PlayerRemovedFavoriteGameEvent event = new PlayerRemovedFavoriteGameEvent(
+                this.playerId.playerId()
         );
-        eventStore.add(event);
+        this.eventStore.add(event);
     }
 
     /**
@@ -125,21 +109,10 @@ public class Player {
      * Player unlocks a game-specific achievement.
     */
     public void unlockGameAchievement(GameReference gameReference, String achievementCode) {
-        validateGameOwnedForAchievement(gameReference);
         validateGameAchievementNotAlreadyUnlocked(gameReference, achievementCode);
 
         UnlockedGameAchievement achievement = UnlockedGameAchievement.now(gameReference, achievementCode);
         this.unlockedGameAchievements.add(achievement);
-    }
-
-    private OwnedGame findOwnedGame(GameReference gameReference) {
-        return ownedGames.stream()
-                .filter(og -> og.getGame().equals(gameReference))
-                .findFirst()
-                .orElse(null);
-    }
-    public boolean ownsGame(GameReference gameReference) {
-        return findOwnedGame(gameReference) != null;
     }
 
 
@@ -147,26 +120,6 @@ public class Player {
         if (joinedDate.isAfter(LocalDate.now())) {
             throw new InvalidPlayerException("Joined date cannot be in the future");
         }
-    }
-
-    private void validateGameNotAlreadyOwned(GameReference gameReference) {
-        if (ownsGame(gameReference)) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Player %s already owns game %s",
-                            playerId.playerId(), gameReference.gameId())
-            );
-        }
-    }
-
-    private OwnedGame validateGameOwned(GameReference gameReference) {
-        OwnedGame ownedGame = findOwnedGame(gameReference);
-        if (ownedGame == null) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Player %s does not own game %s",
-                            playerId.playerId(), gameReference.gameId())
-            );
-        }
-        return ownedGame;
     }
 
 
@@ -182,15 +135,6 @@ public class Player {
         }
     }
 
-
-    private void validateGameOwnedForAchievement(GameReference gameReference) {
-        if (!ownsGame(gameReference)) {
-            throw new InvalidGameForPlayerException(
-                    String.format("Player %s does not own game %s",
-                            playerId.playerId(), gameReference.gameId())
-            );
-        }
-    }
 
     private void validateGameAchievementNotAlreadyUnlocked(GameReference gameReference, String achievementCode) {
         boolean alreadyUnlocked = unlockedGameAchievements.stream()
@@ -228,11 +172,10 @@ public class Player {
     public Set<UnlockedGameAchievement> getUnlockedGameAchievements() {
         return Collections.unmodifiableSet(unlockedGameAchievements);
     }
-
-    public Set<OwnedGame> getOwnedGames() {
-        return Collections.unmodifiableSet(ownedGames);
-    }
     public List<DomainEvent> getEventStore() {
         return Collections.unmodifiableList(eventStore);
+    }
+    public GameReference getFavoriteGame() {
+        return favoriteGame;
     }
 }
