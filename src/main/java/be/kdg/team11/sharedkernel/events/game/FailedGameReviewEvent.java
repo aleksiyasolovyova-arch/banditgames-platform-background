@@ -8,13 +8,15 @@ import java.util.UUID;
 public record FailedGameReviewEvent(
         UUID uuid,
         LocalDateTime eventPit,
-        UUID gameId
+        UUID gameId,
+        String newReviewStatus
 ) implements DomainEvent {
-    public FailedGameReviewEvent(UUID gameId) {
+    public FailedGameReviewEvent(UUID gameId,String newReviewStatus) {
         this(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
-                gameId
+                gameId,
+                newReviewStatus
         );
     }
 }

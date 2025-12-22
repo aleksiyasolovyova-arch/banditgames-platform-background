@@ -12,6 +12,8 @@ public class PlayerFavouriteGameListener {
         this.playerModelService = playerModelService;
     }
 
+    //TODO move this logic to the service ( just pass the event as a attribute )
+
     @EventListener(PlayerChangedFavoriteGameEvent.class)
     public void playerChangedFavoriteGame(PlayerChangedFavoriteGameEvent event){
         playerModelService.project(event.playerId(), event.gameId());

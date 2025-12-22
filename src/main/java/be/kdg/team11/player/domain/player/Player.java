@@ -17,7 +17,7 @@ public class Player {
     private static final String DEFAULT_PICTURE_URL="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg";
 
     private final PlayerId playerId;
-    private final String username;
+    private final Username username;
     private String pictureUrl;
     private final LocalDate joinedDate;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
@@ -30,7 +30,7 @@ public class Player {
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId,String username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
+    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
@@ -46,7 +46,7 @@ public class Player {
      * Factory method for creating a new player.
      * Initial state: no games, no achievements.
      */
-    public static Player create(PlayerId playerId, String username) {
+    public static Player create(PlayerId playerId, Username username) {
 
         Player player = new Player(
                 playerId,
@@ -57,7 +57,7 @@ public class Player {
                 Collections.emptySet(),
                 null);
 
-        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username, DEFAULT_PICTURE_URL, player.joinedDate);
+        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username.username(), DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
 
         return player;
@@ -153,7 +153,7 @@ public class Player {
         return playerId;
     }
 
-    public String getUsername() {
+    public Username getUsername() {
         return username;
     }
 

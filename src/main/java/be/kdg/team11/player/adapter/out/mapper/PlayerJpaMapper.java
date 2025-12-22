@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class PlayerJpaMapper {
 
     public Player toDomain(PlayerJpaEntity entity) {
-        PlayerId playerId = new PlayerId(entity.getPlayerId());
-
+        PlayerId playerId = PlayerId.of(entity.getPlayerId());
+        Username username = Username.of(entity.getUsername());
         Set<UnlockedPlatformAchievement> unlockedPlatformAchievements =
                 entity.getUnlockedPlatformAchievements().stream()
                         .map(e -> new UnlockedPlatformAchievement(
@@ -39,7 +39,7 @@ public class PlayerJpaMapper {
 
         return new Player(
                 playerId,
-                entity.getUsername(),
+                username,
                 entity.getPictureUrl(),
                 entity.getJoinedDate(),
                 unlockedPlatformAchievements,
@@ -51,7 +51,7 @@ public class PlayerJpaMapper {
     public PlayerJpaEntity toJpaEntity(Player player) {
         PlayerJpaEntity entity = new PlayerJpaEntity();
         entity.setPlayerId(player.getPlayerId().playerId());
-        entity.setUsername(player.getUsername());
+        entity.setUsername(player.getUsername().username());
         entity.setPictureUrl(player.getPictureUrl());
         entity.setJoinedDate(player.getJoinedDate());
 

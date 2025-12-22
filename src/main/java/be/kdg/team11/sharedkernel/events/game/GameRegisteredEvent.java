@@ -17,7 +17,8 @@ public record GameRegisteredEvent(
         String gameCreatorName,
         List<RuleRecord> rules,
         List<GameAchievementRecord> achievements,
-        boolean playableWithAI
+        boolean playableWithAI,
+        String initialReviewStatus
 ) implements DomainEvent {
 
     public GameRegisteredEvent(
@@ -29,7 +30,8 @@ public record GameRegisteredEvent(
             String gameCreatorName,
             List<RuleRecord> rules,
             List<GameAchievementRecord> achievements,
-            boolean playableWithAI
+            boolean playableWithAI,
+            String initialReviewStatus
     ) {
         this(
                 UUID.randomUUID(),
@@ -42,7 +44,8 @@ public record GameRegisteredEvent(
                 gameCreatorName,
                 rules,
                 achievements,
-                playableWithAI
+                playableWithAI,
+                initialReviewStatus
         );
     }
 

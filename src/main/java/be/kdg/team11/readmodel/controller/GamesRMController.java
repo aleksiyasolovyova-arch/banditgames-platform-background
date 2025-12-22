@@ -52,6 +52,8 @@ public class GamesRMController {
      * - 500 Internal Server Error: Unexpected server error
      */
 
+    //TODO move mapping logic to the service, keep authenthication and security logic here.
+
     @GetMapping
     public ResponseEntity<List<? extends GameDto>> getGames(@AuthenticationPrincipal Jwt token){
         List<? extends GameDto> gameDtoList;

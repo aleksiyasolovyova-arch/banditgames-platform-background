@@ -1,9 +1,12 @@
 package be.kdg.team11.player.core;
 
 import be.kdg.team11.player.domain.friendship.Friendship;
+import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
+import be.kdg.team11.player.domain.player.Username;
 import be.kdg.team11.player.port.in.RequestFriendshipCommand;
 import be.kdg.team11.player.port.in.RequestFriendshipPort;
+import be.kdg.team11.player.port.out.LoadPlayerPort;
 import be.kdg.team11.player.port.out.SaveFriendshipPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,18 +20,20 @@ import java.util.List;
 @Service
 @Transactional
 public class RequestFriendshipUseCaseImpl implements RequestFriendshipPort {
+    private final LoadPlayerPort loadPlayerPort;
     private final List<SaveFriendshipPort> saveFriendshipPorts;
 
-    public RequestFriendshipUseCaseImpl(List<SaveFriendshipPort> saveFriendshipPorts) {
+    public RequestFriendshipUseCaseImpl(LoadPlayerPort loadPlayerPort, List<SaveFriendshipPort> saveFriendshipPorts) {
+        this.loadPlayerPort = loadPlayerPort;
         this.saveFriendshipPorts = saveFriendshipPorts;
     }
 
     @Override
     public Friendship requestFriendship(RequestFriendshipCommand command) {
         PlayerId requesterId = PlayerId.of(command.requesterId());
-        PlayerId recipientId = PlayerId.of(command.recipientId());
+        Player recipient = loadPlayerPort.loadBy(command.recipientUsername()).orElseThrow(() -> Username.notFound(command.recipientUsername()));
 
-        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(requesterId, recipientId);
+        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(requesterId, recipient.getPlayerId());
 
         Friendship friendship = Friendship.create(playerIdPair);
 

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface GameModelService {
+
+    //TODO take event for projection methods and write logic in implementation
     void project(
       UUID gameId,
       String name,
@@ -19,6 +21,8 @@ public interface GameModelService {
       List<GameModelAchievementEmbeddable> achievements,
       boolean playableWithAI
     );
+
+    //TODO return dto instead of object and do mapping logic in service!
     List<GameModel> getAll();
     List<GameModel> getAllWithRules();
     List<GameModel> getAllWithRulesAndAchievements();

@@ -14,7 +14,7 @@ public class PlayerMapper {
     public PlayerInfoDto toInfoResponse(Player player){
         return new PlayerInfoDto(
                 player.getPlayerId().playerId(),
-                player.getUsername(),
+                player.getUsername().username(),
                 player.getPictureUrl()
         );
     }
@@ -22,7 +22,7 @@ public class PlayerMapper {
     public PlayerDto toResponse(Player player) {
         return new PlayerDto(
                 player.getPlayerId().playerId(),
-                player.getUsername(),
+                player.getUsername().username(),
                 player.getPictureUrl(),
                 player.getJoinedDate(),
                 player.getUnlockedPlatformAchievements().stream()

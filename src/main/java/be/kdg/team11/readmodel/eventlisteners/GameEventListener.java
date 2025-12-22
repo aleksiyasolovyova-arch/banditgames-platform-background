@@ -15,6 +15,7 @@ public class GameEventListener {
         this.gameModelService = gameModelService;
     }
 
+    //TODO move this logic to the service ( just pass the event as a attribute )
     @EventListener(GameRegisteredEvent.class)
     public void gameRegistered(GameRegisteredEvent event){
         gameModelService.project(
@@ -24,7 +25,7 @@ public class GameEventListener {
                 event.pictureUrl(),
                 event.gameUrl(),
                 event.gameCreatorName(),
-                "PENDING",
+                event.initialReviewStatus(),
                 event.rules().stream().map(GameRegisteredEvent.RuleRecord::description).toList(),
                 event.achievements().stream()
                         .map(a -> {

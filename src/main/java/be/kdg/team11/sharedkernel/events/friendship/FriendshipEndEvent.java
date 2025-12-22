@@ -8,12 +8,15 @@ import java.util.UUID;
 public record FriendshipEndEvent(
         UUID friendshipId,
         UUID initiatedBy,
-        LocalDateTime eventPit
+        LocalDateTime eventPit,
+        String newState
 ) implements DomainEvent {
     public FriendshipEndEvent(UUID friendshipId,
-                              UUID initiatedBy) {
+                              UUID initiatedBy,
+                              String newState) {
         this(friendshipId,
                 initiatedBy,
-                LocalDateTime.now());
+                LocalDateTime.now(),
+                newState);
     }
 }

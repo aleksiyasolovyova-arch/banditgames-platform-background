@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface LoadPlayerPort {
     Optional<Player> loadBy(PlayerId playerId);
+    Optional<Player> loadBy(String username);
 }

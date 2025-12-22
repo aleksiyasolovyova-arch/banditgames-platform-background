@@ -5,13 +5,10 @@ import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
-import be.kdg.team11.content.port.in.FindAllAchievementsQueryPort;
-import be.kdg.team11.content.port.out.LoadAchievementsPort;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("achievements")
 public class AchievementsController {
     private final CreateAchievementPort createAchievementPort;
-    private final FindAllAchievementsQueryPort loadAllAchievementsPort;
     private final AchievementMapper achievementMapper;
 
     public AchievementsController(CreateAchievementPort createAchievementPort,
-                                  FindAllAchievementsQueryPort loadAllAchievementsPort,
                                   AchievementMapper achievementMapper) {
         this.createAchievementPort = createAchievementPort;
-        this.loadAllAchievementsPort = loadAllAchievementsPort;
         this.achievementMapper = achievementMapper;
     }
 
@@ -47,15 +41,16 @@ public class AchievementsController {
      * - 200 OK: Achievements retrieved successfully
      * - 500 Internal Server Error: Unexpected server error
      */
-    @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AchievementDto>> loadAllAchievements() {
-        List<Achievement> achievements = loadAllAchievementsPort.findAll();
-        List<AchievementDto> response = achievements.stream()
-                .map(achievementMapper::toResponse)
-                .toList();
-        return ResponseEntity.ok(response);
-    }
+    //TODO move this to read model
+//    @GetMapping()
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<AchievementDto>> loadAllAchievements() {
+//        List<Achievement> achievements = loadAllAchievementsPort.findAll();
+//        List<AchievementDto> response = achievements.stream()
+//                .map(achievementMapper::toResponse)
+//                .toList();
+//        return ResponseEntity.ok(response);
+//    }
 
     /**
      * Creates a new achievement definition.

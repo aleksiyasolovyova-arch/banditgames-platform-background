@@ -2,6 +2,7 @@ package be.kdg.team11.player.core;
 
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
+import be.kdg.team11.player.domain.player.Username;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.player.port.in.CreatePlayerCommand;
 import be.kdg.team11.player.port.in.CreatePlayerPort;
@@ -27,11 +28,11 @@ public class CreatePlayerUseCaseImpl implements CreatePlayerPort {
     @Override
     public Player create(CreatePlayerCommand command) {
         PlayerId playerId = PlayerId.of(command.playerId());
-
+        Username username = Username.of(command.username());
         // Create the player (initially without games)
         Player player = Player.create(
                 playerId,
-                command.username()
+                username
         );
 
 
