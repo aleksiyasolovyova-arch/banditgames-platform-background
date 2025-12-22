@@ -1,4 +1,4 @@
-package be.kdg.team11.readmodel.service;
+package be.kdg.team11.readmodel.service.playergames;
 
 import be.kdg.team11.readmodel.controller.response.PlayerGamesDto;
 import be.kdg.team11.readmodel.models.GameRM;
@@ -23,14 +23,11 @@ public class PlayerGamesServiceImpl implements PlayerGamesService {
 
     @Override
     public List<PlayerGamesDto> getAllForPlayerId(UUID playerId) {
-        // Get all games from the read model
         List<GameRM> allGames = gameRMRepository.findAll();
 
-        // Get the player's single favourite game (if exists)
         Optional<PlayerFavouriteGameRM> playerFavourite = playerFavouriteGameRMRepository.findById(playerId);
         UUID favouriteGameId = playerFavourite.map(PlayerFavouriteGameRM::getGameId).orElse(null);
 
-        // Map GameRM to PlayerGamesDto with isFavourite flag
         return allGames.stream()
                 .map(game -> new PlayerGamesDto(
                         game.getGameId(),
@@ -39,10 +36,9 @@ public class PlayerGamesServiceImpl implements PlayerGamesService {
                         game.getPictureUrl(),
                         game.getGameUrl(),
                         game.getGameCreatorName(),
-                        game.getRules().stream()
-                                .map(PlayerGamesDto.RuleDto::new)
-                                .toList(),
-                        game.getGameId().equals(favouriteGameId)
+                        game.getRules(),
+                        game.getGameId().equals(favouriteGameId),
+                        game.isPlayableWithAI()
                 ))
                 .toList();
     }

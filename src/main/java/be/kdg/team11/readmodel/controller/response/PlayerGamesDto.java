@@ -10,11 +10,7 @@ public record PlayerGamesDto(
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,
-        List<RuleDto> rules,
-        boolean isFavourite
-) {
-    public record RuleDto(
-            String description
-    ) {
-    }
-}
+        List<String> rules,
+        boolean isFavourite,
+        boolean playableWithAi
+) {}

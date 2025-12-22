@@ -36,6 +36,9 @@ public class GameRM {
     @Column(name = "rule", nullable = false)
     private List<String> rules = new ArrayList<>();
 
+    @Column(nullable = false)
+    private boolean playableWithAI;
+
     public GameRM() {
     }
 
@@ -93,5 +96,13 @@ public class GameRM {
 
     public void setRules(List<String> rules) {
         this.rules = rules;
+    }
+
+    public boolean isPlayableWithAI() {
+        return playableWithAI;
+    }
+
+    public void setPlayableWithAI(boolean playableWithAI) {
+        this.playableWithAI = playableWithAI;
     }
 }

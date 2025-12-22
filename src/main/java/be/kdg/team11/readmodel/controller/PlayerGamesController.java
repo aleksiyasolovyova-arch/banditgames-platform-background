@@ -1,7 +1,7 @@
 package be.kdg.team11.readmodel.controller;
 
 import be.kdg.team11.readmodel.controller.response.PlayerGamesDto;
-import be.kdg.team11.readmodel.service.PlayerGamesService;
+import be.kdg.team11.readmodel.service.playergames.PlayerGamesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
