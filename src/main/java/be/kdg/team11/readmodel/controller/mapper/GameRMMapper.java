@@ -17,15 +17,15 @@ public class GameRMMapper {
                 game.getDescription(),
                 game.getPictureUrl(),
                 game.getGameUrl(),
-                game.getGameCreatorName(),
-                game.getReviewState(),
-                game.getRules().stream()
-                        .map(AdminGameDto.RuleDto::new)
-                        .toList(),
-                game.getAchievementEmbeddables().stream()
-                        .map(a -> new AdminGameDto.GameAchievementDto(a.getCode(), a.getDescription()))
-                        .toList(),
-                game.isPlayableWithAI()
+                game.getCreatorName()
+               // game.getReviewState()
+               // game.getRules().stream()
+               //         .map(AdminGameDto.RuleDto::new)
+               //         .toList(),
+               // game.getAchievementEmbeddables().stream()
+               //         .map(a -> new AdminGameDto.GameAchievementDto(a.getCode(), a.getDescription()))
+               //         .toList(),
+               // game.isPlayableWithAI()
         );
     }
 
@@ -36,12 +36,12 @@ public class GameRMMapper {
                 game.getDescription(),
                 game.getPictureUrl(),
                 game.getGameUrl(),
-                game.getGameCreatorName(),
-                game.getRules().stream()
-                        .map(PlayerGamesDto.RuleDto::new)
-                        .toList(),
-                game.getGameId().equals(favouriteGameId),
-                game.isPlayableWithAI()
+                game.getCreatorName()
+               // game.getRules().stream()
+               //         .map(PlayerGamesDto.RuleDto::new)
+               //         .toList(),
+               // game.getGameId().equals(favouriteGameId),
+               // game.isPlayableWithAI()
         );
     }
 
@@ -51,7 +51,7 @@ public class GameRMMapper {
                 game.getName(),
                 game.getDescription(),
                 game.getPictureUrl(),
-                game.getGameCreatorName()
+                game.getCreatorName()
         );
     }
 }

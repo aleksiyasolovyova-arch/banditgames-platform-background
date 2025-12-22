@@ -68,6 +68,8 @@ import java.util.List;
                 gameReference.gameId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
+                ParticipationStatus.PENDING.name(),
+                ParticipationStatus.PENDING.name(),
                 "STRANGERS",
                 "DID_NOT_START"
         );
@@ -101,6 +103,8 @@ import java.util.List;
                 gameReference.gameId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
+                ParticipationStatus.ACCEPTED.name(),
+                ParticipationStatus.PENDING.name(),
                 "FRIENDS",
                 "DID_NOT_START"
         );
@@ -138,6 +142,8 @@ import java.util.List;
                 gameReference.gameId(),
                 lobby.getSlotPair().getFirst().getPlayerId().playerId(),
                 lobby.getSlotPair().getSecond().getPlayerId().playerId(),
+                ParticipationStatus.ACCEPTED.name(),
+                ParticipationStatus.ACCEPTED.name(),
                 "AI",
                 "DID_NOT_START"
         );

@@ -2,6 +2,7 @@ package be.kdg.team11.readmodel.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,45 +11,36 @@ import java.util.UUID;
 @Table(name = "game", schema = "read_model_schema")
 public class GameModel {
     @Id
+    @Column(name = "game_id")
     private UUID gameId;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false, length = 500)
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "picture_url")
     private String pictureUrl;
 
-    @Column(nullable = false)
+    @Column(name = "game_url")
     private String gameUrl;
 
-    @Column(nullable = false)
-    private String gameCreatorName;
+    @Column(name = "creator_name")
+    private String creatorName;
 
-    @Column(nullable = false)
+    @Column(name = "review_state")
     private String reviewState;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "game_rules",
-            schema = "content_schema",
-            joinColumns = @JoinColumn(name = "game_id")
-    )
-    @Column(name = "rule", nullable = false)
-    private List<String> rules = new ArrayList<>();
-
-    @ElementCollection
-    @CollectionTable(
-            name = "game_achievements",
-            schema = "content_schema",
-            joinColumns = @JoinColumn(name = "game_id")
-    )
-    private List<GameModelAchievementEmbeddable> achievementEmbeddables = new ArrayList<>();
-
-    @Column(nullable = false)
+    @Column(name = "playable_with_ai")
     private boolean playableWithAI;
+
+    // Timestamps
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public GameModel() {
     }
@@ -93,14 +85,6 @@ public class GameModel {
         this.gameUrl = gameUrl;
     }
 
-    public String getGameCreatorName() {
-        return gameCreatorName;
-    }
-
-    public void setGameCreatorName(String gameCreatorName) {
-        this.gameCreatorName = gameCreatorName;
-    }
-
     public String getReviewState() {
         return reviewState;
     }
@@ -109,27 +93,35 @@ public class GameModel {
         this.reviewState = reviewState;
     }
 
-    public List<String> getRules() {
-        return rules;
-    }
-
-    public void setRules(List<String> rules) {
-        this.rules = rules;
-    }
-
-    public List<GameModelAchievementEmbeddable> getAchievementEmbeddables() {
-        return achievementEmbeddables;
-    }
-
-    public void setAchievementEmbeddables(List<GameModelAchievementEmbeddable> achievementEmbeddables) {
-        this.achievementEmbeddables = achievementEmbeddables;
-    }
-
     public boolean isPlayableWithAI() {
         return playableWithAI;
     }
 
     public void setPlayableWithAI(boolean playableWithAI) {
         this.playableWithAI = playableWithAI;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

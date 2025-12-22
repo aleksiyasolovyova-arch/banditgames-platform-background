@@ -1,9 +1,7 @@
 package be.kdg.team11.readmodel.eventlisteners;
 
-import be.kdg.team11.readmodel.models.GameModelAchievementEmbeddable;
 import be.kdg.team11.readmodel.service.game.GameModelService;
-import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
-import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
+import be.kdg.team11.sharedkernel.events.game.*;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -15,33 +13,29 @@ public class GameEventListener {
         this.gameModelService = gameModelService;
     }
 
-    //TODO move this logic to the service ( just pass the event as a attribute )
     @EventListener(GameRegisteredEvent.class)
-    public void gameRegistered(GameRegisteredEvent event){
-        gameModelService.project(
-                event.gameId(),
-                event.name(),
-                event.description(),
-                event.pictureUrl(),
-                event.gameUrl(),
-                event.gameCreatorName(),
-                event.initialReviewStatus(),
-                event.rules().stream().map(GameRegisteredEvent.RuleRecord::description).toList(),
-                event.achievements().stream()
-                        .map(a -> {
-                            GameModelAchievementEmbeddable embeddable = new GameModelAchievementEmbeddable();
-                            embeddable.setCode(a.code());
-                            embeddable.setDescription(a.description());
-                            return embeddable;
-                        })
-                        .toList(),
-                event.playableWithAI()
-        );
+    public void gameRegistered(GameRegisteredEvent event) {
+        gameModelService.project(event);
     }
 
 
     @EventListener(PassedGameReviewEvent.class)
     public void gamePassedReview(PassedGameReviewEvent event) {
+        gameModelService.project(event);
+    }
 
+    @EventListener(FailedGameReviewEvent.class)
+    public void gameFailedReview(FailedGameReviewEvent event) {
+        gameModelService.project(event);
+    }
+
+    @EventListener(GameToggledPlayableWithAIEvent.class)
+    public void gameToggledPlayableWithAI(GameToggledPlayableWithAIEvent event) {
+        gameModelService.project(event);
+    }
+
+    @EventListener(GameUrlsModifiedEvent.class)
+    public void gameUrlsModified(GameUrlsModifiedEvent event) {
+        gameModelService.project(event);
     }
 }

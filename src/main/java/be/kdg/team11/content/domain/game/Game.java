@@ -96,7 +96,8 @@ public class Game {
                 gameCreatorName,
                 ruleRecords,
                 achievementRecords,
-                playableWithAI
+                playableWithAI,
+                GameReviewState.PENDING.name()
         );
         game.eventStore.add(event);
 
@@ -109,8 +110,9 @@ public class Game {
                     "Cannot pass game review: current state is " + this.reviewState + ", expected PENDING"
             );
         }
-        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId());
         this.reviewState = GameReviewState.PASSED;
+        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId(), GameReviewState.PASSED.name());
+
         this.eventStore.add(event);
     }
 
@@ -120,8 +122,9 @@ public class Game {
                     "Cannot fail game review: current state is " + this.reviewState + ", expected PENDING"
             );
         }
-        FailedGameReviewEvent event = new FailedGameReviewEvent(this.gameId.gameId());
         this.reviewState = GameReviewState.FAILED;
+        FailedGameReviewEvent event = new FailedGameReviewEvent(this.gameId.gameId(), GameReviewState.FAILED.name());
+
         this.eventStore.add(event);
     }
 
