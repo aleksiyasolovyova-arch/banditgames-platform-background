@@ -20,9 +20,6 @@ public class GameJpaEntity {
     @Column(nullable = false, length = 500)
     private String description;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
-
     @Column(nullable = false)
     private String pictureUrl;
 
@@ -81,14 +78,6 @@ public class GameJpaEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public String getPictureUrl() {

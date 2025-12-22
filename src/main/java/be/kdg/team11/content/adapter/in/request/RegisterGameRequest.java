@@ -18,9 +18,6 @@ public record RegisterGameRequest(
         @Size(min = 5, max = 500, message = "Game description must be between 5 and 500 characters")
         String description,
 
-        @NotNull(message = "Game price cannot be null")
-        BigDecimal price,
-
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")
         @URL(message = "Picture URL must be a valid URL")

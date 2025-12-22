@@ -32,7 +32,6 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
         Game game = Game.register(
                 command.name(),
                 command.description(),
-                command.price(),
                 command.pictureUrl(),
                 command.gameUrl(),
                 command.gameCreatorName(),

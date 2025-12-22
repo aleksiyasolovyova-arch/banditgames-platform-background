@@ -6,7 +6,6 @@ import java.util.List;
 public record RegisterGameCommand(
         String name,
         String description,
-        BigDecimal price,
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,
