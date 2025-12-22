@@ -4,6 +4,6 @@ import be.kdg.team11.content.domain.achievement.Achievement;
 
 import java.util.List;
 
-public interface LoadAllAchievementsPort {
-    List<Achievement> loadAll();
+public interface FindAllAchievementsQueryPort {
+    List<Achievement> findAll();
 }

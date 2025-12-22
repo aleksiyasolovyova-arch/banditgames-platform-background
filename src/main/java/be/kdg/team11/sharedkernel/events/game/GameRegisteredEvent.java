@@ -13,24 +13,24 @@ public record GameRegisteredEvent(
         UUID gameId,
         String name,
         String description,
-        BigDecimal price,
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,
         List<RuleRecord> rules,
-        List<GameAchievementRecord> achievements
+        List<GameAchievementRecord> achievements,
+        boolean playableWithAI
 ) implements DomainEvent {
 
     public GameRegisteredEvent(
             UUID gameId,
             String name,
             String description,
-            BigDecimal price,
             String pictureUrl,
             String gameUrl,
             String gameCreatorName,
             List<RuleRecord> rules,
-            List<GameAchievementRecord> achievements
+            List<GameAchievementRecord> achievements,
+            boolean playableWithAI
     ) {
         this(
                 UUID.randomUUID(),
@@ -38,12 +38,12 @@ public record GameRegisteredEvent(
                 gameId,
                 name,
                 description,
-                price,
                 pictureUrl,
                 gameUrl,
                 gameCreatorName,
                 rules,
-                achievements
+                achievements,
+                playableWithAI
         );
     }
 

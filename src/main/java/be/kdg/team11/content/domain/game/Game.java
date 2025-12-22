@@ -18,7 +18,6 @@ public class Game {
     private final GameId gameId;
     private final String name;
     private final String description;
-    private final BigDecimal price;
     private String pictureUrl;
     private String gameUrl;
     private final String gameCreatorName;
@@ -34,7 +33,6 @@ public class Game {
             GameId gameId,
             String name,
             String description,
-            BigDecimal price,
             String pictureUrl,
             String gameUrl,
             String gameCreatorName,
@@ -46,7 +44,6 @@ public class Game {
         this.gameId = gameId;
         this.name = name;
         this.description = description;
-        this.price = price;
         this.pictureUrl = pictureUrl;
         this.gameUrl = gameUrl;
         this.gameCreatorName = gameCreatorName;
@@ -58,20 +55,17 @@ public class Game {
 
     public static Game register(String name,
                                 String description,
-                                BigDecimal price,
                                 String pictureUrl,
                                 String gameUrl,
                                 String gameCreatorName,
                                 List<Rule> rules,
                                 List<GameAchievement> achievements,
                                 boolean playableWithAI) {
-        validateGamePrice(price);
 
         Game game = new Game(
                 GameId.create(),
                 name,
                 description,
-                price,
                 pictureUrl,
                 gameUrl,
                 gameCreatorName,
@@ -97,12 +91,12 @@ public class Game {
                 game.gameId.gameId(),
                 name,
                 description,
-                price,
                 pictureUrl,
                 gameUrl,
                 gameCreatorName,
                 ruleRecords,
-                achievementRecords
+                achievementRecords,
+                playableWithAI
         );
         game.eventStore.add(event);
 
@@ -181,10 +175,6 @@ public class Game {
 
     public String getDescription() {
         return description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 
     public String getPictureUrl() {

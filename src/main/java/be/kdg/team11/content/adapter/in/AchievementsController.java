@@ -5,6 +5,7 @@ import be.kdg.team11.content.adapter.in.request.CreateAchievementRequest;
 import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.content.domain.achievement.Achievement;
 import be.kdg.team11.content.port.in.CreateAchievementPort;
+import be.kdg.team11.content.port.in.FindAllAchievementsQueryPort;
 import be.kdg.team11.content.port.out.LoadAchievementsPort;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("achievements")
 public class AchievementsController {
     private final CreateAchievementPort createAchievementPort;
-    private final LoadAchievementsPort loadAllAchievementsPort;
+    private final FindAllAchievementsQueryPort loadAllAchievementsPort;
     private final AchievementMapper achievementMapper;
 
     public AchievementsController(CreateAchievementPort createAchievementPort,
-                                  LoadAchievementsPort loadAllAchievementsPort,
+                                  FindAllAchievementsQueryPort loadAllAchievementsPort,
                                   AchievementMapper achievementMapper) {
         this.createAchievementPort = createAchievementPort;
         this.loadAllAchievementsPort = loadAllAchievementsPort;
@@ -49,7 +50,7 @@ public class AchievementsController {
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AchievementDto>> loadAllAchievements() {
-        List<Achievement> achievements = loadAllAchievementsPort.loadAll();
+        List<Achievement> achievements = loadAllAchievementsPort.findAll();
         List<AchievementDto> response = achievements.stream()
                 .map(achievementMapper::toResponse)
                 .toList();

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-//TODO Add technical validation
 @RestController
 @RequestMapping("/games")
 public class GamesController {
@@ -162,7 +161,7 @@ public class GamesController {
      * - 404 Not Found: Game with given ID doesn't exist
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PutMapping("/{gameId}")
+    @PatchMapping("/{gameId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminGameDto> updateGame(
             @NotNull @PathVariable UUID gameId,
@@ -185,7 +184,7 @@ public class GamesController {
      * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PutMapping("/{gameId}/pass")
+    @PatchMapping("/{gameId}/pass")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminGameDto> passGameReview(
            @NotNull @PathVariable UUID gameId) {
@@ -207,7 +206,7 @@ public class GamesController {
      * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PutMapping("/{gameId}/fail")
+    @PatchMapping("/{gameId}/fail")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminGameDto> failGameReview(
             @NotNull @PathVariable UUID gameId) {
@@ -219,7 +218,7 @@ public class GamesController {
     }
 
 
-    @PutMapping("{gameId}/toggle")
+    @PatchMapping("{gameId}/toggle")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminGameDto> togglePlayableWithAI(
             @NotNull @PathVariable UUID gameId

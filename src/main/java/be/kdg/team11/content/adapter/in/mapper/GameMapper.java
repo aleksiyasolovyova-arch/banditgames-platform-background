@@ -18,7 +18,6 @@ public class GameMapper {
         return new RegisterGameCommand(
                 request.name(),
                 request.description(),
-                request.price(),
                 request.pictureUrl(),
                 request.gameUrl(),
                 request.gameCreatorName(),
@@ -40,7 +39,6 @@ public class GameMapper {
                 game.getGameId().gameId(),
                 game.getName(),
                 game.getDescription(),
-                game.getPrice(),
                 game.getPictureUrl(),
                 game.getGameUrl(),
                 game.getGameCreatorName(),

@@ -8,7 +8,6 @@ public record AdminGameDto(
         UUID gameId,
         String name,
         String description,
-        BigDecimal price,
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,

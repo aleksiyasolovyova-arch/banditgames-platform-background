@@ -19,7 +19,6 @@ public class GameJpaMapper {
         entity.setGameId(game.getGameId().gameId());
         entity.setName(game.getName());
         entity.setDescription(game.getDescription());
-        entity.setPrice(game.getPrice());
         entity.setPictureUrl(game.getPictureUrl());
         entity.setGameUrl(game.getGameUrl());
         entity.setGameCreatorName(game.getGameCreatorName());
@@ -65,7 +64,6 @@ public class GameJpaMapper {
                 new GameId(entity.getGameId()),
                 entity.getName(),
                 entity.getDescription(),
-                entity.getPrice(),
                 entity.getPictureUrl(),
                 entity.getGameUrl(),
                 entity.getGameCreatorName(),
