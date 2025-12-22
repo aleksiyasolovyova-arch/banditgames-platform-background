@@ -28,5 +28,12 @@ public class FriendshipsController {
         return ResponseEntity.ok(friends);
     }
 
+    @GetMapping("/requests")
+    public ResponseEntity<List<FriendDto>> getIncomingFriendRequests(@AuthenticationPrincipal Jwt token) {
+        UUID playerId = UUID.fromString(token.getSubject());
+        List<FriendDto> incomingRequests = friendshipModelService.getIncomingFriendRequests(playerId);
+        return ResponseEntity.ok(incomingRequests);
+    }
+
 
 }

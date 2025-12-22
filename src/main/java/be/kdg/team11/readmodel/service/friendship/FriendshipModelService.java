@@ -16,4 +16,5 @@ public interface FriendshipModelService {
     void project(FriendshipDeclinedEvent event);
 
     List<FriendDto> getPlayerFriends(UUID playerId);
+    List<FriendDto> getIncomingFriendRequests(UUID playerId);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -100,6 +101,32 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
                     return null;
                 })
                 .filter(dto -> dto != null)
+                .sorted(Comparator.comparing(FriendDto::username))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FriendDto> getIncomingFriendRequests(UUID playerId) {
+        List<FriendshipModel> incomingRequests =
+                friendshipModelRepository.findByRecipientIdAndState(playerId, "REQUESTED");
+
+        return incomingRequests.stream()
+                .map(friendship -> {
+                    UUID requesterId = friendship.getRequesterId();
+
+                    PlayerModel requesterPlayer = playerModelRepository.findById(requesterId)
+                            .orElse(null);
+
+                    if (requesterPlayer != null) {
+                        return new FriendDto(
+                                requesterId,
+                                requesterPlayer.getUsername(),
+                                requesterPlayer.getPictureUrl()
+                        );
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
                 .sorted(Comparator.comparing(FriendDto::username))
                 .collect(Collectors.toList());
     }
