@@ -17,14 +17,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("games")
-public class GamesRMController {
+public class GamesModelController {
     private final GameModelService gameModelService;
     private final PlayerModelService playerModelService;
     private final GameRMMapper gameRMMapper;
 
-    public GamesRMController(GameModelService gameModelService,
-                             PlayerModelService playerModelService,
-                             GameRMMapper gameRMMapper) {
+    public GamesModelController(GameModelService gameModelService,
+                                PlayerModelService playerModelService,
+                                GameRMMapper gameRMMapper) {
         this.gameModelService = gameModelService;
         this.playerModelService = playerModelService;
         this.gameRMMapper = gameRMMapper;

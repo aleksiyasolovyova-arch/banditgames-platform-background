@@ -133,4 +133,8 @@ public class AchievementModel {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public UUID getAchievementIdPK() {
+        return achievementIdPK;
+    }
 }
