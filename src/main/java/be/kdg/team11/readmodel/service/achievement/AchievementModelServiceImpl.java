@@ -1,6 +1,8 @@
 package be.kdg.team11.readmodel.service.achievement;
 
-import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseDto;
+import be.kdg.team11.content.adapter.in.response.AchievementDto;
+import be.kdg.team11.readmodel.controller.dto.AchievementModelDto;
+import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.UnlockedAchievementModel;
@@ -48,7 +50,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
     }
 
     @Override
-    public List<AchievementPlayerResponseDto> getPlayerAchievements(UUID playerId) {
+    public List<? extends AchievementModelDto> getPlayerAchievements(UUID playerId) {
         List<AchievementModel> allAchievements = achievementModelRepository.findAll();
 
         List<UnlockedAchievementModel> playerUnlockedAchievements =
@@ -77,7 +79,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
                         playerStatistics,
                         unlockedDataMap
                 ))
-                .sorted(Comparator.comparing(AchievementPlayerResponseDto::unlocked).reversed())
+                .sorted(Comparator.comparing(AchievementPlayerResponseModelDto::unlocked).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -102,6 +104,13 @@ public class AchievementModelServiceImpl implements AchievementModelService{
                     return stats;
                 })
                 .orElse(new HashMap<>());
+    }
+
+    @Override
+    public List<? extends AchievementModelDto> getAllPlatformAchievements() {
+        return achievementModelRepository.findByGameIdIsNull().stream()
+                .map(achievementMapper::toAchievementAdminResponseDto)
+                .collect(Collectors.toList());
     }
 
 }

@@ -1,6 +1,7 @@
 package be.kdg.team11.readmodel.service.mapper;
 
-import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseDto;
+import be.kdg.team11.readmodel.controller.dto.AchievementAdminResponseModelDto;
+import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.UnlockedAchievementModel;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 @Component
 public class AchievementMapper {
-    public AchievementPlayerResponseDto toAchievementPlayerResponseDto(
+    public AchievementPlayerResponseModelDto toAchievementPlayerResponseDto(
             AchievementModel achievement,
             Set<UUID> unlockedAchievements,
             Map<UUID, Long> playerStatistics) {
@@ -43,7 +44,7 @@ public class AchievementMapper {
         String dtoGameName = !isPlatformAchievement ? achievement.getGameName() : null;
         String dtoGameCode = !isPlatformAchievement ? achievement.getAchievementCode() : null;
 
-        return new AchievementPlayerResponseDto(
+        return new AchievementPlayerResponseModelDto(
                 dtoAchievementId,
                 achievementType,
                 dtoDescription,
@@ -65,7 +66,7 @@ public class AchievementMapper {
         );
     }
 
-    public AchievementPlayerResponseDto toAchievementPlayerResponseDto(
+    public AchievementPlayerResponseModelDto toAchievementPlayerResponseDto(
             AchievementModel achievement,
             Set<UUID> unlockedAchievements,
             Map<UUID, Long> playerStatistics,
@@ -97,7 +98,7 @@ public class AchievementMapper {
         String dtoGameName = !isPlatformAchievement ? achievement.getGameName() : null;
         String dtoGameCode = !isPlatformAchievement ? achievement.getAchievementCode() : null;
 
-        return new AchievementPlayerResponseDto(
+        return new AchievementPlayerResponseModelDto(
                 dtoAchievementId,
                 achievementType,
                 dtoDescription,
@@ -116,6 +117,17 @@ public class AchievementMapper {
                 dtoGameId,
                 dtoGameName,
                 dtoGameCode
+        );
+    }
+
+    public AchievementAdminResponseModelDto toAchievementAdminResponseDto(AchievementModel achievement) {
+        return new AchievementAdminResponseModelDto(
+                achievement.getPlatformAchievementId(),
+                achievement.getName(),
+                achievement.getDescription(),
+                achievement.getPictureUrl(),
+                achievement.getType() != null ? achievement.getType().toString() : null,
+                achievement.getRequiredValue()
         );
     }
 }

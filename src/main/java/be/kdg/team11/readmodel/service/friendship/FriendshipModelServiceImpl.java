@@ -1,7 +1,11 @@
 package be.kdg.team11.readmodel.service.friendship;
 
+import be.kdg.team11.readmodel.controller.dto.FriendDto;
 import be.kdg.team11.readmodel.models.FriendshipModel;
+import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.FriendshipModelRepository;
+import be.kdg.team11.readmodel.repository.PlayerModelRepository;
+import be.kdg.team11.readmodel.service.mapper.FriendshipMapper;
 import be.kdg.team11.sharedkernel.events.friendship.BefriendedPlayerEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipCreatedEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipDeclinedEvent;
@@ -10,13 +14,24 @@ import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class FriendshipModelServiceImpl implements FriendshipModelService{
     private final FriendshipModelRepository friendshipModelRepository;
+    private final PlayerModelRepository playerModelRepository;
+    private final FriendshipMapper friendshipMapper;
 
-    public FriendshipModelServiceImpl(FriendshipModelRepository friendshipModelRepository) {
+    public FriendshipModelServiceImpl(FriendshipModelRepository friendshipModelRepository,
+                                      PlayerModelRepository playerModelRepository,
+                                      FriendshipMapper friendshipMapper) {
         this.friendshipModelRepository = friendshipModelRepository;
+        this.playerModelRepository = playerModelRepository;
+        this.friendshipMapper = friendshipMapper;
     }
 
 
@@ -63,4 +78,29 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
                 });
     }
 
+    @Override
+    public List<FriendDto> getPlayerFriends(UUID playerId) {
+        List<FriendshipModel> allFriendships =
+                friendshipModelRepository.findFriendshipsByPlayerAndState(playerId, "FRIENDS");
+
+        return allFriendships.stream()
+                .map(friendship -> {
+                    UUID friendId;
+                    if (friendship.getRequesterId().equals(playerId)) {
+                        friendId = friendship.getRecipientId();
+                    } else {
+                        friendId = friendship.getRequesterId();
+                    }
+                    PlayerModel friendPlayer = playerModelRepository.findById(friendId)
+                            .orElse(null);
+
+                    if (friendPlayer != null) {
+                        return friendshipMapper.toFriendDto(friendship, friendPlayer, playerId);
+                    }
+                    return null;
+                })
+                .filter(dto -> dto != null)
+                .sorted(Comparator.comparing(FriendDto::username))
+                .collect(Collectors.toList());
+    }
 }

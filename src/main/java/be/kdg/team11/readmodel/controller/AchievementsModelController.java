@@ -1,12 +1,12 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseDto;
+import be.kdg.team11.content.adapter.in.response.AchievementDto;
+import be.kdg.team11.readmodel.controller.dto.AchievementModelDto;
 import be.kdg.team11.readmodel.service.achievement.AchievementModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +22,7 @@ public class AchievementsModelController {
     }
 
     /**
-     * GET /achievements
+     * GET /achievements (in case of player)
      *
      * Retrieves all platform and game-specific achievements available in the platform,
      * along with the player's unlock status for each achievement.
@@ -53,9 +53,25 @@ public class AchievementsModelController {
      */
 
     @GetMapping
-    public ResponseEntity<List<AchievementPlayerResponseDto>> getPlayerAchievements(@AuthenticationPrincipal Jwt token) {
-        UUID playerId = UUID.fromString(token.getSubject());
-        List<AchievementPlayerResponseDto> achievements = achievementModelService.getPlayerAchievements(playerId);
-        return ResponseEntity.ok(achievements);
+    public ResponseEntity<List<? extends AchievementModelDto>> getAchievements(@AuthenticationPrincipal Jwt token) {
+        List<? extends AchievementModelDto> achievementDtoList;
+
+        if (token != null) {
+            // Check if user has ADMIN role
+            if (token.getClaimAsStringList("authorities") != null &&
+                    token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")) {
+                //  Return platform achievements only with admin details
+                achievementDtoList = achievementModelService.getAllPlatformAchievements();
+            } else {
+                // Return all achievements with unlock status
+                UUID playerId = UUID.fromString(token.getSubject());
+                achievementDtoList =  achievementModelService.getPlayerAchievements(playerId);
+            }
+        } else {
+            // Not implemented - could return public platform achievements
+            achievementDtoList = List.of();
+        }
+
+        return ResponseEntity.ok(achievementDtoList);
     }
 }
