@@ -2,7 +2,6 @@ package be.kdg.team11.sharedkernel.events.game;
 
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

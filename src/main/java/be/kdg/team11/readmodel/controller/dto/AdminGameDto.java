@@ -1,6 +1,5 @@
-package be.kdg.team11.content.adapter.in.response;
+package be.kdg.team11.readmodel.controller.dto;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 

@@ -1,10 +1,10 @@
-package be.kdg.team11.content.adapter.out.jpa;
+package be.kdg.team11.readmodel.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class GameAchievementEmbeddable {
+public class GameModelAchievementEmbeddable {
 
     @Column(nullable = false, length = 100)
     private String code;
@@ -12,7 +12,7 @@ public class GameAchievementEmbeddable {
     @Column(nullable = false, length = 255)
     private String description;
 
-    public GameAchievementEmbeddable() {
+    public GameModelAchievementEmbeddable() {
     }
 
     public String getCode() {

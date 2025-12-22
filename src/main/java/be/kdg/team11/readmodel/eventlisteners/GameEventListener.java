@@ -1,31 +1,46 @@
 package be.kdg.team11.readmodel.eventlisteners;
 
-import be.kdg.team11.readmodel.service.game.GameService;
+import be.kdg.team11.readmodel.models.GameModelAchievementEmbeddable;
+import be.kdg.team11.readmodel.service.game.GameModelService;
+import be.kdg.team11.sharedkernel.events.game.GameRegisteredEvent;
 import be.kdg.team11.sharedkernel.events.game.PassedGameReviewEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GameEventListener {
-    private final GameService gameService;
+    private final GameModelService gameModelService;
 
-    public GameEventListener(GameService gameService) {
-        this.gameService = gameService;
+    public GameEventListener(GameModelService gameModelService) {
+        this.gameModelService = gameModelService;
     }
 
-    @EventListener(PassedGameReviewEvent.class)
-    public void gamePassedReview(PassedGameReviewEvent event) {
-        gameService.project(
+    @EventListener(GameRegisteredEvent.class)
+    public void gameRegistered(GameRegisteredEvent event){
+        gameModelService.project(
                 event.gameId(),
                 event.name(),
                 event.description(),
                 event.pictureUrl(),
                 event.gameUrl(),
                 event.gameCreatorName(),
-                event.rules().stream()
-                        .map(PassedGameReviewEvent.RuleRecord::description)
+                "PENDING",
+                event.rules().stream().map(GameRegisteredEvent.RuleRecord::description).toList(),
+                event.achievements().stream()
+                        .map(a -> {
+                            GameModelAchievementEmbeddable embeddable = new GameModelAchievementEmbeddable();
+                            embeddable.setCode(a.code());
+                            embeddable.setDescription(a.description());
+                            return embeddable;
+                        })
                         .toList(),
                 event.playableWithAI()
         );
+    }
+
+
+    @EventListener(PassedGameReviewEvent.class)
+    public void gamePassedReview(PassedGameReviewEvent event) {
+
     }
 }

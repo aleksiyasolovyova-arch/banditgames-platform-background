@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "game", schema = "read_model_schema")
-public class GameRM {
+public class GameModel {
     @Id
     private UUID gameId;
 
@@ -27,6 +27,9 @@ public class GameRM {
     @Column(nullable = false)
     private String gameCreatorName;
 
+    @Column(nullable = false)
+    private String reviewState;
+
     @ElementCollection
     @CollectionTable(
             name = "game_rules",
@@ -36,10 +39,18 @@ public class GameRM {
     @Column(name = "rule", nullable = false)
     private List<String> rules = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(
+            name = "game_achievements",
+            schema = "content_schema",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<GameModelAchievementEmbeddable> achievementEmbeddables = new ArrayList<>();
+
     @Column(nullable = false)
     private boolean playableWithAI;
 
-    public GameRM() {
+    public GameModel() {
     }
 
     public UUID getGameId() {
@@ -90,12 +101,28 @@ public class GameRM {
         this.gameCreatorName = gameCreatorName;
     }
 
+    public String getReviewState() {
+        return reviewState;
+    }
+
+    public void setReviewState(String reviewState) {
+        this.reviewState = reviewState;
+    }
+
     public List<String> getRules() {
         return rules;
     }
 
     public void setRules(List<String> rules) {
         this.rules = rules;
+    }
+
+    public List<GameModelAchievementEmbeddable> getAchievementEmbeddables() {
+        return achievementEmbeddables;
+    }
+
+    public void setAchievementEmbeddables(List<GameModelAchievementEmbeddable> achievementEmbeddables) {
+        this.achievementEmbeddables = achievementEmbeddables;
     }
 
     public boolean isPlayableWithAI() {

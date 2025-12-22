@@ -9,13 +9,14 @@ import java.util.UUID;
 
 @Entity
 @Table(schema="read_model_schema", name="player_favourite_game")
-public class PlayerFavouriteGameRM {
+public class PlayerModel {
     @Id
     private UUID playerId;
-    @Column(nullable = false)
-    private UUID gameId;
 
-    public PlayerFavouriteGameRM() {}
+    @Column
+    private UUID favouriteGameId;
+
+    public PlayerModel() {}
 
     public UUID getPlayerId() {
         return playerId;
@@ -25,11 +26,11 @@ public class PlayerFavouriteGameRM {
         this.playerId = playerId;
     }
 
-    public UUID getGameId() {
-        return gameId;
+    public UUID getFavouriteGameId() {
+        return favouriteGameId;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
+    public void setFavouriteGameId(UUID favouriteGameId) {
+        this.favouriteGameId = favouriteGameId;
     }
 }
