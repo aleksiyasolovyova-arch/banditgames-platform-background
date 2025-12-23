@@ -1,7 +1,7 @@
-package be.kdg.team11.readmodel.service.mapper;
+package be.kdg.team11.readmodel.service.achievement;
 
-import be.kdg.team11.readmodel.controller.dto.AchievementAdminResponseModelDto;
-import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseModelDto;
+import be.kdg.team11.readmodel.controller.dto.achievement.AdminAchievementModelDto;
+import be.kdg.team11.readmodel.controller.dto.achievement.PlayerAchievementModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.UnlockedAchievementModel;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Component
 public class AchievementModelMapper {
-    public AchievementPlayerResponseModelDto toAchievementPlayerResponseDto(
+    public PlayerAchievementModelDto toAchievementPlayerResponseDto(
             AchievementModel achievement,
             Set<UUID> unlockedAchievements,
             Map<UUID, Long> playerStatistics) {
@@ -44,7 +44,7 @@ public class AchievementModelMapper {
         String dtoGameName = !isPlatformAchievement ? achievement.getGameName() : null;
         String dtoGameCode = !isPlatformAchievement ? achievement.getAchievementCode() : null;
 
-        return new AchievementPlayerResponseModelDto(
+        return new PlayerAchievementModelDto(
                 dtoAchievementId,
                 achievementType,
                 dtoDescription,
@@ -66,7 +66,7 @@ public class AchievementModelMapper {
         );
     }
 
-    public AchievementPlayerResponseModelDto toAchievementPlayerResponseDto(
+    public PlayerAchievementModelDto toAchievementPlayerResponseDto(
             AchievementModel achievement,
             Set<UUID> unlockedAchievements,
             Map<UUID, Long> playerStatistics,
@@ -98,7 +98,7 @@ public class AchievementModelMapper {
         String dtoGameName = !isPlatformAchievement ? achievement.getGameName() : null;
         String dtoGameCode = !isPlatformAchievement ? achievement.getAchievementCode() : null;
 
-        return new AchievementPlayerResponseModelDto(
+        return new PlayerAchievementModelDto(
                 dtoAchievementId,
                 achievementType,
                 dtoDescription,
@@ -120,8 +120,8 @@ public class AchievementModelMapper {
         );
     }
 
-    public AchievementAdminResponseModelDto toAchievementAdminResponseDto(AchievementModel achievement) {
-        return new AchievementAdminResponseModelDto(
+    public AdminAchievementModelDto toAchievementAdminResponseDto(AchievementModel achievement) {
+        return new AdminAchievementModelDto(
                 achievement.getPlatformAchievementId(),
                 achievement.getName(),
                 achievement.getDescription(),

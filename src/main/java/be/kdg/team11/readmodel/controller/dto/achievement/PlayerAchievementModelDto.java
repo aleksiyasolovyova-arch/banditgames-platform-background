@@ -1,9 +1,9 @@
-package be.kdg.team11.readmodel.controller.dto;
+package be.kdg.team11.readmodel.controller.dto.achievement;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record AchievementPlayerResponseModelDto(
+public record PlayerAchievementModelDto(
         UUID achievementId,
         String achievementType,
         String achievementDescription,

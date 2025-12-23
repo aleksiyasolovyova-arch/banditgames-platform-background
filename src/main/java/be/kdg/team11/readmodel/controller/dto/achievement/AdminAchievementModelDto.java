@@ -1,8 +1,8 @@
-package be.kdg.team11.readmodel.controller.dto;
+package be.kdg.team11.readmodel.controller.dto.achievement;
 
 import java.util.UUID;
 
-public record AchievementAdminResponseModelDto(
+public record AdminAchievementModelDto(
         UUID achievementId,
         String name,
         String description,

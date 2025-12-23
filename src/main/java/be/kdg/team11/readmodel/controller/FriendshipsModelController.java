@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.readmodel.controller.dto.FriendDto;
+import be.kdg.team11.readmodel.controller.dto.FriendShipDto;
 import be.kdg.team11.readmodel.service.friendship.FriendshipModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/friends")
+@RequestMapping("/friendships")
 public class FriendshipsModelController {
     private final FriendshipModelService friendshipModelService;
 
@@ -22,18 +22,9 @@ public class FriendshipsModelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FriendDto>> getFriends(@AuthenticationPrincipal Jwt token) {
+    public ResponseEntity<List<FriendShipDto>> getFriendships(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
-        List<FriendDto> friends = friendshipModelService.getPlayerFriends(playerId);
-        return ResponseEntity.ok(friends);
+        List<FriendShipDto> friendships = friendshipModelService.getPlayerFriendships(playerId);
+        return ResponseEntity.ok(friendships);
     }
-
-    @GetMapping("/requests")
-    public ResponseEntity<List<FriendDto>> getIncomingFriendRequests(@AuthenticationPrincipal Jwt token) {
-        UUID playerId = UUID.fromString(token.getSubject());
-        List<FriendDto> incomingRequests = friendshipModelService.getIncomingFriendRequests(playerId);
-        return ResponseEntity.ok(incomingRequests);
-    }
-
-
 }

@@ -6,6 +6,8 @@ import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.player.Username;
 import be.kdg.team11.player.port.in.RequestFriendshipCommand;
 import be.kdg.team11.player.port.in.RequestFriendshipPort;
+import be.kdg.team11.player.port.out.FriendshipExistsPort;
+import be.kdg.team11.player.port.out.LoadFriendshipPort;
 import be.kdg.team11.player.port.out.LoadPlayerPort;
 import be.kdg.team11.player.port.out.SaveFriendshipPort;
 import jakarta.transaction.Transactional;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Use case implementation for requesting a friendship between two players.
@@ -30,6 +33,7 @@ public class RequestFriendshipUseCaseImpl implements RequestFriendshipPort {
 
     @Override
     public Friendship requestFriendship(RequestFriendshipCommand command) {
+        //TODO Add error handling for requests already existing. Make it simple and just force users to go to the friendships page to accept it
         PlayerId requesterId = PlayerId.of(command.requesterId());
         Player recipient = loadPlayerPort.loadBy(command.recipientUsername()).orElseThrow(() -> Username.notFound(command.recipientUsername()));
 

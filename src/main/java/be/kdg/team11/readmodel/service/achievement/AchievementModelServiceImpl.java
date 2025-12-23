@@ -1,14 +1,13 @@
 package be.kdg.team11.readmodel.service.achievement;
 
-import be.kdg.team11.readmodel.controller.dto.AchievementModelDto;
-import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseModelDto;
+import be.kdg.team11.readmodel.controller.dto.achievement.AchievementModelDto;
+import be.kdg.team11.readmodel.controller.dto.achievement.PlayerAchievementModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.UnlockedAchievementModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.PlayerModelRepository;
 import be.kdg.team11.readmodel.repository.UnlockedAchievementModelRepository;
-import be.kdg.team11.readmodel.service.mapper.AchievementModelMapper;
 import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -78,7 +77,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
                         playerStatistics,
                         unlockedDataMap
                 ))
-                .sorted(Comparator.comparing(AchievementPlayerResponseModelDto::unlocked).reversed())
+                .sorted(Comparator.comparing(PlayerAchievementModelDto::unlocked).reversed())
                 .collect(Collectors.toList());
     }
 

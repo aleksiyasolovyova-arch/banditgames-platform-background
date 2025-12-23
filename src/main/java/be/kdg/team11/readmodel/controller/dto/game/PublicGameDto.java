@@ -1,4 +1,4 @@
-package be.kdg.team11.readmodel.controller.dto;
+package be.kdg.team11.readmodel.controller.dto.game;
 
 import java.util.UUID;
 

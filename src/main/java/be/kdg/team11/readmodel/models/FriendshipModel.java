@@ -9,40 +9,35 @@ import java.util.UUID;
 @Table(name = "friendship", schema = "read_model_schema")
 public class FriendshipModel {
     @Id
-    @Column(name = "friendship_id")
     private UUID friendshipId;
 
-    @Column(name = "requester_id", nullable = false)
+    @Column
     private UUID requesterId;
 
-    @Column(name = "recipient_id", nullable = false)
+    @Column
+    private String requesterUsername;
+
+    @Column
+    private String requesterPictureUrl;
+
+    @Column
     private UUID recipientId;
 
-    //TODO can be added if use case is changed but im not sure if it is ddd
-    // Denormalized player info
-  //  @Column(name = "requester_username")
-  //  private String requesterUsername;
-//
-  //  @Column(name = "recipient_username")
-  //  private String recipientUsername;
-//
-  //  @Column(name = "requester_picture_url")
-  //  private String requesterPictureUrl;
-//
-  //  @Column(name = "recipient_picture_url")
-  //  private String recipientPictureUrl;
+    @Column
+    private String recipientUsername;
 
-    @Column(name = "state", nullable = false)
+    @Column
+    private String recipientPictureUrl;
+
+    @Column(nullable = false)
     private String state;
 
-    // Timestamps
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "accepted_at")
+    @Column
     private LocalDateTime acceptedAt;
 
-    // Constructors
     public FriendshipModel() {}
 
     public UUID getFriendshipId() {
@@ -61,6 +56,22 @@ public class FriendshipModel {
         this.requesterId = requesterId;
     }
 
+    public String getRequesterUsername() {
+        return requesterUsername;
+    }
+
+    public void setRequesterUsername(String requesterUsername) {
+        this.requesterUsername = requesterUsername;
+    }
+
+    public String getRequesterPictureUrl() {
+        return requesterPictureUrl;
+    }
+
+    public void setRequesterPictureUrl(String requesterPictureUrl) {
+        this.requesterPictureUrl = requesterPictureUrl;
+    }
+
     public UUID getRecipientId() {
         return recipientId;
     }
@@ -69,37 +80,21 @@ public class FriendshipModel {
         this.recipientId = recipientId;
     }
 
-  //  public String getRequesterUsername() {
-  //      return requesterUsername;
-  //  }
-//
-  //  public void setRequesterUsername(String requesterUsername) {
-  //      this.requesterUsername = requesterUsername;
-  //  }
-//
-  //  public String getRecipientUsername() {
-  //      return recipientUsername;
-  //  }
-//
-  //  public void setRecipientUsername(String recipientUsername) {
-  //      this.recipientUsername = recipientUsername;
-  //  }
-//
-  //  public String getRequesterPictureUrl() {
-  //      return requesterPictureUrl;
-  //  }
+    public String getRecipientUsername() {
+        return recipientUsername;
+    }
 
-  // public void setRequesterPictureUrl(String requesterPictureUrl) {
-  //     this.requesterPictureUrl = requesterPictureUrl;
-  // }
+    public void setRecipientUsername(String recipientUsername) {
+        this.recipientUsername = recipientUsername;
+    }
 
-  // public String getRecipientPictureUrl() {
-  //     return recipientPictureUrl;
-  // }
+    public String getRecipientPictureUrl() {
+        return recipientPictureUrl;
+    }
 
-  // public void setRecipientPictureUrl(String recipientPictureUrl) {
-  //     this.recipientPictureUrl = recipientPictureUrl;
-  // }
+    public void setRecipientPictureUrl(String recipientPictureUrl) {
+        this.recipientPictureUrl = recipientPictureUrl;
+    }
 
     public String getState() {
         return state;

@@ -1,7 +1,6 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.content.adapter.in.response.AchievementDto;
-import be.kdg.team11.readmodel.controller.dto.AchievementModelDto;
+import be.kdg.team11.readmodel.controller.dto.achievement.AchievementModelDto;
 import be.kdg.team11.readmodel.service.achievement.AchievementModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
