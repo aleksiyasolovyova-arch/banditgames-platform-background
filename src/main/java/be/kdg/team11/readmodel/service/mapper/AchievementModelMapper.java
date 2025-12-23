@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Component
-public class AchievementMapper {
+public class AchievementModelMapper {
     public AchievementPlayerResponseModelDto toAchievementPlayerResponseDto(
             AchievementModel achievement,
             Set<UUID> unlockedAchievements,

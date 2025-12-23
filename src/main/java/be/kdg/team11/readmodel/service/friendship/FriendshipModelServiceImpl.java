@@ -5,12 +5,11 @@ import be.kdg.team11.readmodel.models.FriendshipModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.FriendshipModelRepository;
 import be.kdg.team11.readmodel.repository.PlayerModelRepository;
-import be.kdg.team11.readmodel.service.mapper.FriendshipMapper;
+import be.kdg.team11.readmodel.service.mapper.FriendshipModelMapper;
 import be.kdg.team11.sharedkernel.events.friendship.BefriendedPlayerEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipCreatedEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipDeclinedEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipEndEvent;
-import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +24,14 @@ import java.util.stream.Collectors;
 public class FriendshipModelServiceImpl implements FriendshipModelService{
     private final FriendshipModelRepository friendshipModelRepository;
     private final PlayerModelRepository playerModelRepository;
-    private final FriendshipMapper friendshipMapper;
+    private final FriendshipModelMapper friendshipModelMapper;
 
     public FriendshipModelServiceImpl(FriendshipModelRepository friendshipModelRepository,
                                       PlayerModelRepository playerModelRepository,
-                                      FriendshipMapper friendshipMapper) {
+                                      FriendshipModelMapper friendshipModelMapper) {
         this.friendshipModelRepository = friendshipModelRepository;
         this.playerModelRepository = playerModelRepository;
-        this.friendshipMapper = friendshipMapper;
+        this.friendshipModelMapper = friendshipModelMapper;
     }
 
 
@@ -96,7 +95,7 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
                             .orElse(null);
 
                     if (friendPlayer != null) {
-                        return friendshipMapper.toFriendDto(friendship, friendPlayer, playerId);
+                        return friendshipModelMapper.toFriendDto(friendship, friendPlayer, playerId);
                     }
                     return null;
                 })

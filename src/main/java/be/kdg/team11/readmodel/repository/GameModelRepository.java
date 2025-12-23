@@ -11,12 +11,12 @@ import java.util.UUID;
 @Repository
 public interface GameModelRepository extends JpaRepository<GameModel, UUID> {
     @Query("SELECT DISTINCT g FROM GameModel g " +
-            "LEFT JOIN FETCH g.rules " +
-            "LEFT JOIN FETCH g.achievementEmbeddables")
+            "LEFT JOIN FETCH RuleModel r on r.gameId = g.gameId " +
+            "LEFT JOIN FETCH AchievementModel a on a.gameId = g.gameId")
     List<GameModel> findAllWithRulesAndAchievements();
 
     // Fetch games with only rules
     @Query("SELECT DISTINCT g FROM GameModel g " +
-            "LEFT JOIN FETCH g.rules")
+            "LEFT JOIN FETCH RuleModel r on r.gameId = g.gameId")
     List<GameModel> findAllWithRules();
 }

@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/friends")
-public class FriendshipsController {
+public class FriendshipsModelController {
     private final FriendshipModelService friendshipModelService;
 
-    public FriendshipsController(FriendshipModelService friendshipModelService) {
+    public FriendshipsModelController(FriendshipModelService friendshipModelService) {
         this.friendshipModelService = friendshipModelService;
     }
 

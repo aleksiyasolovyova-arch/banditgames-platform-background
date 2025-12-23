@@ -1,6 +1,5 @@
 package be.kdg.team11.readmodel.service.achievement;
 
-import be.kdg.team11.content.adapter.in.response.AchievementDto;
 import be.kdg.team11.readmodel.controller.dto.AchievementModelDto;
 import be.kdg.team11.readmodel.controller.dto.AchievementPlayerResponseModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
@@ -9,7 +8,7 @@ import be.kdg.team11.readmodel.models.UnlockedAchievementModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.PlayerModelRepository;
 import be.kdg.team11.readmodel.repository.UnlockedAchievementModelRepository;
-import be.kdg.team11.readmodel.service.mapper.AchievementMapper;
+import be.kdg.team11.readmodel.service.mapper.AchievementModelMapper;
 import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -22,15 +21,15 @@ import java.util.stream.Collectors;
 public class AchievementModelServiceImpl implements AchievementModelService{
     private final AchievementModelRepository achievementModelRepository;
     private final UnlockedAchievementModelRepository unlockedAchievementModelRepository;
-    private final AchievementMapper achievementMapper;
+    private final AchievementModelMapper achievementModelMapper;
     private final PlayerModelRepository playerModelRepository;
     public AchievementModelServiceImpl(AchievementModelRepository achievementModelRepository,
                                        UnlockedAchievementModelRepository unlockedAchievementModelRepository,
-                                       AchievementMapper achievementMapper,
+                                       AchievementModelMapper achievementModelMapper,
                                        PlayerModelRepository playerModelRepository) {
         this.achievementModelRepository = achievementModelRepository;
         this.unlockedAchievementModelRepository = unlockedAchievementModelRepository;
-        this.achievementMapper = achievementMapper;
+        this.achievementModelMapper = achievementModelMapper;
         this.playerModelRepository = playerModelRepository;
     }
 
@@ -73,7 +72,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
 
         // Map all achievements to DTOs with unlock status
         return allAchievements.stream()
-                .map(achievement -> achievementMapper.toAchievementPlayerResponseDto(
+                .map(achievement -> achievementModelMapper.toAchievementPlayerResponseDto(
                         achievement,
                         unlockedAchievementIds,
                         playerStatistics,
@@ -109,7 +108,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
     @Override
     public List<? extends AchievementModelDto> getAllPlatformAchievements() {
         return achievementModelRepository.findByGameIdIsNull().stream()
-                .map(achievementMapper::toAchievementAdminResponseDto)
+                .map(achievementModelMapper::toAchievementAdminResponseDto)
                 .collect(Collectors.toList());
     }
 
