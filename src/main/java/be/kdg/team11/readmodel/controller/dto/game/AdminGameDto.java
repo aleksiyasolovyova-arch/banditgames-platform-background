@@ -9,11 +9,11 @@ public record AdminGameDto(
         String description,
         String pictureUrl,
         String gameUrl,
-        String gameCreatorName,
-        String registrationState,
-        List<RuleDto> rules,
-        List<GameAchievementDto> achievements,
-        boolean playableWithAI
+        String gameCreatorName
+       //String registrationState,
+       //List<RuleDto> rules,
+       //List<GameAchievementDto> achievements,
+       //boolean playableWithAI
 ) implements GameDto {
     public record RuleDto(
             String description

@@ -18,25 +18,26 @@ public class LobbyModel {
     @Column(name = "game_id", nullable = false)
     private UUID gameId;
 
+    @Column(name = "game_name", nullable = false)
+    private String gameName;
+
     @Column(name = "player1_id", nullable = false)
     private UUID player1Id;
 
     @Column(name = "player2_id", nullable = false)
     private UUID player2Id;
 
-    //TODO same as with friendship
-    // Denormalized player info
-  //  @Column(name = "player1_username")
-  //  private String player1Username;
-//
-  //  @Column(name = "player2_username")
-  //  private String player2Username;
-//
-  //  @Column(name = "player1_picture_url")
-  //  private String player1PictureUrl;
-//
-  //  @Column(name = "player2_picture_url")
-  //  private String player2PictureUrl;
+    @Column(name = "player1_username")
+    private String player1Username;
+
+    @Column(name = "player2_username")
+    private String player2Username;
+
+    @Column(name = "player1_picture_url")
+    private String player1PictureUrl;
+
+    @Column(name = "player2_picture_url")
+    private String player2PictureUrl;
 
     // Participation status
     @Column(name = "player1_status")
@@ -100,37 +101,6 @@ public class LobbyModel {
         this.player2Id = player2Id;
     }
 
-   // public String getPlayer1Username() {
-   //     return player1Username;
-   // }
-//
-   // public void setPlayer1Username(String player1Username) {
-   //     this.player1Username = player1Username;
-   // }
-//
-   // public String getPlayer2Username() {
-   //     return player2Username;
-   // }
-//
-   // public void setPlayer2Username(String player2Username) {
-   //     this.player2Username = player2Username;
-   // }
-//
-   // public String getPlayer1PictureUrl() {
-   //     return player1PictureUrl;
-   // }
-
-  // public void setPlayer1PictureUrl(String player1PictureUrl) {
-  //     this.player1PictureUrl = player1PictureUrl;
-  // }
-
-  // public String getPlayer2PictureUrl() {
-  //     return player2PictureUrl;
-  // }
-
-  // public void setPlayer2PictureUrl(String player2PictureUrl) {
-  //     this.player2PictureUrl = player2PictureUrl;
-  // }
 
     public String getPlayer1Status() {
         return player1Status;
@@ -194,5 +164,45 @@ public class LobbyModel {
 
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public String getPlayer1Username() {
+        return player1Username;
+    }
+
+    public void setPlayer1Username(String player1Username) {
+        this.player1Username = player1Username;
+    }
+
+    public String getPlayer2Username() {
+        return player2Username;
+    }
+
+    public void setPlayer2Username(String player2Username) {
+        this.player2Username = player2Username;
+    }
+
+    public String getPlayer1PictureUrl() {
+        return player1PictureUrl;
+    }
+
+    public void setPlayer1PictureUrl(String player1PictureUrl) {
+        this.player1PictureUrl = player1PictureUrl;
+    }
+
+    public String getPlayer2PictureUrl() {
+        return player2PictureUrl;
+    }
+
+    public void setPlayer2PictureUrl(String player2PictureUrl) {
+        this.player2PictureUrl = player2PictureUrl;
     }
 }
