@@ -2,7 +2,6 @@ package be.kdg.team11.sharedkernel.events.game;
 
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +17,8 @@ public record GameRegisteredEvent(
         String gameCreatorName,
         List<RuleRecord> rules,
         List<GameAchievementRecord> achievements,
-        boolean playableWithAI
+        boolean playableWithAI,
+        String initialReviewStatus
 ) implements DomainEvent {
 
     public GameRegisteredEvent(
@@ -30,7 +30,8 @@ public record GameRegisteredEvent(
             String gameCreatorName,
             List<RuleRecord> rules,
             List<GameAchievementRecord> achievements,
-            boolean playableWithAI
+            boolean playableWithAI,
+            String initialReviewStatus
     ) {
         this(
                 UUID.randomUUID(),
@@ -43,7 +44,8 @@ public record GameRegisteredEvent(
                 gameCreatorName,
                 rules,
                 achievements,
-                playableWithAI
+                playableWithAI,
+                initialReviewStatus
         );
     }
 

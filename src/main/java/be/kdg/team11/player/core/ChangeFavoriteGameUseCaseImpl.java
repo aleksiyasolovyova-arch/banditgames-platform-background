@@ -26,12 +26,12 @@ public class ChangeFavoriteGameUseCaseImpl implements ChangeFavouriteGamePort {
     @Override
     public Player favoriteGame(ChangeFavoriteGameCommand command) {
         PlayerId playerId = PlayerId.of(command.playerId());
-        GameReference gameReference = GameReference.of(command.gameId());
+        GameReference favoriteGame = GameReference.of(command.gameId());
 
         Player player = loadPlayerPort.loadBy(playerId)
                 .orElseThrow(() -> PlayerId.notFound(command.playerId()));
 
-        player.changeFavoriteGame(gameReference);
+        player.changeFavoriteGame(favoriteGame);
         savePlayerPorts.forEach(savePlayerPort -> savePlayerPort.save(player));
 
         return player;

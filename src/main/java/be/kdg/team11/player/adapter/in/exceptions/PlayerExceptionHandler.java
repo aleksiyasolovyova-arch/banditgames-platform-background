@@ -1,4 +1,5 @@
 package be.kdg.team11.player.adapter.in.exceptions;
+import be.kdg.team11.player.domain.friendship.exceptions.FriendRequestAlreadyExistsException;
 import be.kdg.team11.player.domain.friendship.exceptions.FriendshipNotFoundException;
 import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipException;
 import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipStateException;
@@ -45,6 +46,15 @@ public class PlayerExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("INVALID_FRIENDSHIP_STATE", ex.getMessage()));
+    }
+
+    @ExceptionHandler(FriendRequestAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleFriendshipAlreadyExists(
+            FriendRequestAlreadyExistsException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("FRIENDSHIP_ALREADY_EXISTS", ex.getMessage()));
     }
 
 }

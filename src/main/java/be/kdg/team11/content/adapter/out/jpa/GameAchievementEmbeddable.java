@@ -15,7 +15,6 @@ public class GameAchievementEmbeddable {
     public GameAchievementEmbeddable() {
     }
 
-    // Getters and setters
     public String getCode() {
         return code;
     }

@@ -7,6 +7,7 @@ import be.kdg.team11.player.domain.player.*;
 import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 public class PlayerJpaMapper {
 
     public Player toDomain(PlayerJpaEntity entity) {
-        PlayerId playerId = new PlayerId(entity.getPlayerId());
-
+        PlayerId playerId = PlayerId.of(entity.getPlayerId());
+        Username username = Username.of(entity.getUsername());
         Set<UnlockedPlatformAchievement> unlockedPlatformAchievements =
                 entity.getUnlockedPlatformAchievements().stream()
                         .map(e -> new UnlockedPlatformAchievement(
@@ -32,14 +33,12 @@ public class PlayerJpaMapper {
                                 e.getUnlockedAt()
                         ))
                         .collect(Collectors.toSet());
-
-        GameReference favoriteGame = entity.getFavoriteGameId() != null ? new GameReference(entity.getFavoriteGameId()) : null;
-
-
+        Optional<GameReference> favoriteGame = Optional.ofNullable(entity.getFavoriteGameId())
+                .map(GameReference::new);
 
         return new Player(
                 playerId,
-                entity.getUsername(),
+                username,
                 entity.getPictureUrl(),
                 entity.getJoinedDate(),
                 unlockedPlatformAchievements,
@@ -51,7 +50,7 @@ public class PlayerJpaMapper {
     public PlayerJpaEntity toJpaEntity(Player player) {
         PlayerJpaEntity entity = new PlayerJpaEntity();
         entity.setPlayerId(player.getPlayerId().playerId());
-        entity.setUsername(player.getUsername());
+        entity.setUsername(player.getUsername().username());
         entity.setPictureUrl(player.getPictureUrl());
         entity.setJoinedDate(player.getJoinedDate());
 
@@ -79,7 +78,9 @@ public class PlayerJpaMapper {
                         })
                         .collect(Collectors.toSet());
         entity.setUnlockedGameAchievements(gameAchievements);
-        entity.setFavoriteGameId(player.getFavoriteGame().gameId());
+        entity.setFavoriteGameId(player.getFavoriteGame()
+                .map(GameReference::gameId)
+                .orElse(null));
 
         return entity;
     }

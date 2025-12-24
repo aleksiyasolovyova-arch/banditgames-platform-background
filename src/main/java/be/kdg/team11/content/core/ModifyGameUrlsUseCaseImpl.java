@@ -30,7 +30,6 @@ public class ModifyGameUrlsUseCaseImpl implements ModifyGameUrlsPort {
                 .orElseThrow(() -> GameId.notFound(gameId));
 
         game.modifyUrls(command.pictureUrl(), command.gameUrl());
-        // 6. Persist the new aggregate
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 
         return game;

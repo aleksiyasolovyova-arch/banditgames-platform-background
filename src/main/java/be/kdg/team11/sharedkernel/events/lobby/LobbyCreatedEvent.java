@@ -10,6 +10,8 @@ public record LobbyCreatedEvent(
         UUID gameId,
         UUID player1Id,
         UUID player2Id,
+        String player1Status,
+        String player2Status,
         String lobbyType,
         String initialStatus,
         LocalDateTime eventPit
@@ -18,12 +20,16 @@ public record LobbyCreatedEvent(
                              UUID gameId,
                              UUID player1Id,
                              UUID player2Id,
+                             String player1Status,
+                             String player2Status,
                              String lobbyType,
                              String initialStatus) {
         this(lobbyId,
                 gameId,
                 player1Id,
                 player2Id,
+                player1Status,
+                player2Status,
                 lobbyType,
                 initialStatus,
                 LocalDateTime.now());

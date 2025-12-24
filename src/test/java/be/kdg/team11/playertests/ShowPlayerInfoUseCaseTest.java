@@ -1,9 +1,7 @@
 package be.kdg.team11.playertests;
 
-import be.kdg.team11.player.core.ShowPlayerInfoUseCaseImpl;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.port.in.ShowPlayerInfoCommand;
 import be.kdg.team11.player.port.out.LoadPlayerPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

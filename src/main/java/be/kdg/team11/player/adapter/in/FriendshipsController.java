@@ -47,12 +47,12 @@ public class FriendshipsController {
      * FULL PATH: POST /friendships
 
      * REQUEST BODY (RequestFriendshipRequest):
-     * - recipientId (UUID, required): ID of the player to send the friendship request to
+     * - recipientUsername (UUID, required): ID of the player to send the friendship request to
 
      * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
-     * - recipientId (UUID): ID of the player receiving the request
+     * - recipientUsername (UUID): ID of the player receiving the request
      * - state (String): Current friendship state ("REQUESTED", "FRIENDS", "DECLINED", "ENDED")
 
      * HTTP Status Codes:
@@ -82,7 +82,7 @@ public class FriendshipsController {
     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
-     * - recipientId (UUID): ID of the player who accepted
+     * - recipientUsername (UUID): ID of the player who accepted
      * - state (String): Current friendship state ("FRIENDS")
      * HTTP Status Codes:
      * - 200 OK: Friendship successfully accepted
@@ -112,7 +112,7 @@ public class FriendshipsController {
     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
-     * - recipientId (UUID): ID of the player who declined
+     * - recipientUsername (UUID): ID of the player who declined
      * - state (String): Current friendship state ("DECLINED")
      * HTTP Status Codes:
      * - 200 OK: Friendship successfully declined
@@ -144,7 +144,7 @@ public class FriendshipsController {
     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the friendship
-     * - recipientId (UUID): ID of the other player
+     * - recipientUsername (UUID): ID of the other player
      * - state (String): Current friendship state ("ENDED")
      * HTTP Status Codes:
      * - 200 OK: Friendship successfully ended

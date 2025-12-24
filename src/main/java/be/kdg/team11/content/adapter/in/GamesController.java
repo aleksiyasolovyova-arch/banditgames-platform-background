@@ -4,8 +4,6 @@ import be.kdg.team11.content.adapter.in.mapper.GameMapper;
 import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
 import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
-import be.kdg.team11.content.adapter.in.response.AdminGameDto;
-import be.kdg.team11.content.adapter.in.response.PublicGameDto;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.*;
 import jakarta.validation.Valid;
@@ -13,11 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,7 +23,6 @@ public class GamesController {
     private final PassGameReviewPort passGameReviewPort;
     private final FailGameReviewPort failGameReviewPort;
     private final ModifyGameUrlsPort modifyGameUrlsPort;
-    private final FindAllGamesQueryPort showAllGamesPort;
     private final TogglePlayableWithAIPort togglePlayableWithAIPort;
     private final GameMapper gameMapper;
 
@@ -53,51 +47,15 @@ public class GamesController {
                            PassGameReviewPort passGameReviewPort,
                            FailGameReviewPort failGameReviewPort,
                            ModifyGameUrlsPort modifyGameUrlsPort,
-                           FindAllGamesQueryPort showAllGamesPort,
                            TogglePlayableWithAIPort togglePlayableWithAIPort,
                            GameMapper gameMapper) {
         this.registerGamePort = registerGamePort;
         this.passGameReviewPort = passGameReviewPort;
         this.failGameReviewPort = failGameReviewPort;
         this.modifyGameUrlsPort = modifyGameUrlsPort;
-        this.showAllGamesPort = showAllGamesPort;
         this.togglePlayableWithAIPort = togglePlayableWithAIPort;
         this.gameMapper = gameMapper;
     }
-
-    /**
-     * Retrieves all games in the system.
-     * FULL PATH: /games (GET)
-     * RESPONSE BODY (List<GameDto>):
-     * - gameId (UUID): Unique game identifier
-     * - name (String): Game name
-     * - description (String): Game description
-     * - price (BigDecimal): Game price
-     * - pictureUrl (String): URL to game icon/screenshot
-     * - gameUrl (String): URL to playable game
-     * - gameCreatorName (String): Name of the game creator
-     * - registrationState (String): Game review state (PENDING, PASSED, FAILED)
-     * - rules (List<RuleDto>): List of game rules
-     *   - description (String): Rule description
-     * - achievements (List<GameAchievementDto>): List of game-specific achievements
-     *   - code (String): Achievement code
-     *   - description (String): Achievement description
-     * - playableWithAI (boolean): Whether the game can be played with an AI
-     * HTTP Status Codes:
-     * - 200 OK: Games retrieved successfully
-     * - 500 Internal Server Error: Unexpected server error
-     */
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AdminGameDto>> loadAllGames() {
-        List<Game> games = showAllGamesPort.showAll();
-        List<AdminGameDto> response = games.stream()
-                .map(gameMapper::toAdminResponse)
-                .toList();
-        return ResponseEntity.ok(response);
-    }
-
-
 
     /**
      * Registers a new game in the system.
@@ -120,32 +78,14 @@ public class GamesController {
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping
-    public ResponseEntity<AdminGameDto> registerGame(
+    public ResponseEntity<GameDto> registerGame(
             @Valid @RequestBody RegisterGameRequest request) {
         Game createdGame = registerGamePort.register(
                 gameMapper.toCommand(request)
         );
-        AdminGameDto response = gameMapper.toAdminResponse(createdGame);
+         GameDto response = gameMapper.toResponse(createdGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-    @GetMapping
-    public ResponseEntity<List<? extends GameDto>> loadAllGames(
-            @AuthenticationPrincipal Jwt jwt) {
-        List<Game> games = showAllGamesPort.showAll();
-        if (jwt != null && jwt.getClaimAsStringList("authorities")!= null && jwt.getClaimAsStringList("authorities").contains("ROLE_ADMIN")) {
-            List<AdminGameDto> response = games.stream()
-                    .map(gameMapper::toAdminResponse)
-                    .toList();
-            return ResponseEntity.ok(response);
-        } else {
-            List<PublicGameDto> response = games.stream()
-                    .map(gameMapper::toPlayerResponse)
-                    .toList();
-            return ResponseEntity.ok(response);
-        }
-    }
-
 
     /**
      * Updates game URLs (picture and game content URLs).
@@ -163,13 +103,13 @@ public class GamesController {
      */
     @PatchMapping("/{gameId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdminGameDto> updateGame(
+    public ResponseEntity< GameDto> updateGame(
             @NotNull @PathVariable UUID gameId,
             @Valid @RequestBody UpdateGameRequest request) {
         Game updatedGame = modifyGameUrlsPort.modifyGameUrls(
                 gameMapper.toUpdateCommand(gameId, request)
         );
-        AdminGameDto response = gameMapper.toAdminResponse(updatedGame);
+         GameDto response = gameMapper.toResponse(updatedGame);
         return ResponseEntity.ok(response);
     }
 
@@ -186,12 +126,12 @@ public class GamesController {
      */
     @PatchMapping("/{gameId}/pass")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdminGameDto> passGameReview(
+    public ResponseEntity< GameDto> passGameReview(
            @NotNull @PathVariable UUID gameId) {
         Game acceptedGame = passGameReviewPort.passGameReview(
                 new PassGameReviewCommand(gameId)
         );
-        AdminGameDto response = gameMapper.toAdminResponse(acceptedGame);
+         GameDto response = gameMapper.toResponse(acceptedGame);
         return ResponseEntity.ok(response);
     }
 
@@ -208,23 +148,23 @@ public class GamesController {
      */
     @PatchMapping("/{gameId}/fail")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdminGameDto> failGameReview(
+    public ResponseEntity< GameDto> failGameReview(
             @NotNull @PathVariable UUID gameId) {
         Game rejectedGame = failGameReviewPort.failGameReview(
                 new FailGameReviewCommand(gameId)
         );
-        AdminGameDto response = gameMapper.toAdminResponse(rejectedGame);
+         GameDto response = gameMapper.toResponse(rejectedGame);
         return ResponseEntity.ok(response);
     }
 
 
     @PatchMapping("{gameId}/toggle")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdminGameDto> togglePlayableWithAI(
+    public ResponseEntity< GameDto> togglePlayableWithAI(
             @NotNull @PathVariable UUID gameId
     ){
         Game game = togglePlayableWithAIPort.togglePlayableWithAI(new TogglePlayableWithAICommand(gameId));
-        AdminGameDto response = gameMapper.toAdminResponse(game);
+         GameDto response = gameMapper.toResponse(game);
         return ResponseEntity.ok(response);
     }
 

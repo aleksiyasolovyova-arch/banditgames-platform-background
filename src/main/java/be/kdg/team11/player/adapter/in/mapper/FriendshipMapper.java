@@ -17,7 +17,7 @@ public class FriendshipMapper {
     public RequestFriendshipCommand toRequestCommand(UUID requesterId, RequestFriendshipRequest request) {
         return new RequestFriendshipCommand(
                 requesterId,
-                request.recipientId()
+                request.recipientUsername()
         );
     }
 

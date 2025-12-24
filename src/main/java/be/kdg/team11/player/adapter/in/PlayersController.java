@@ -26,20 +26,17 @@ public class PlayersController {
     private final ChangeFavouriteGamePort favoriteGamePort;
     private final RemoveFavoriteGamePort unfavoriteGamePort;
     private final PlayerMapper playerMapper;
-    private final ShowPlayerInfoPort showPlayerInfoPort;
     private final ChangePlayerPictureUrlPort changePlayerPictureUrlPort;
 
     public PlayersController(CreatePlayerPort createPlayerPort,
                              ChangeFavouriteGamePort favoriteGamePort,
                              RemoveFavoriteGamePort unfavoriteGamePort,
                              PlayerMapper playerMapper,
-                             ShowPlayerInfoPort showPlayerInfoPort,
                              ChangePlayerPictureUrlPort changePlayerPictureUrlPort) {
         this.createPlayerPort = createPlayerPort;
         this.favoriteGamePort = favoriteGamePort;
         this.unfavoriteGamePort = unfavoriteGamePort;
         this.playerMapper = playerMapper;
-        this.showPlayerInfoPort = showPlayerInfoPort;
         this.changePlayerPictureUrlPort = changePlayerPictureUrlPort;
     }
 
@@ -54,13 +51,14 @@ public class PlayersController {
      * - 200 OK: Player info retrieved successfully
      * - 500 Internal Server Error: Unexpected server error
      */
-    @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PlayerInfoDto> getPlayerInfo(@AuthenticationPrincipal Jwt token) {
-        UUID playerId = UUID.fromString(token.getSubject());
-        Player player = showPlayerInfoPort.showInfo(new ShowPlayerInfoCommand(playerId));
-        return ResponseEntity.ok(playerMapper.toInfoResponse(player));
-    }
+    //TODO move this to read model
+//    @GetMapping
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<PlayerInfoDto> getPlayerInfo(@AuthenticationPrincipal Jwt token) {
+//        UUID playerId = UUID.fromString(token.getSubject());
+//        Player player = showPlayerInfoPort.showInfo(new ShowPlayerInfoCommand(playerId));
+//        return ResponseEntity.ok(playerMapper.toInfoResponse(player));
+//    }
 
     /**
      * Creates a new player in the system.

@@ -1,5 +1,6 @@
 package be.kdg.team11.player.domain.friendship;
 
+import be.kdg.team11.player.domain.friendship.exceptions.FriendRequestAlreadyExistsException;
 import be.kdg.team11.player.domain.friendship.exceptions.FriendshipNotFoundException;
 
 import java.util.UUID;
@@ -14,9 +15,14 @@ public record FriendshipId(
         return new FriendshipId(friendshipId);
     }
 
+
     public static FriendshipNotFoundException notFound(FriendshipId friendshipId) {
         return new FriendshipNotFoundException(
                 String.format("Friendship not found with ID: %s", friendshipId.friendshipId())
         );
+    }
+
+    public static FriendRequestAlreadyExistsException alreadyExists() {
+        return new FriendRequestAlreadyExistsException("Friend request already exists");
     }
 }

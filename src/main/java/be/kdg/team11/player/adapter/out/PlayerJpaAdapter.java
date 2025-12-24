@@ -36,4 +36,9 @@ public class PlayerJpaAdapter implements SavePlayerPort, LoadPlayerPort {
         return playerJpaRepository.findById(playerId.playerId()).map(playerJpaMapper::toDomain);
     }
 
+    @Override
+    public Optional<Player> loadBy(String username) {
+        return playerJpaRepository.findByUsername(username).map(playerJpaMapper::toDomain);
+    }
+
 }

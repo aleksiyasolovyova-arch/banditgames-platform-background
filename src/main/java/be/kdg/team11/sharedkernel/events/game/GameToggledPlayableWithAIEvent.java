@@ -3,14 +3,15 @@ package be.kdg.team11.sharedkernel.events.game;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record GameToggledPlayableWithAIEvent(
         UUID gameId,
         boolean playableWithAI,
-        LocalDate eventPit
+        LocalDateTime eventPit
 )implements DomainEvent {
     public GameToggledPlayableWithAIEvent(UUID gameId, boolean playableWithAI) {
-        this(gameId, playableWithAI, LocalDate.now());
+        this(gameId, playableWithAI, LocalDateTime.now());
     }
 }

@@ -4,14 +4,17 @@ import be.kdg.team11.player.adapter.out.jpa.FriendshipJpaRepository;
 import be.kdg.team11.player.adapter.out.mapper.FriendshipJpaMapper;
 import be.kdg.team11.player.domain.friendship.Friendship;
 import be.kdg.team11.player.domain.friendship.FriendshipId;
+import be.kdg.team11.player.domain.player.PlayerId;
+import be.kdg.team11.player.port.out.FriendshipExistsPort;
 import be.kdg.team11.player.port.out.LoadFriendshipPort;
 import be.kdg.team11.player.port.out.SaveFriendshipPort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class FriendshipJpaAdapter implements LoadFriendshipPort, SaveFriendshipPort {
+public class FriendshipJpaAdapter implements LoadFriendshipPort, SaveFriendshipPort, FriendshipExistsPort {
     private final FriendshipJpaRepository friendshipJpaRepository;
     private final FriendshipJpaMapper friendshipJpaMapper;
 
@@ -32,5 +35,10 @@ public class FriendshipJpaAdapter implements LoadFriendshipPort, SaveFriendshipP
     @Override
     public Friendship save(Friendship friendship) {
         return friendshipJpaMapper.toDomain(friendshipJpaRepository.save(friendshipJpaMapper.toJpaEntity(friendship)));
+    }
+
+    @Override
+    public boolean exists(Pair<PlayerId, PlayerId> playerIdPair) {
+        return friendshipJpaRepository.existsBetweenPlayers(playerIdPair.getFirst().playerId(), playerIdPair.getSecond().playerId());
     }
 }

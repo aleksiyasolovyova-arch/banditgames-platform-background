@@ -1,4 +1,4 @@
-package be.kdg.team11.content.adapter.in.response;
+package be.kdg.team11.readmodel.controller.dto.game;
 
 import java.util.UUID;
 
@@ -10,3 +10,4 @@ public record PublicGameDto(
         String gameCreatorName
 ) implements GameDto {
 }
+

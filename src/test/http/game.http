@@ -3,7 +3,7 @@
 
 ### Variables
 @baseUrl = http://localhost:8080
-@gameId = 550e8400-e29b-41d4-a716-446655440000
+@favouriteGameId = 550e8400-e29b-41d4-a716-446655440000
 @invalidUUID = invalid-uuid
 @existingGameId = c83d6843-6ecc-4b32-804d-78be6c700513
 
@@ -194,7 +194,7 @@ Content-Type: application/json
 }
 
 ### ============================================================
-### 2. PUT /games/{gameId} - Update Game URLs
+### 2. PUT /games/{favouriteGameId} - Update Game URLs
 ### ============================================================
 
 ### 2.1 Success - Update game URLs (200 OK)
@@ -207,7 +207,7 @@ Content-Type: application/json
 }
 
 ### 2.2 Not Found - Game doesn't exist (404 Not Found)
-PUT {{baseUrl}}/games/{{gameId}}
+PUT {{baseUrl}}/games/{{favouriteGameId}}
 Content-Type: application/json
 
 {
@@ -252,14 +252,14 @@ Content-Type: application/json
 }
 
 ### ============================================================
-### 3. PUT /games/{gameId}/accept - Accept Game
+### 3. PUT /games/{favouriteGameId}/accept - Accept Game
 ### ============================================================
 
 ### 3.1 Success - Accept pending game (200 OK)
 PUT {{baseUrl}}/games/{{existingGameId}}/accept
 
 ### 3.2 Not Found - Game doesn't exist (404 Not Found)
-PUT {{baseUrl}}/games/{{gameId}}/accept
+PUT {{baseUrl}}/games/{{favouriteGameId}}/accept
 
 ### 3.3 Bad Request - Cannot accept already accepted game (400 Bad Request)
 PUT {{baseUrl}}/games/{{existingGameId}}/accept
@@ -268,14 +268,14 @@ PUT {{baseUrl}}/games/{{existingGameId}}/accept
 PUT {{baseUrl}}/games/{{existingGameId}}/accept
 
 ### ============================================================
-### 4. PUT /games/{gameId}/reject - Reject Game
+### 4. PUT /games/{favouriteGameId}/reject - Reject Game
 ### ============================================================
 
 ### 4.1 Success - Reject pending game (200 OK)
 PUT {{baseUrl}}/games/{{existingGameId}}/reject
 
 ### 4.2 Not Found - Game doesn't exist (404 Not Found)
-PUT {{baseUrl}}/games/{{gameId}}/reject
+PUT {{baseUrl}}/games/{{favouriteGameId}}/reject
 
 ### 4.3 Bad Request - Cannot reject already accepted game (400 Bad Request)
 PUT {{baseUrl}}/games/{{existingGameId}}/reject

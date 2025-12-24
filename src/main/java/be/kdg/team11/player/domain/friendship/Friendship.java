@@ -72,7 +72,8 @@ public class Friendship {
 
         BefriendedPlayerEvent event = new BefriendedPlayerEvent(
                 this.friendshipId.friendshipId(),
-                this.playerIdPair.getSecond().playerId()
+                this.playerIdPair.getSecond().playerId(),
+                FriendshipState.FRIENDS.name()
         );
 
         this.eventStore.add(event);
@@ -91,7 +92,8 @@ public class Friendship {
         this.friendshipState = FriendshipState.DECLINED;
         FriendshipDeclinedEvent event = new FriendshipDeclinedEvent(
                 this.friendshipId.friendshipId(),
-                this.playerIdPair.getSecond().playerId()
+                this.playerIdPair.getSecond().playerId(),
+                FriendshipState.DECLINED.name()
         );
 
         this.eventStore.add(event);
@@ -119,7 +121,8 @@ public class Friendship {
 
         FriendshipEndEvent event = new FriendshipEndEvent(
                 this.friendshipId.friendshipId(),
-                initiatedBy.playerId()
+                initiatedBy.playerId(),
+                FriendshipState.DECLINED.name()
         );
 
         this.eventStore.add(event);
