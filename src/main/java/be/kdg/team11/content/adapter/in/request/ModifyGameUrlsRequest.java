@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
-public record UpdateGameRequest(
+public record ModifyGameUrlsRequest(
 
         @NotNull(message = "Picture URL cannot be null")
         @NotBlank(message = "Picture URL cannot be blank")

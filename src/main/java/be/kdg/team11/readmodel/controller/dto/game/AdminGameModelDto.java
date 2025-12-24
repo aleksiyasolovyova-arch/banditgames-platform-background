@@ -3,7 +3,7 @@ package be.kdg.team11.readmodel.controller.dto.game;
 import java.util.List;
 import java.util.UUID;
 
-public record AdminGameDto(
+public record AdminGameModelDto(
         UUID gameId,
         String name,
         String description,
@@ -14,7 +14,7 @@ public record AdminGameDto(
         List<RuleDto> rules,
         List<GameAchievementDto> achievements,
         boolean playableWithAI
-) implements GameDto {
+) implements GameModelDto {
     public record RuleDto(
             String description
     ) {

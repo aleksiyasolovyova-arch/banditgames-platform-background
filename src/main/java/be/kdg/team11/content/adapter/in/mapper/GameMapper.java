@@ -1,7 +1,7 @@
 package be.kdg.team11.content.adapter.in.mapper;
 
 import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
-import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
+import be.kdg.team11.content.adapter.in.request.ModifyGameUrlsRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.ModifyGameUrlsCommand;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Component
 public class GameMapper {
 
-    public RegisterGameCommand toCommand(RegisterGameRequest request) {
+    public RegisterGameCommand toRegisterGameCommand(RegisterGameRequest request) {
         return new RegisterGameCommand(
                 request.name(),
                 request.description(),
@@ -55,7 +55,7 @@ public class GameMapper {
         );
     }
 
-    public ModifyGameUrlsCommand toUpdateCommand(UUID gameId, UpdateGameRequest request) {
+    public ModifyGameUrlsCommand toModifyGameUrlsCommand(UUID gameId, ModifyGameUrlsRequest request) {
         return new ModifyGameUrlsCommand(
                 gameId,
                 request.pictureUrl(),

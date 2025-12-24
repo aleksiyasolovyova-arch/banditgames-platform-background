@@ -1,10 +1,13 @@
 package be.kdg.team11.readmodel.service.game;
 
+import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.GameModel;
+import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.GameModelRepository;
+import be.kdg.team11.readmodel.repository.PlayerModelRepository;
 import be.kdg.team11.sharedkernel.events.game.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,18 @@ import java.util.UUID;
 @Transactional
 public class GameModelServiceImpl implements GameModelService {
     private final GameModelRepository gameModelRepository;
+    private final PlayerModelRepository playerModelRepository;
     private final AchievementModelRepository achievementModelRepository;
+    private final GameModelMapper gameModelMapper;
 
     public GameModelServiceImpl(GameModelRepository gameModelRepository,
-                                AchievementModelRepository achievementModelRepository) {
+                                PlayerModelRepository playerModelRepository,
+                                AchievementModelRepository achievementModelRepository,
+                                GameModelMapper gameModelMapper) {
         this.gameModelRepository = gameModelRepository;
+        this.playerModelRepository = playerModelRepository;
         this.achievementModelRepository = achievementModelRepository;
+        this.gameModelMapper = gameModelMapper;
     }
 
 
@@ -124,17 +133,25 @@ public class GameModelServiceImpl implements GameModelService {
     //TODO if you decide to keep both embedded tables in game remove the methods
 
     @Override
-    public List<GameModel> getAll() {
-        return gameModelRepository.findAll();
+    public List<? extends GameModelDto> getAll() {
+        return gameModelRepository.findAll().stream().map(gameModelMapper::toPublicGameDto).toList();
     }
 
     @Override
-    public List<GameModel> getAllWithRules() {
-        return gameModelRepository.findAll();
+    public List<? extends GameModelDto> getAllWithRules(UUID playerId) {
+
+        UUID favouriteGameId = playerModelRepository.findById(playerId)
+                .map(PlayerModel::getFavouriteGameId)
+                .orElse(null);
+
+        return gameModelRepository.findAll().stream()
+                .map(gameRM -> gameModelMapper.toPlayerGamesDto(gameRM, favouriteGameId))
+                .toList();
     }
 
     @Override
-    public List<GameModel> getAllWithRulesAndAchievements() {
-        return gameModelRepository.findAll();
+    public List<? extends GameModelDto> getAllWithRulesAndAchievements() {
+        return gameModelRepository.findAll().stream().map(
+                gameModelMapper::toAdminGameDto).toList();
     }
 }

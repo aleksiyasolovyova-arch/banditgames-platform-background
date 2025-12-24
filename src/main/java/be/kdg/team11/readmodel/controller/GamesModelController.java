@@ -1,7 +1,8 @@
 package be.kdg.team11.readmodel.controller;
 
+import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.readmodel.service.game.GameModelMapper;
-import be.kdg.team11.readmodel.controller.dto.game.GameDto;
+import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.service.game.GameModelService;
 import be.kdg.team11.readmodel.service.player.PlayerModelService;
@@ -19,15 +20,9 @@ import java.util.UUID;
 @RequestMapping("games")
 public class GamesModelController {
     private final GameModelService gameModelService;
-    private final PlayerModelService playerModelService;
-    private final GameModelMapper gameModelMapper;
 
-    public GamesModelController(GameModelService gameModelService,
-                                PlayerModelService playerModelService,
-                                GameModelMapper gameModelMapper) {
+    public GamesModelController(GameModelService gameModelService) {
         this.gameModelService = gameModelService;
-        this.playerModelService = playerModelService;
-        this.gameModelMapper = gameModelMapper;
     }
 
     /**
@@ -53,26 +48,17 @@ public class GamesModelController {
      */
 
     @GetMapping
-    public ResponseEntity<List<? extends GameDto>> getGames(@AuthenticationPrincipal Jwt token){
-        List<? extends GameDto> gameDtoList;
+    public ResponseEntity<List<? extends GameModelDto>> getGames(@AuthenticationPrincipal Jwt token){
+        List<? extends GameModelDto> gameDtoList;
         if (token != null){
             if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")){
-                gameDtoList = gameModelService.getAllWithRulesAndAchievements().stream().map(
-                        gameModelMapper::toAdminGameDto
-                ).toList();
+                gameDtoList = gameModelService.getAllWithRulesAndAchievements();
             } else {
                 UUID playerId = UUID.fromString(token.getSubject());
-                UUID favouriteGameId = playerModelService.findByPlayerId(playerId)
-                        .map(PlayerModel::getFavouriteGameId)
-                        .orElse(null);
-                gameDtoList = gameModelService.getAllWithRules().stream().map(
-                        gameRM -> gameModelMapper.toPlayerGamesDto(gameRM,favouriteGameId)
-                ).toList();
+                gameDtoList = gameModelService.getAllWithRules(playerId);
             }
         } else {
-            gameDtoList = gameModelService.getAll().stream().map(
-                    gameModelMapper::toPublicGameDto
-            ).toList();
+            gameDtoList = gameModelService.getAll();
         }
         return ResponseEntity.ok(gameDtoList);
     }

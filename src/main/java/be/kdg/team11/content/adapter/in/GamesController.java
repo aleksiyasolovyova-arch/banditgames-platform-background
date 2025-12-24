@@ -2,7 +2,7 @@ package be.kdg.team11.content.adapter.in;
 
 import be.kdg.team11.content.adapter.in.mapper.GameMapper;
 import be.kdg.team11.content.adapter.in.request.RegisterGameRequest;
-import be.kdg.team11.content.adapter.in.request.UpdateGameRequest;
+import be.kdg.team11.content.adapter.in.request.ModifyGameUrlsRequest;
 import be.kdg.team11.content.adapter.in.response.GameDto;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.port.in.*;
@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-/*
-TODO
-    Update documentation
- */
 @RestController
 @RequestMapping("/games")
 public class GamesController {
@@ -29,23 +25,6 @@ public class GamesController {
     private final ModifyGameUrlsPort modifyGameUrlsPort;
     private final TogglePlayableWithAIPort togglePlayableWithAIPort;
     private final GameMapper gameMapper;
-
-
-    /**
-     * REQUEST BODY:
-     * - name (String, required): Game name (1-255 chars)
-     * - description (String, required): Game description (1-500 chars)
-     * - price (BigDecimal, required): Game price (non-negative)
-     * - pictureUrl (String, required): URL to game image
-     * - gameUrl (String, required): URL to game content
-     * - gameCreatorName (String, required): Name of game creator (1-100 chars)
-     * - rules (List<RuleRequest>, required): Game rules (at least one required)
-     * - description (String, required): Rule description (1-255 chars)
-     * - achievements (List<GameAchievementRequest>, required): Linked achievements (at least one required)
-     * - code (String, required): Achievement code (1-100 chars)
-     * - description (String, required): Achievement description (1-500 chars)
-     * - playableWithAI (boolean, required): Whether the game can be played with an AI
-     */
 
     public GamesController(RegisterGamePort registerGamePort,
                            PassGameReviewPort passGameReviewPort,
@@ -63,59 +42,88 @@ public class GamesController {
 
     /**
      * Registers a new game in the system.
-     * FULL PATH: /games (POST)
+     * Endpoint: POST /games
+     * Required Role: ADMIN
+     *
+     * REQUEST BODY (RegisterGameRequest):
+     * - name (String, required): Game name (1-255 characters, cannot be blank)
+     * - description (String, required): Game description (5-500 characters, cannot be blank)
+     * - pictureUrl (String, required): Game image URL (must be valid URL format, cannot be blank)
+     * - gameUrl (String, required): Game playable content URL (must be valid URL format, cannot be blank)
+     * - gameCreatorName (String, required): Creator name (1-100 characters, cannot be blank)
+     * - rules (List<RuleRequest>, required): At least one game rule must be provided
+     *   - RuleRequest.description (String): Rule description (1-255 characters, cannot be blank)
+     * - achievements (List<GameAchievementRequest>, required): At least one achievement must be provided
+     *   - GameAchievementRequest.code (String): Achievement code (1-100 characters, cannot be blank)
+     *   - GameAchievementRequest.description (String): Achievement description (1-500 characters, cannot be blank)
+     * - playableWithAI (boolean, required): Whether the game can be played with an AI opponent
+     *
      * RESPONSE BODY (GameDto):
-     * - gameId (UUID): Unique game identifier
-     * - name (String): Game name
-     * - description (String): Game description
-     * - price (BigDecimal): Game price
-     * - pictureUrl (String): Game image URL
-     * - gameUrl (String): Game content URL
-     * - gameCreatorName (String): Creator name
-     * - registrationState (String): Current state (e.g., "PENDING", "ACCEPTED", "REJECTED")
-     * - rules (List<RuleDto>): Game rules
-     * - achievements (List<GameAchievementDto>): Linked achievements
-     * - playableWithAI (boolean): Whether the game can be played with an AI
+     * - gameId (UUID): Unique game identifier (auto-generated)
+     * - name (String): Game name (echoed from request)
+     * - description (String): Game description (echoed from request)
+     * - pictureUrl (String): Game image URL (echoed from request)
+     * - gameUrl (String): Game playable content URL (echoed from request)
+     * - gameCreatorName (String): Creator name (echoed from request)
+     * - registrationState (String): Current registration state (e.g., "PENDING", "ACCEPTED", "REJECTED")
+     * - rules (List<RuleDto>): List of game rules with descriptions
+     * - achievements (List<GameAchievementDto>): List of linked achievements with codes and descriptions
+     * - playableWithAI (boolean): Whether the game can be played with an AI opponent (echoed from request)
+     *
      * HTTP Status Codes:
-     * - 201 Created: Game successfully registered
-     * - 400 Bad Request: Validation failed (invalid/missing fields)
-     * - 500 Internal Server Error: Unexpected server error
-     */
+     * - 201 Created: Game successfully registered with generated ID
+     * - 400 Bad Request: Validation failed (e.g., missing rules/achievements, invalid URLs, text too long/short)
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
+     * - 500 Internal Server Error: Unexpected server error during game registration
+     *  */
     @PostMapping
     public ResponseEntity<GameDto> registerGame(
             @Valid @RequestBody RegisterGameRequest request) {
         Game createdGame = registerGamePort.register(
-                gameMapper.toCommand(request)
+                gameMapper.toRegisterGameCommand(request)
         );
          GameDto response = gameMapper.toResponse(createdGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /*
-    TODO Make this endpoint and command/usecase more specific ( not just update but update URLs
-         You can for example have PATCH /games/gameId/urls and it is more clear that way
-     */
     /**
      * Updates game URLs (picture and game content URLs).
-     * FULL PATH: /games/{gameId} (PUT)
+     * Endpoint: PATCH /games/{gameId}/urls
+     * Required Role: ADMIN
+     *
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to update
-     * REQUEST BODY (UpdateGameRequest):
-     * - pictureUrl (String, required): New picture URL (cannot be blank)
-     * - gameUrl (String, required): New game URL (cannot be blank)
+     *
+     * REQUEST BODY (ModifyGameUrlsRequest):
+     * - pictureUrl (String, required): New game picture/thumbnail URL (must be valid URL format, cannot be blank)
+     * - gameUrl (String, required): New game playable content URL (must be valid URL format, cannot be blank)
+     *
+     * RESPONSE BODY (GameDto):
+     * - gameId (UUID): Unique identifier of the updated game
+     * - name (String): Game name
+     * - description (String): Game description
+     * - pictureUrl (String): Updated game picture URL
+     * - gameUrl (String): Updated game content URL
+     * - gameCreatorName (String): Name of the game creator
+     * - registrationState (String): Current registration state of the game
+     * - rules (List<RuleDto>): List of game rules with descriptions
+     * - achievements (List<GameAchievementDto>): List of associated achievements (code and description)
+     * - playableWithAI (boolean): Whether the game supports AI opponent mode
+     *
      * HTTP Status Codes:
      * - 200 OK: Game URLs successfully updated
      * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
      * - 404 Not Found: Game with given ID doesn't exist
      * - 500 Internal Server Error: Unexpected server error
      */
-    @PatchMapping("/{gameId}")
+    @PatchMapping("/{gameId}/urls")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity< GameDto> updateGame(
             @NotNull @PathVariable UUID gameId,
-            @Valid @RequestBody UpdateGameRequest request) {
+            @Valid @RequestBody ModifyGameUrlsRequest request) {
         Game updatedGame = modifyGameUrlsPort.modifyGameUrls(
-                gameMapper.toUpdateCommand(gameId, request)
+                gameMapper.toModifyGameUrlsCommand(gameId, request)
         );
          GameDto response = gameMapper.toResponse(updatedGame);
         return ResponseEntity.ok(response);
@@ -123,13 +131,19 @@ public class GamesController {
 
     /**
      * Accepts a game, transitioning it from PENDING to ACCEPTED state.
-     * FULL PATH: /games/{gameId}/pass (PUT)
+     * Endpoint: PATCH /games/{gameId}/pass
+     * Required Role: ADMIN
+     *
      * PATH PARAMETER:
-     * - gameId (UUID): ID of the game to accept
+     * - gameId (UUID): ID of the game to accept and transition to ACCEPTED state
+     *
+     * RESPONSE BODY (GameDto)
+     *
      * HTTP Status Codes:
      * - 200 OK: Game successfully accepted
+     * - 400 Bad Request: Invalid state transition (already accepted/rejected)
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
      * - 404 Not Found: Game with given ID doesn't exist
-     * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
     @PatchMapping("/{gameId}/pass")
@@ -145,13 +159,19 @@ public class GamesController {
 
     /**
      * Rejects a game, transitioning it from PENDING to REJECTED state.
-     * FULL PATH: /games/{gameId}/fail (PUT)
+     * Endpoint: PATCH /games/{gameId}/fail
+     * Required Role: ADMIN
+     *
      * PATH PARAMETER:
-     * - gameId (UUID): ID of the game to reject
+     * - gameId (UUID): ID of the game to reject and transition to REJECTED state
+     *
+     * RESPONSE BODY (GameDto)
+     *
      * HTTP Status Codes:
      * - 200 OK: Game successfully rejected
+     * - 400 Bad Request: Invalid state transition (already accepted/rejected)
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
      * - 404 Not Found: Game with given ID doesn't exist
-     * - 409 Conflict: Invalid state transition (already accepted/rejected)
      * - 500 Internal Server Error: Unexpected server error
      */
     @PatchMapping("/{gameId}/fail")
@@ -166,11 +186,23 @@ public class GamesController {
     }
 
 
-    /*
-    TODO Add documentation
-         Update the URL to something more clear, toggle what? toggle-playable-ai is better maybe?
+    /**
+     * Toggles the AI playability flag of a game between enabled and disabled states.
+     * Endpoint: PATCH /games/{gameId}/toggle-playable-ai
+     * Required Role: ADMIN
+     *
+     * PATH PARAMETER:
+     * - gameId (UUID): ID of the game to toggle AI playability
+     *
+     * RESPONSE BODY (GameDto):
+     *
+     * HTTP Status Codes:
+     * - 200 OK: AI playability flag successfully toggled
+     * - 404 Not Found: Game with given ID doesn't exist
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
+     * - 500 Internal Server Error: Unexpected server error during toggle operation
      */
-    @PatchMapping("{gameId}/toggle")
+    @PatchMapping("{gameId}/toggle-playable-ai")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity< GameDto> togglePlayableWithAI(
             @NotNull @PathVariable UUID gameId

@@ -1,5 +1,7 @@
 package be.kdg.team11.readmodel.service.game;
 
+import be.kdg.team11.readmodel.controller.dto.achievement.AchievementModelDto;
+import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
 import be.kdg.team11.readmodel.models.GameModel;
 import be.kdg.team11.sharedkernel.events.game.*;
 
@@ -14,8 +16,7 @@ public interface GameModelService {
     void project(GameToggledPlayableWithAIEvent event);
     void project(GameUrlsModifiedEvent event);
 
-    //TODO return dto instead of object and do mapping logic in service!
-    List<GameModel> getAll();
-    List<GameModel> getAllWithRules();
-    List<GameModel> getAllWithRulesAndAchievements();
+    List<? extends GameModelDto> getAll();
+    List<? extends GameModelDto> getAllWithRules(UUID playerId);
+    List<? extends GameModelDto> getAllWithRulesAndAchievements();
 }

@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/*
-TODO
-    Update documentation
- */
-
 @RestController
 @RequestMapping("achievements")
 public class AchievementsController {
@@ -33,33 +28,10 @@ public class AchievementsController {
     }
 
     /**
-     * Retrieves all achievements in the system.
-     * FULL PATH: /achievements (GET)
-     * RESPONSE BODY (List<AchievementDto>):
-     * - achievementId (UUID): Unique achievement identifier
-     * - name (String): Achievement name
-     * - description (String): Achievement description
-     * - pictureUrl (String): Achievement picture URL
-     * - type (String): Achievement type (PLAY_COUNT, WIN_COUNT, FRIEND_COUNT, RECORD_TIME)
-     * - requiredValue (long): Value required to unlock the achievement
-     * HTTP Status Codes:
-     * - 200 OK: Achievements retrieved successfully
-     * - 500 Internal Server Error: Unexpected server error
-     */
-    //TODO move this to read model
-//    @GetMapping()
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<AchievementDto>> loadAllAchievements() {
-//        List<Achievement> achievements = loadAllAchievementsPort.findAll();
-//        List<AchievementDto> response = achievements.stream()
-//                .map(achievementMapper::toResponse)
-//                .toList();
-//        return ResponseEntity.ok(response);
-//    }
-
-    /**
      * Creates a new achievement definition.
-     * FULL PATH: /achievements (POST)
+     * Endpoint: POST /achievements
+     * Required Role: ADMIN
+     *
      * REQUEST BODY (CreateAchievementRequest):
      * - achievementName (String, required): Name of the achievement (1-100 chars)
      * - description (String, required): Achievement description (5-500 chars)
@@ -78,6 +50,7 @@ public class AchievementsController {
      * HTTP Status Codes:
      * - 201 Created: Achievement successfully created
      * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 403 Forbidden: User lacks ADMIN role required for this operation
      * - 500 Internal Server Error: Unexpected server error
      */
     @PostMapping

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LobbyJpaMapper {
     //TODO Make sure it is ok to inject this mapper into here
+    /// as long as the mappers are avoid circular dependencies (both of them calling each other) it is not violating any principles
+    /// its used often with mapstruct mappers
     private final GameReferenceJpaMapper gameReferenceJpaMapper;
 
     public LobbyJpaMapper(GameReferenceJpaMapper gameReferenceJpaMapper) {

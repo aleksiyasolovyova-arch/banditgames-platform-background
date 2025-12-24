@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.service.friendship;
 
-import be.kdg.team11.readmodel.controller.dto.FriendShipDto;
+import be.kdg.team11.readmodel.controller.dto.FriendShipModelDto;
 import be.kdg.team11.sharedkernel.events.friendship.BefriendedPlayerEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipCreatedEvent;
 import be.kdg.team11.sharedkernel.events.friendship.FriendshipDeclinedEvent;
@@ -15,5 +15,5 @@ public interface FriendshipModelService {
     void project(FriendshipCreatedEvent event);
     void project(FriendshipDeclinedEvent event);
 
-    List<FriendShipDto> getPlayerFriendships(UUID playerId);
+    List<FriendShipModelDto> getPlayerFriendships(UUID playerId);
 }
