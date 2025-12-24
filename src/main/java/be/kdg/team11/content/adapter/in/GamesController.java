@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/*
+TODO
+    Update documentation
+ */
 @RestController
 @RequestMapping("/games")
 public class GamesController {
@@ -87,6 +91,10 @@ public class GamesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /*
+    TODO Make this endpoint and command/usecase more specific ( not just update but update URLs
+         You can for example have PATCH /games/gameId/urls and it is more clear that way
+     */
     /**
      * Updates game URLs (picture and game content URLs).
      * FULL PATH: /games/{gameId} (PUT)
@@ -158,6 +166,10 @@ public class GamesController {
     }
 
 
+    /*
+    TODO Add documentation
+         Update the URL to something more clear, toggle what? toggle-playable-ai is better maybe?
+     */
     @PatchMapping("{gameId}/toggle")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity< GameDto> togglePlayableWithAI(

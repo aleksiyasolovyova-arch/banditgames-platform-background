@@ -13,12 +13,12 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PassGameReviewReviewUseCaseImpl implements PassGameReviewPort {
+public class PassGameReviewUseCaseImpl implements PassGameReviewPort {
     private final LoadGamePort loadGamePort;
     private final List<SaveGamePort> saveGamePorts;
 
-    public PassGameReviewReviewUseCaseImpl(LoadGamePort loadGamePort,
-                                           List<SaveGamePort> saveGamePorts) {
+    public PassGameReviewUseCaseImpl(LoadGamePort loadGamePort,
+                                     List<SaveGamePort> saveGamePorts) {
         this.loadGamePort = loadGamePort;
         this.saveGamePorts = saveGamePorts;
     }

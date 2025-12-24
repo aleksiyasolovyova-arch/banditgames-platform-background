@@ -20,17 +20,17 @@ public class Player {
     private final Username username;
     private String pictureUrl;
     private final LocalDate joinedDate;
+    private GameReference favoriteGame;
     private final Set<UnlockedPlatformAchievement> unlockedPlatformAchievements = new HashSet<>();
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    private Optional<GameReference> favoriteGame;
 
 
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Optional<GameReference> favoriteGame) {
+    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
@@ -55,7 +55,7 @@ public class Player {
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
-                Optional.empty());
+                null);
 
         PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username.username(), DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
@@ -73,7 +73,7 @@ public class Player {
      * Player marks a game as favorite.
      */
     public void changeFavoriteGame(GameReference gameReference) {
-        this.favoriteGame = Optional.of(gameReference);
+        this.favoriteGame = gameReference;
 
         PlayerChangedFavoriteGameEvent event = new PlayerChangedFavoriteGameEvent(
                 this.playerId.playerId(),
@@ -86,7 +86,7 @@ public class Player {
      * Player removes a game from favorites.
      */
     public void removeFavoriteGame() {
-        this.favoriteGame = Optional.empty();
+        this.favoriteGame = null;
 
         PlayerRemovedFavoriteGameEvent event = new PlayerRemovedFavoriteGameEvent(
                 this.playerId.playerId()
@@ -149,6 +149,10 @@ public class Player {
         }
     }
 
+    public UUID getFavoriteGameId() {
+        return favoriteGame == null ? null : favoriteGame.gameId();
+    }
+
     public PlayerId getPlayerId() {
         return playerId;
     }
@@ -174,9 +178,5 @@ public class Player {
     }
     public List<DomainEvent> getEventStore() {
         return Collections.unmodifiableList(eventStore);
-    }
-
-    public Optional<GameReference> getFavoriteGame() {
-        return favoriteGame;
     }
 }

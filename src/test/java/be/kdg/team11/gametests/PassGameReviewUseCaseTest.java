@@ -1,5 +1,5 @@
 package be.kdg.team11.gametests;
-import be.kdg.team11.content.core.PassGameReviewReviewUseCaseImpl;
+import be.kdg.team11.content.core.PassGameReviewUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
@@ -32,13 +32,13 @@ class PassGameReviewUseCaseTest {
     @Mock
     private SaveGamePort saveGamePort;
 
-    private PassGameReviewReviewUseCaseImpl useCase;
+    private PassGameReviewUseCaseImpl useCase;
     private UUID gameId;
 
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new PassGameReviewReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
+        useCase = new PassGameReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
     }
 
     @Test
@@ -79,7 +79,7 @@ class PassGameReviewUseCaseTest {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new PassGameReviewReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
+        useCase = new PassGameReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
@@ -103,7 +103,7 @@ class PassGameReviewUseCaseTest {
 
         when(port.loadBy(any(GameId.class))).thenReturn(Optional.empty());
 
-        useCase = new PassGameReviewReviewUseCaseImpl(port, List.of(saveGamePort));
+        useCase = new PassGameReviewUseCaseImpl(port, List.of(saveGamePort));
 
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 

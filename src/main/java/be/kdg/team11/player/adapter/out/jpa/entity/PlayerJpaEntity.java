@@ -32,7 +32,7 @@ public class PlayerJpaEntity {
     @CollectionTable(name = "player_game_achievements", schema = "player_schema", joinColumns = @JoinColumn(name = "player_id"))
     private Set<UnlockedGameAchievementEmbeddable> unlockedGameAchievements = new HashSet<>();
 
-    @Column()
+    @Column
     private UUID favoriteGameId;
 
     public PlayerJpaEntity() {

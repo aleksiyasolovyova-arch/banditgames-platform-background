@@ -1,6 +1,6 @@
 package be.kdg.team11.gametests;
 
-import be.kdg.team11.content.core.FailGameReviewReviewUseCaseImpl;
+import be.kdg.team11.content.core.FailGameReviewUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
@@ -33,13 +33,13 @@ class FailGameReviewUseCaseTest {
     @Mock
     private SaveGamePort saveGamePort;
 
-    private FailGameReviewReviewUseCaseImpl useCase;
+    private FailGameReviewUseCaseImpl useCase;
     private UUID gameId;
 
     @BeforeEach
     void setUp() {
         gameId = UUID.randomUUID();
-        useCase = new FailGameReviewReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
+        useCase = new FailGameReviewUseCaseImpl(loadGamePort, List.of(saveGamePort));
     }
 
     @Test
@@ -80,7 +80,7 @@ class FailGameReviewUseCaseTest {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
         SaveGamePort port2 = mock(SaveGamePort.class);
-        useCase = new FailGameReviewReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
+        useCase = new FailGameReviewUseCaseImpl(loadGamePort, List.of(port1, port2));
 
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));

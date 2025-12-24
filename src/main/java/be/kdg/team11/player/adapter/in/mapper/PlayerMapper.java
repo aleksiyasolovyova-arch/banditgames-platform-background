@@ -37,9 +37,7 @@ public class PlayerMapper {
                                 achievement.unlockedAt()
                         ))
                         .collect(Collectors.toSet()),
-                player.getFavoriteGame()
-                        .map(GameReference::gameId)
-                        .orElse(null)
+                player.getFavoriteGameId()
         );
     }
 }
