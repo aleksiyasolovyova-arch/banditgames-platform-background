@@ -3,15 +3,14 @@ package be.kdg.team11.readmodel.service.game;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.GameModel;
-import be.kdg.team11.readmodel.models.RuleModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.GameModelRepository;
-import be.kdg.team11.readmodel.repository.RuleModelRepository;
 import be.kdg.team11.sharedkernel.events.game.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +18,11 @@ import java.util.UUID;
 @Transactional
 public class GameModelServiceImpl implements GameModelService {
     private final GameModelRepository gameModelRepository;
-    private final RuleModelRepository ruleModelRepository;
     private final AchievementModelRepository achievementModelRepository;
 
     public GameModelServiceImpl(GameModelRepository gameModelRepository,
-                                RuleModelRepository ruleModelRepository,
                                 AchievementModelRepository achievementModelRepository) {
         this.gameModelRepository = gameModelRepository;
-        this.ruleModelRepository = ruleModelRepository;
         this.achievementModelRepository = achievementModelRepository;
     }
 
@@ -44,17 +40,17 @@ public class GameModelServiceImpl implements GameModelService {
         game.setPlayableWithAI(event.playableWithAI());
         game.setCreatedAt(event.eventPit());
 
-        gameModelRepository.save(game);
+
 
         if (event.rules() != null && !event.rules().isEmpty()) {
+            List<GameModel.GameRule> rules = new ArrayList<>();
             event.rules().forEach(ruleData -> {
-                RuleModel rule = new RuleModel();
+                GameModel.GameRule rule = new GameModel.GameRule();
                 rule.setRuleId(UUID.randomUUID());
-                rule.setGameId(event.gameId());
                 rule.setDescription(ruleData.description());
-
-                ruleModelRepository.save(rule);
+                rules.add(rule);
             });
+            game.setRules(rules);
         }
 
         if (event.achievements() != null && !event.achievements().isEmpty()) {
@@ -71,7 +67,18 @@ public class GameModelServiceImpl implements GameModelService {
 
                 achievementModelRepository.save(achievement);
             });
+            List<GameModel.GameAchievement> gameAchievements = new ArrayList<>();
+
+            event.achievements().forEach(achievementData -> {
+                GameModel.GameAchievement gameAchievement = new GameModel.GameAchievement();
+                gameAchievement.setCode(achievementData.code());
+                gameAchievement.setDescription(achievementData.description());
+                gameAchievements.add(gameAchievement);
+            });
+            game.setAchievements(gameAchievements);
         }
+
+        gameModelRepository.save(game);
     }
 
     @Override
@@ -114,6 +121,8 @@ public class GameModelServiceImpl implements GameModelService {
                 });
     }
 
+    //TODO if you decide to keep both embedded tables in game remove the methods
+
     @Override
     public List<GameModel> getAll() {
         return gameModelRepository.findAll();
@@ -121,11 +130,11 @@ public class GameModelServiceImpl implements GameModelService {
 
     @Override
     public List<GameModel> getAllWithRules() {
-        return gameModelRepository.findAllWithRules();
+        return gameModelRepository.findAll();
     }
 
     @Override
     public List<GameModel> getAllWithRulesAndAchievements() {
-        return gameModelRepository.findAllWithRulesAndAchievements();
+        return gameModelRepository.findAll();
     }
 }

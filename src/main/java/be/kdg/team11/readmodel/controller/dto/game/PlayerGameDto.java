@@ -9,10 +9,10 @@ public record PlayerGameDto(
         String description,
         String pictureUrl,
         String gameUrl,
-        String gameCreatorName
-       // List<RuleDto> rules,
-       // boolean isFavourite,
-       // boolean playableWithAi
+        String gameCreatorName,
+        List<RuleDto> rules,
+        boolean isFavourite,
+        boolean playableWithAi
 ) implements GameDto {
     public record RuleDto(
             String description

@@ -52,30 +52,28 @@ public class GamesModelController {
      * - 500 Internal Server Error: Unexpected server error
      */
 
-    //TODO move mapping logic to the service, keep authenthication and security logic here.
-
-//    @GetMapping
-//    public ResponseEntity<List<? extends GameDto>> getGames(@AuthenticationPrincipal Jwt token){
-//        List<? extends GameDto> gameDtoList;
-//        if (token != null){
-//            if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")){
-//                gameDtoList = gameModelService.getAllWithRulesAndAchievements().stream().map(
-//                        gameModelMapper::toAdminGameDto
-//                ).toList();
-//            } else {
-//                UUID playerId = UUID.fromString(token.getSubject());
-//                UUID favouriteGameId = playerModelService.findByPlayerId(playerId)
-//                        .map(PlayerModel::getFavouriteGameId)
-//                        .orElse(null);
-//                gameDtoList = gameModelService.getAllWithRules().stream().map(
-//                        gameRM -> gameModelMapper.toPlayerGamesDto(gameRM,favouriteGameId)
-//                ).toList();
-//            }
-//        } else {
-//            gameDtoList = gameModelService.getAll().stream().map(
-//                    gameModelMapper::toPublicGameDto
-//            ).toList();
-//        }
-//        return ResponseEntity.ok(gameDtoList);
-//    }
+    @GetMapping
+    public ResponseEntity<List<? extends GameDto>> getGames(@AuthenticationPrincipal Jwt token){
+        List<? extends GameDto> gameDtoList;
+        if (token != null){
+            if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")){
+                gameDtoList = gameModelService.getAllWithRulesAndAchievements().stream().map(
+                        gameModelMapper::toAdminGameDto
+                ).toList();
+            } else {
+                UUID playerId = UUID.fromString(token.getSubject());
+                UUID favouriteGameId = playerModelService.findByPlayerId(playerId)
+                        .map(PlayerModel::getFavouriteGameId)
+                        .orElse(null);
+                gameDtoList = gameModelService.getAllWithRules().stream().map(
+                        gameRM -> gameModelMapper.toPlayerGamesDto(gameRM,favouriteGameId)
+                ).toList();
+            }
+        } else {
+            gameDtoList = gameModelService.getAll().stream().map(
+                    gameModelMapper::toPublicGameDto
+            ).toList();
+        }
+        return ResponseEntity.ok(gameDtoList);
+    }
 }

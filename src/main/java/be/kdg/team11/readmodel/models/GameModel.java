@@ -42,6 +42,25 @@ public class GameModel {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "game_rule",
+            schema = "read_model_schema",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<GameRule> rules = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "game_achievement",
+            schema = "read_model_schema",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<GameAchievement> achievements = new ArrayList<>();
+
+
+
+
     public GameModel() {
     }
 
@@ -123,5 +142,66 @@ public class GameModel {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<GameRule> getRules() {
+        return rules;
+    }
+
+    public void setRules(List<GameRule> rules) {
+        this.rules = rules;
+    }
+
+    public List<GameAchievement> getAchievements() {
+        return achievements;
+    }
+    public void setAchievements(List<GameAchievement> achievements) {
+        this.achievements = achievements;
+    }
+
+    @Embeddable
+    public static class GameRule {
+        private UUID ruleId;
+        private String description;
+
+        public UUID getRuleId() {
+            return ruleId;
+        }
+
+        public void setRuleId(UUID ruleId) {
+            this.ruleId = ruleId;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+
+    }
+
+    @Embeddable
+    public static class GameAchievement {
+        private String code;
+        private String description;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
     }
 }
