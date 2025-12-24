@@ -119,7 +119,7 @@ public class GamesController {
      */
     @PatchMapping("/{gameId}/urls")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity< GameDto> updateGame(
+    public ResponseEntity< GameDto> modifyGameUrls(
             @NotNull @PathVariable UUID gameId,
             @Valid @RequestBody ModifyGameUrlsRequest request) {
         Game updatedGame = modifyGameUrlsPort.modifyGameUrls(

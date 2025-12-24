@@ -1,6 +1,9 @@
 package be.kdg.team11.readmodel.service.game;
 
+import be.kdg.team11.readmodel.controller.dto.game.AdminGameModelDto;
 import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
+import be.kdg.team11.readmodel.controller.dto.game.PlayerGameModelDto;
+import be.kdg.team11.readmodel.controller.dto.game.PublicGameModelDto;
 import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.GameModel;
@@ -45,7 +48,7 @@ public class GameModelServiceImpl implements GameModelService {
         game.setPictureUrl(event.pictureUrl());
         game.setGameUrl(event.gameUrl());
         game.setCreatorName(event.gameCreatorName());
-        game.setReviewState("PENDING");
+        game.setPending(true);
         game.setPlayableWithAI(event.playableWithAI());
         game.setCreatedAt(event.eventPit());
 
@@ -94,7 +97,7 @@ public class GameModelServiceImpl implements GameModelService {
     public void project(PassedGameReviewEvent event) {
         gameModelRepository.findById(event.gameId())
                 .ifPresent(game -> {
-                    game.setReviewState("PASSED");
+                    game.setPending(false);
                     game.setUpdatedAt(event.eventPit());
                     gameModelRepository.save(game);
                 });
@@ -103,11 +106,7 @@ public class GameModelServiceImpl implements GameModelService {
     @Override
     public void project(FailedGameReviewEvent event) {
         gameModelRepository.findById(event.gameId())
-                .ifPresent(game -> {
-                    game.setReviewState("FAILED");
-                    game.setUpdatedAt(event.eventPit());
-                    gameModelRepository.save(game);
-                });
+                .ifPresent(gameModelRepository::delete);
     }
 
     @Override
@@ -124,34 +123,33 @@ public class GameModelServiceImpl implements GameModelService {
     public void project(GameUrlsModifiedEvent event) {
         gameModelRepository.findById(event.gameId())
                 .ifPresent(game -> {
+                    game.setPictureUrl(event.newPictureUrl());
                     game.setGameUrl(event.newGameUrl());
                     game.setUpdatedAt(LocalDateTime.now());
                     gameModelRepository.save(game);
                 });
     }
 
-    //TODO if you decide to keep both embedded tables in game remove the methods
-
     @Override
-    public List<? extends GameModelDto> getAll() {
-        return gameModelRepository.findAll().stream().map(gameModelMapper::toPublicGameDto).toList();
+    public List<AdminGameModelDto> getAllForAdmin() {
+        return gameModelRepository.findAll().stream().map(
+                gameModelMapper::toAdminGameDto).toList();
     }
 
     @Override
-    public List<? extends GameModelDto> getAllWithRules(UUID playerId) {
+    public List<PlayerGameModelDto> getAllForPlayer(UUID playerId) {
 
         UUID favouriteGameId = playerModelRepository.findById(playerId)
                 .map(PlayerModel::getFavouriteGameId)
                 .orElse(null);
 
-        return gameModelRepository.findAll().stream()
+        return gameModelRepository.findByPending(false).stream()
                 .map(gameRM -> gameModelMapper.toPlayerGamesDto(gameRM, favouriteGameId))
                 .toList();
     }
 
     @Override
-    public List<? extends GameModelDto> getAllWithRulesAndAchievements() {
-        return gameModelRepository.findAll().stream().map(
-                gameModelMapper::toAdminGameDto).toList();
+    public List<PublicGameModelDto> getAllForPublic() {
+        return gameModelRepository.findByPending(false).stream().map(gameModelMapper::toPublicGameDto).toList();
     }
 }

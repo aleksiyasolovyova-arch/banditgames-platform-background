@@ -1,8 +1,8 @@
 package be.kdg.team11.readmodel.service.game;
 
-import be.kdg.team11.readmodel.controller.dto.achievement.AchievementModelDto;
-import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
-import be.kdg.team11.readmodel.models.GameModel;
+import be.kdg.team11.readmodel.controller.dto.game.AdminGameModelDto;
+import be.kdg.team11.readmodel.controller.dto.game.PlayerGameModelDto;
+import be.kdg.team11.readmodel.controller.dto.game.PublicGameModelDto;
 import be.kdg.team11.sharedkernel.events.game.*;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface GameModelService {
     void project(GameToggledPlayableWithAIEvent event);
     void project(GameUrlsModifiedEvent event);
 
-    List<? extends GameModelDto> getAll();
-    List<? extends GameModelDto> getAllWithRules(UUID playerId);
-    List<? extends GameModelDto> getAllWithRulesAndAchievements();
+    List<AdminGameModelDto> getAllForAdmin();
+    List<PlayerGameModelDto> getAllForPlayer(UUID playerId);
+    List<PublicGameModelDto> getAllForPublic();
 }

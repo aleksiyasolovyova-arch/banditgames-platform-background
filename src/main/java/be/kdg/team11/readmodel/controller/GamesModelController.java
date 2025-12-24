@@ -26,7 +26,7 @@ public class GamesModelController {
     }
 
     /**
-     * Retrieves all games in the system.
+     * Retrieves all games in the system with different structures depending on the authentication and role.
      * FULL PATH: /games (GET)
      * RESPONSE BODY (List<GameDto>):
      * - gameId (UUID): Unique game identifier
@@ -42,6 +42,8 @@ public class GamesModelController {
      *   - code (String): Achievement code
      *   - description (String): Achievement description
      * - playableWithAI (boolean): Whether the game can be played with an AI
+     * - isFavourite (boolean): If a player has this game as their favourite
+     * - isPending (boolean): If the game passed the review or is still awaiting review from the admin
      * HTTP Status Codes:
      * - 200 OK: Games retrieved successfully
      * - 500 Internal Server Error: Unexpected server error
@@ -52,13 +54,13 @@ public class GamesModelController {
         List<? extends GameModelDto> gameDtoList;
         if (token != null){
             if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")){
-                gameDtoList = gameModelService.getAllWithRulesAndAchievements();
+                gameDtoList = gameModelService.getAllForAdmin();
             } else {
                 UUID playerId = UUID.fromString(token.getSubject());
-                gameDtoList = gameModelService.getAllWithRules(playerId);
+                gameDtoList = gameModelService.getAllForPlayer(playerId);
             }
         } else {
-            gameDtoList = gameModelService.getAll();
+            gameDtoList = gameModelService.getAllForPublic();
         }
         return ResponseEntity.ok(gameDtoList);
     }

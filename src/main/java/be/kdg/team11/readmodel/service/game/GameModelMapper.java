@@ -19,15 +19,15 @@ public class GameModelMapper {
                 game.getPictureUrl(),
                 game.getGameUrl(),
                 game.getCreatorName(),
-                game.getReviewState(),
                 game.getRules().stream()
                         .map(rule -> new AdminGameModelDto.RuleDto(rule.getDescription()))
                         .collect(Collectors.toList()),
                 game.getAchievements().stream()
                         .map(achievement -> new AdminGameModelDto.GameAchievementDto(achievement.getCode(),achievement.getDescription()))
                         .collect(Collectors.toList()),
-                game.isPlayableWithAI()
-        );
+                game.isPlayableWithAI(),
+                game.isPending()
+                );
     }
 
     public PlayerGameModelDto toPlayerGamesDto(GameModel game, UUID favouriteGameId) {

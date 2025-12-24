@@ -10,10 +10,10 @@ public record AdminGameModelDto(
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,
-        String registrationState,
         List<RuleDto> rules,
         List<GameAchievementDto> achievements,
-        boolean playableWithAI
+        boolean playableWithAI,
+        boolean pending
 ) implements GameModelDto {
     public record RuleDto(
             String description
