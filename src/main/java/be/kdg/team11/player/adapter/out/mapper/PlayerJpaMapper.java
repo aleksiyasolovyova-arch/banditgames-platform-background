@@ -7,6 +7,7 @@ import be.kdg.team11.player.domain.player.*;
 import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,8 @@ public class PlayerJpaMapper {
                                 e.getUnlockedAt()
                         ))
                         .collect(Collectors.toSet());
-
-        GameReference favoriteGame = entity.getFavoriteGameId() != null ? new GameReference(entity.getFavoriteGameId()) : null;
-
-
+        Optional<GameReference> favoriteGame = Optional.ofNullable(entity.getFavoriteGameId())
+                .map(GameReference::new);
 
         return new Player(
                 playerId,
@@ -79,7 +78,9 @@ public class PlayerJpaMapper {
                         })
                         .collect(Collectors.toSet());
         entity.setUnlockedGameAchievements(gameAchievements);
-        entity.setFavoriteGameId(player.getFavoriteGame().gameId());
+        entity.setFavoriteGameId(player.getFavoriteGame()
+                .map(GameReference::gameId)
+                .orElse(null));
 
         return entity;
     }

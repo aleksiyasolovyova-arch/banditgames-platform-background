@@ -24,13 +24,13 @@ public class Player {
     private final Set<UnlockedGameAchievement> unlockedGameAchievements = new HashSet<>();
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
-    private GameReference favoriteGame;
+    private Optional<GameReference> favoriteGame;
 
 
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
+    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, Optional<GameReference> favoriteGame) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
@@ -55,7 +55,7 @@ public class Player {
                 LocalDate.now(),
                 Collections.emptySet(),
                 Collections.emptySet(),
-                null);
+                Optional.empty());
 
         PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username.username(), DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
@@ -73,7 +73,7 @@ public class Player {
      * Player marks a game as favorite.
      */
     public void changeFavoriteGame(GameReference gameReference) {
-        this.favoriteGame = gameReference;
+        this.favoriteGame = Optional.of(gameReference);
 
         PlayerChangedFavoriteGameEvent event = new PlayerChangedFavoriteGameEvent(
                 this.playerId.playerId(),
@@ -86,7 +86,7 @@ public class Player {
      * Player removes a game from favorites.
      */
     public void removeFavoriteGame() {
-        this.favoriteGame = null;
+        this.favoriteGame = Optional.empty();
 
         PlayerRemovedFavoriteGameEvent event = new PlayerRemovedFavoriteGameEvent(
                 this.playerId.playerId()
@@ -175,7 +175,8 @@ public class Player {
     public List<DomainEvent> getEventStore() {
         return Collections.unmodifiableList(eventStore);
     }
-    public GameReference getFavoriteGame() {
+
+    public Optional<GameReference> getFavoriteGame() {
         return favoriteGame;
     }
 }

@@ -1,10 +1,9 @@
 package be.kdg.team11.player.adapter.in.mapper;
 
-import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
 import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
-import be.kdg.team11.player.port.in.ChangePlayerPictureUrlCommand;
+import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -38,7 +37,9 @@ public class PlayerMapper {
                                 achievement.unlockedAt()
                         ))
                         .collect(Collectors.toSet()),
-                player.getFavoriteGame().gameId()
+                player.getFavoriteGame()
+                        .map(GameReference::gameId)
+                        .orElse(null)
         );
     }
 }
