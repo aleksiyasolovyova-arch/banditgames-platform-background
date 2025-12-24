@@ -1,5 +1,6 @@
 package be.kdg.team11.readmodel.service.player;
 
+import be.kdg.team11.readmodel.controller.dto.PlayerModelDto;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.PlayerModelRepository;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedFavoriteGameEvent;
@@ -16,9 +17,12 @@ import java.util.UUID;
 @Transactional
 public class PlayerModelServiceImpl implements PlayerModelService {
     private final PlayerModelRepository playerModelRepository;
+    private final PlayerModelMapper playerModelMapper;
 
-    public PlayerModelServiceImpl(PlayerModelRepository playerModelRepository) {
+    public PlayerModelServiceImpl(PlayerModelRepository playerModelRepository,
+                                  PlayerModelMapper playerModelMapper) {
         this.playerModelRepository = playerModelRepository;
+        this.playerModelMapper = playerModelMapper;
     }
 
     @Override
@@ -61,7 +65,8 @@ public class PlayerModelServiceImpl implements PlayerModelService {
     }
 
     @Override
-    public Optional<PlayerModel> findByPlayerId(UUID playerId) {
-        return playerModelRepository.findById(playerId);
+    public Optional<PlayerModelDto> findByPlayerId(UUID playerId) {
+
+        return playerModelRepository.findById(playerId).map(playerModelMapper::toDto);
     }
 }

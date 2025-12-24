@@ -41,26 +41,6 @@ public class PlayersController {
     }
 
     /**
-     * show player info for nav bar
-     * FULL PATH: /players (GET)
-     * RESPONSE BODY (PlayerInfoDto):
-     * - playerId (UUID): Unique player identifier
-     * - username (String): Player username
-     * - pictureUrl (String): Player profile picture URL
-    * HTTP Status Codes:
-     * - 200 OK: Player info retrieved successfully
-     * - 500 Internal Server Error: Unexpected server error
-     */
-    //TODO move this to read model
-//    @GetMapping
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<PlayerInfoDto> getPlayerInfo(@AuthenticationPrincipal Jwt token) {
-//        UUID playerId = UUID.fromString(token.getSubject());
-//        Player player = showPlayerInfoPort.showInfo(new ShowPlayerInfoCommand(playerId));
-//        return ResponseEntity.ok(playerMapper.toInfoResponse(player));
-//    }
-
-    /**
      * Creates a new player in the system.
      * FULL PATH: /players (POST)
      * REQUEST BODY (ChangePlayerPictureUrlRequest):
@@ -89,6 +69,30 @@ public class PlayersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Updates the current authenticated player's profile picture URL.
+     * Endpoint: PUT /players
+     * Required Authentication: Authenticated user (JWT token)
+     *
+     * REQUEST BODY (ChangePlayerPictureUrlRequest):
+     * - pictureUrl (String, required): New profile picture URL (cannot be null or blank)
+     *
+     * RESPONSE BODY (PlayerDto):
+     * - playerId (UUID): Unique player identifier (extracted from JWT subject)
+     * - username (String): Player username
+     * - pictureUrl (String): Updated profile picture URL
+     * - joinedDate (LocalDate): Date player joined the platform
+     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Set of unlocked platform achievements with unlock timestamps
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game achievements (gameId, code, unlock timestamp)
+     * - favoriteGameId (UUID): ID of the player's favorite game
+     *
+     * HTTP Status Codes:
+     * - 200 OK: Profile picture successfully updated and player data returned
+     * - 400 Bad Request: Validation failed (picture URL is null or blank)
+     * - 401 Unauthorized: JWT token is invalid, expired, or missing
+     * - 404 Not Found: Player with given ID doesn't exist
+     * - 500 Internal Server Error: Unexpected server error during update
+     */
     @PutMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerDto> changePlayerPictureUrl(

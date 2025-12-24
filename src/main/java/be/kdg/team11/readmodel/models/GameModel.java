@@ -29,8 +29,8 @@ public class GameModel {
     @Column(name = "creator_name")
     private String creatorName;
 
-    @Column(name = "review_state")
-    private String reviewState;
+    @Column
+    private boolean pending;
 
     @Column(name = "playable_with_ai")
     private boolean playableWithAI;
@@ -104,12 +104,12 @@ public class GameModel {
         this.gameUrl = gameUrl;
     }
 
-    public String getReviewState() {
-        return reviewState;
+    public boolean isPending() {
+        return pending;
     }
 
-    public void setReviewState(String reviewState) {
-        this.reviewState = reviewState;
+    public void setPending(boolean pending) {
+        this.pending = pending;
     }
 
     public boolean isPlayableWithAI() {

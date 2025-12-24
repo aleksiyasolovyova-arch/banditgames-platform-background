@@ -3,18 +3,18 @@ package be.kdg.team11.readmodel.controller.dto.game;
 import java.util.List;
 import java.util.UUID;
 
-public record AdminGameDto(
+public record AdminGameModelDto(
         UUID gameId,
         String name,
         String description,
         String pictureUrl,
         String gameUrl,
         String gameCreatorName,
-        String registrationState,
         List<RuleDto> rules,
         List<GameAchievementDto> achievements,
-        boolean playableWithAI
-) implements GameDto {
+        boolean playableWithAI,
+        boolean pending
+) implements GameModelDto {
     public record RuleDto(
             String description
     ) {

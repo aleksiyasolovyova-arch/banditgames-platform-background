@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.service.friendship;
 
-import be.kdg.team11.readmodel.controller.dto.FriendShipDto;
+import be.kdg.team11.readmodel.controller.dto.FriendShipModelDto;
 import be.kdg.team11.readmodel.models.FriendshipModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.FriendshipModelRepository;
@@ -64,7 +64,6 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
                 });
     }
 
-    //TODO these two should be fine when scheduler for deleting is implemented in the write model
     @Override
     public void project(FriendshipEndEvent event) {
         friendshipModelRepository.deleteById(event.friendshipId());
@@ -76,10 +75,10 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
     }
 
     @Override
-    public List<FriendShipDto> getPlayerFriendships(UUID playerId) {
+    public List<FriendShipModelDto> getPlayerFriendships(UUID playerId) {
         return friendshipModelRepository.findFriendshipsByPlayerIdWhereStateFriendsOrRequested(playerId).stream()
                 .map(friendship -> friendshipModelMapper.toFriendDto(friendship,playerId))
-                .sorted(Comparator.comparing(FriendShipDto::username))
+                .sorted(Comparator.comparing(FriendShipModelDto::username))
                 .toList();
     }
 }

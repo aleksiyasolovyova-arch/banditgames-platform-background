@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.service.player;
 
-import be.kdg.team11.readmodel.models.PlayerModel;
+import be.kdg.team11.readmodel.controller.dto.PlayerModelDto;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedFavoriteGameEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedPictureUrlEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerCreatedEvent;
@@ -15,6 +15,5 @@ public interface PlayerModelService {
     void project(PlayerChangedFavoriteGameEvent event);
     void project(PlayerRemovedFavoriteGameEvent event);
 
-    //TODO return dto instead of object and do mapping logic in service!
-    Optional<PlayerModel> findByPlayerId(UUID playerId);
+    Optional<PlayerModelDto> findByPlayerId(UUID playerId);
 }

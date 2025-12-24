@@ -12,18 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LobbyJpaMapper {
-    //TODO Make sure it is ok to inject this mapper into here
-    private final GameReferenceJpaMapper gameReferenceJpaMapper;
-
-    public LobbyJpaMapper(GameReferenceJpaMapper gameReferenceJpaMapper) {
-        this.gameReferenceJpaMapper = gameReferenceJpaMapper;
-    }
 
     public LobbyJpaEntity toJpaEntity(Lobby lobby) {
         LobbyJpaEntity entity = new LobbyJpaEntity();
 
         entity.setLobbyId(lobby.getLobbyId().lobbyId());
-        entity.setGameReference(gameReferenceJpaMapper.toJpaEntity(lobby.getGameReference()));
+        entity.setGameReference(lobby.getGameReference().gameId());
 
         SlotJpaEmbeddable slotJpaEmbeddable1 = new SlotJpaEmbeddable();
         SlotJpaEmbeddable slotJpaEmbeddable2 = new SlotJpaEmbeddable();
@@ -44,8 +38,8 @@ public class LobbyJpaMapper {
     }
 
     public Lobby toDomain(LobbyJpaEntity entity) {
-        LobbyId lobbyId = new LobbyId(entity.getLobbyId());
-        GameReference gameReference = gameReferenceJpaMapper.toDomain(entity.getGameReference());
+        LobbyId lobbyId = LobbyId.of(entity.getLobbyId());
+        GameReference gameReference = GameReference.of(entity.getGameReference());
 
         SlotJpaEmbeddable slotJpaEmbeddable1 = entity.getSlot1();
         SlotJpaEmbeddable slotJpaEmbeddable2 = entity.getSlot2();

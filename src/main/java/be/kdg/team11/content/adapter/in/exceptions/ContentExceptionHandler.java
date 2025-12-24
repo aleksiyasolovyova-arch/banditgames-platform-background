@@ -30,6 +30,7 @@ public class ContentExceptionHandler {
                 .body(new ErrorResponse("VALIDATION_ERROR", errors));
     }
 
+
     /**
      * Handles game not found errors
      * Returns 404 Not Found

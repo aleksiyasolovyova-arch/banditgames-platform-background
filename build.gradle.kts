@@ -22,25 +22,50 @@ repositories {
 extra["springModulithVersion"] = "1.4.4"
 
 dependencies {
-    //TODO clean this up? bit of a mess without comments explaining which ones we actually need
-	implementation("org.springframework.boot:spring-boot-starter-amqp")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.modulith:spring-modulith-events-api")
-	implementation("org.springframework.modulith:spring-modulith-starter-core")
-	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
+    /**
+     * core web and framework
+     */
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    /**
+     * database and orm
+     */
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql")
+
+    /**
+     * event driven architecture
+     */
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.modulith:spring-modulith-events-api")
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    implementation("org.springframework.modulith:spring-modulith-starter-jpa")
+    runtimeOnly("org.springframework.modulith:spring-modulith-events-amqp")
+
+    /**
+     * validation
+     */
+    implementation("jakarta.validation:jakarta.validation-api")
+    implementation("org.hibernate.validator:hibernate-validator")
+
+    /**
+     * testing
+     */
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.postgresql:postgresql")
-	runtimeOnly("org.springframework.modulith:spring-modulith-events-amqp")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation("jakarta.validation:jakarta.validation-api")
-	implementation("org.hibernate.validator:hibernate-validator")
+
+    /**
+     * kotlin support
+     */
     implementation(kotlin("stdlib-jdk8"))
 
+    /**
+     * security
+     */
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 }

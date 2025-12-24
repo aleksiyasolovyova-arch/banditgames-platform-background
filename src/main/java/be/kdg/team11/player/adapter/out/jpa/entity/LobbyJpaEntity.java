@@ -13,8 +13,8 @@ public class LobbyJpaEntity {
     @Id
     private UUID lobbyId;
 
-    @ManyToOne(optional = false)
-    private GameReferenceJpaEntity gameReference;
+    @Column(nullable = false)
+    private UUID gameReference;
 
     @Embedded
     @AttributeOverrides({
@@ -51,11 +51,11 @@ public class LobbyJpaEntity {
         this.lobbyId = lobbyId;
     }
 
-    public GameReferenceJpaEntity getGameReference() {
+    public UUID getGameReference() {
         return gameReference;
     }
 
-    public void setGameReference(GameReferenceJpaEntity gameReference) {
+    public void setGameReference(UUID gameReference) {
         this.gameReference = gameReference;
     }
 

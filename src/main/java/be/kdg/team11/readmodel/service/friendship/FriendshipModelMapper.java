@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.service.friendship;
 
-import be.kdg.team11.readmodel.controller.dto.FriendShipDto;
+import be.kdg.team11.readmodel.controller.dto.FriendShipModelDto;
 import be.kdg.team11.readmodel.models.FriendshipModel;
 import org.springframework.stereotype.Component;
 
@@ -8,10 +8,10 @@ import java.util.UUID;
 
 @Component
 public class FriendshipModelMapper {
-    public FriendShipDto toFriendDto(FriendshipModel friendship, UUID playerId) {
+    public FriendShipModelDto toFriendDto(FriendshipModel friendship, UUID playerId) {
 
         if (friendship.getRequesterId().equals(playerId)) {
-            return new FriendShipDto(
+            return new FriendShipModelDto(
                     friendship.getFriendshipId(),
                     friendship.getState().equals("FRIENDS"),
                     friendship.getRequesterId(),
@@ -19,7 +19,7 @@ public class FriendshipModelMapper {
                     friendship.getRequesterPictureUrl()
             );
         } else {
-            return new FriendShipDto(
+            return new FriendShipModelDto(
                     friendship.getFriendshipId(),
                     friendship.getState().equals("FRIENDS"),
                     friendship.getRecipientId(),

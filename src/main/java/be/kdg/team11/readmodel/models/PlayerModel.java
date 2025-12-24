@@ -29,7 +29,7 @@ public class PlayerModel {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    //Idea: we can add with event listeners player statistics here!
+    //TODO add with event listeners player statistics here!
 
     public PlayerModel() {}
 
