@@ -1,6 +1,8 @@
 package be.kdg.team11.readmodel.eventlisteners;
 
 import be.kdg.team11.readmodel.service.player.PlayerModelService;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithDrawEvent;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithWinnerEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedFavoriteGameEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedPictureUrlEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerCreatedEvent;
@@ -35,4 +37,15 @@ public class PlayerEventListener {
     public void playerChangedPictureUrl(PlayerChangedPictureUrlEvent event) {
         playerModelService.project(event);
     }
+
+    @EventListener(LobbyEndedWithWinnerEvent.class)
+    public void lobbyEndedWithWinner(LobbyEndedWithWinnerEvent event) {
+        playerModelService.project(event);
+    }
+
+    @EventListener(LobbyEndedWithDrawEvent.class)
+    public void lobbyEndedWithDraw(LobbyEndedWithDrawEvent event) {
+        playerModelService.project(event);
+    }
+
 }
