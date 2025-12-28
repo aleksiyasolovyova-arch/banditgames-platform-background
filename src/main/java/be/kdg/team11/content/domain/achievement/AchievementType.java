@@ -1,10 +1,7 @@
 package be.kdg.team11.content.domain.achievement;
-
-import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
-
 /**
  * Enum representing different types of achievements a player can earn.
- * Each type defines specific criteria for achievement completion based on player statistics.
+ * Each type defines specific criteria for achievement completion.
  * <p>
  * Supports:
  * - PLAY_COUNT: Unlocked after playing N games
@@ -19,9 +16,8 @@ public enum AchievementType {
      */
     PLAY_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
-            Long actual = stats.totalGamesPlayed();
-            return actual != null && actual >= requiredValue;
+        public boolean isMetBy(long requiredValue, long actualValue) {
+            return actualValue >= requiredValue;
         }
     },
     /**
@@ -30,9 +26,8 @@ public enum AchievementType {
      */
     WIN_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
-            Long actual = stats.totalWins();
-            return actual != null && actual >= requiredValue;
+        public boolean isMetBy(long requiredValue, long actualValue) {
+            return actualValue >= requiredValue;
         }
     },
     /**
@@ -41,9 +36,8 @@ public enum AchievementType {
      */
     FRIEND_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
-            Long actual = stats.totalFriends();
-            return actual != null && actual >= requiredValue;
+        public boolean isMetBy(long requiredValue, long actualValue) {
+            return actualValue >= requiredValue;
         }
     },
     /**
@@ -53,10 +47,8 @@ public enum AchievementType {
      */
     RECORD_TIME {
         @Override
-        public boolean isMetBy(long requiredValue, PlayerStatistics stats) {
-            Long actual = stats.bestRecordTime();
-            Long required = requiredValue;
-            return actual != null && actual.compareTo(required) <= 0;
+        public boolean isMetBy(long requiredValue, long actualValue) {
+            return actualValue <= requiredValue;
         }
     };
 
@@ -64,16 +56,5 @@ public enum AchievementType {
      * Determines if an achievement is met based on player statistics.
      * Each type implements its own criteria for achievement completion.
      */
-    public abstract boolean isMetBy(long requiredValue, PlayerStatistics stats);
-
-    /**
-     * Validates that required value is non-negative.
-     */
-    private static void validateRequiredValue(long requiredValue) {
-        if (requiredValue < 0) {
-            throw new InvalidAchievementTypeException(
-                    "Required value cannot be negative, received: " + requiredValue
-            );
-        }
-    }
+    public abstract boolean isMetBy(long requiredValue, long actualValue);
 }

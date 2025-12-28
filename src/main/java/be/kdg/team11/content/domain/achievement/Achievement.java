@@ -61,14 +61,8 @@ public class Achievement {
      * Evaluates if a player has met the criteria for this specific achievement.
      * Delegates to the achievement type to determine if the required value is met.
      */
-    public boolean isAchievementMet(PlayerStatistics statistics) {
-        if (statistics == null) {
-            throw new InvalidAchievementException(
-                    "Player statistics cannot be null when evaluating achievement"
-            );
-        }
-
-        return type.isMetBy(requiredValue, statistics);
+    public boolean isAchievementMet(long actualValue) {
+        return type.isMetBy(requiredValue, actualValue);
     }
 
 
