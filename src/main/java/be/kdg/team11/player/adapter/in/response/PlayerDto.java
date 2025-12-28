@@ -10,12 +10,12 @@ public record PlayerDto(
         String username,
         String pictureUrl,
         LocalDate joinedDate,
-        Set<UnlockedPlatformAchievementDto> unlockedPlatformAchievements,
+        Set<UnlockedAchievementDto> unlockedAchievements,
         Set<UnlockedGameAchievementDto> unlockedGameAchievements,
         UUID favoriteGameId
 ) {
 
-    public record UnlockedPlatformAchievementDto(
+    public record UnlockedAchievementDto(
             UUID achievementId,
             LocalDateTime unlockedAt
     ) {

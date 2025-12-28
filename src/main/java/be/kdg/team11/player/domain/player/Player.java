@@ -95,10 +95,10 @@ public class Player {
     }
 
     /**
-     * Player unlocks a platform achievement.
+     * Player unlocks an achievement.
      * Throws InvalidAchievementForPlayerException if achievement operation fails.
      */
-    public void unlockPlatformAchievement(AchievementId achievementId) {
+    public void unlockAchievement(AchievementId achievementId) {
         validatePlatformAchievementNotAlreadyUnlocked(achievementId);
 
         UnlockedPlatformAchievement achievement = UnlockedPlatformAchievement.now(achievementId);

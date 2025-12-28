@@ -3,7 +3,6 @@ package be.kdg.team11.player.adapter.in.mapper;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
 import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
-import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class PlayerMapper {
                 player.getPictureUrl(),
                 player.getJoinedDate(),
                 player.getUnlockedPlatformAchievements().stream()
-                        .map(achievement -> new PlayerDto.UnlockedPlatformAchievementDto(
+                        .map(achievement -> new PlayerDto.UnlockedAchievementDto(
                                 achievement.achievementId().achievementId(),
                                 achievement.unlockedAt()
                         ))

@@ -1,5 +1,6 @@
 package be.kdg.team11.player.core;
 
+import be.kdg.team11.player.domain.player.AchievementId;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.port.in.AchievementUnlockedCommand;
@@ -26,5 +27,7 @@ public class AchievementUnlockedProjectorImpl implements AchievementUnlockedProj
     @Override
     public void project(AchievementUnlockedCommand command) {
         Player player = loadPlayerPort.loadBy(PlayerId.of(command.playerId())).orElseThrow(() -> PlayerId.notFound(command.playerId()));
+        player.unlockAchievement(AchievementId.of(command.achievementId()));
+        savePlayerPorts.forEach(savePlayerPort -> savePlayerPort.save(player));
     }
 }

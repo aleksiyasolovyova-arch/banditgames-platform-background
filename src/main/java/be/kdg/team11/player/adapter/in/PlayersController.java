@@ -51,7 +51,7 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Platform-wide achievements with unlock timestamps
+     * - unlockedAchievements (Set<UnlockedAchievementDto>): Platform-wide achievements with unlock timestamps
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific achievements with unlock timestamps
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
@@ -82,7 +82,7 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Updated profile picture URL
      * - joinedDate (LocalDate): Date player joined the platform
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Set of unlocked platform achievements with unlock timestamps
+     * - unlockedAchievements (Set<UnlockedAchievementDto>): Set of unlocked platform achievements with unlock timestamps
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game achievements (gameId, code, unlock timestamp)
      * - favoriteGameId (UUID): ID of the player's favorite game
      *
@@ -118,7 +118,7 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
+     * - unlockedAchievements (Set<UnlockedAchievementDto>): Player's platform achievements
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
@@ -149,7 +149,7 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
+     * - unlockedAchievements (Set<UnlockedAchievementDto>): Player's platform achievements
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
