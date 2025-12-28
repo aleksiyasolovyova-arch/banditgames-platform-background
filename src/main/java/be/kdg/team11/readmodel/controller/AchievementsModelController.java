@@ -20,7 +20,7 @@ public class AchievementsModelController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AchievementModelDto>> getAllAchievements() {
+    public ResponseEntity<List<AchievementModelDto>> getAchievements() {
         return ResponseEntity.ok(achievementModelService.getAll());
     }
 }

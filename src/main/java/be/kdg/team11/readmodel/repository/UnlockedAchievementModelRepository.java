@@ -10,7 +10,4 @@ import java.util.List;
 @Repository
 public interface UnlockedAchievementModelRepository extends JpaRepository<UnlockedAchievementModel, UUID> {
     List<UnlockedAchievementModel> findByPlayerId(UUID playerId);
-    List<UnlockedAchievementModel> findByAchievementId(UUID achievementId);
-    boolean existsByPlayerIdAndAchievementId(UUID playerId, UUID achievementId);
-    UnlockedAchievementModel findByPlayerIdAndAchievementId(UUID playerId, UUID achievementId);
 }
