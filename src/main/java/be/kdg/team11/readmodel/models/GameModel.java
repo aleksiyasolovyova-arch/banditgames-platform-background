@@ -180,7 +180,6 @@ public class GameModel {
             this.description = description;
         }
 
-
     }
 
     @Embeddable

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(schema="read_model_schema", name="player")
+@Table(schema="read_model_schema")
 public class PlayerModel {
     @Id
     private UUID playerId;
@@ -25,9 +25,6 @@ public class PlayerModel {
 
     @Column
     private UUID favouriteGameId;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDate createdAt;
 
     //TODO add with event listeners player statistics here!
 
@@ -73,11 +70,4 @@ public class PlayerModel {
         this.joinedDate = joinedDate;
     }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
 }

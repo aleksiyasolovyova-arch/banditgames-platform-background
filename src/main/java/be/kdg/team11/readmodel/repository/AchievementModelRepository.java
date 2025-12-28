@@ -1,7 +1,6 @@
 package be.kdg.team11.readmodel.repository;
 
 import be.kdg.team11.readmodel.models.AchievementModel;
-import be.kdg.team11.readmodel.models.AchievementModelType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

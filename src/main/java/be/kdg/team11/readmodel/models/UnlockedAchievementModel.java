@@ -9,19 +9,24 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "unlocked_achievement", schema = "read_model_schema")
+@Table(schema = "read_model_schema")
 public class UnlockedAchievementModel {
     @Id
-    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "player_id", nullable = false)
+    @Column(nullable = false)
     private UUID playerId;
 
-    @Column(name = "achievement_id", nullable = false)
+    @Column
     private UUID achievementId;
 
-    @Column(name = "unlocked_at", nullable = false)
+    @Column
+    private UUID gameId;
+
+    @Column
+    private String gameAchievementCode;
+
+    @Column(nullable = false)
     private LocalDateTime unlockedAt;
 
     public UnlockedAchievementModel() {}
@@ -56,5 +61,21 @@ public class UnlockedAchievementModel {
 
     public void setUnlockedAt(LocalDateTime unlockedAt) {
         this.unlockedAt = unlockedAt;
+    }
+
+    public String getGameAchievementCode() {
+        return gameAchievementCode;
+    }
+
+    public void setGameAchievementCode(String gameAchievementCode) {
+        this.gameAchievementCode = gameAchievementCode;
+    }
+
+    public UUID getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
     }
 }

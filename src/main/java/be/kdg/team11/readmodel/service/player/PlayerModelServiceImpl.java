@@ -32,7 +32,6 @@ public class PlayerModelServiceImpl implements PlayerModelService {
         player.setUsername(event.username());
         player.setPictureUrl(event.pictureUrl());
         player.setJoinedDate(event.joinedDate());
-        player.setCreatedAt(event.eventPit());
 
         playerModelRepository.save(player);
     }
