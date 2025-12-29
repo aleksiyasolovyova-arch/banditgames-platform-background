@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record PlayerAchievementsDto(
-        List<AchievementDto> achievements,
+public record AchievementsDto(
+        List<PlatformAchievementDto> platformAchievements,
         List<GameAchievementDto> gameAchievements
 ) {
-    public record AchievementDto(
+    public record PlatformAchievementDto(
             UUID achievementId,
             String name,
             String description,

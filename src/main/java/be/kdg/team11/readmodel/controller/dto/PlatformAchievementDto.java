@@ -2,7 +2,7 @@ package be.kdg.team11.readmodel.controller.dto;
 
 import java.util.UUID;
 
-public record AchievementModelDto(
+public record PlatformAchievementDto(
         UUID achievementId,
         String name,
         String description,
