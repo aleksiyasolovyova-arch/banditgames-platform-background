@@ -1,7 +1,8 @@
 package be.kdg.team11.readmodel.service.player;
 
-import be.kdg.team11.readmodel.controller.dto.PlayerModelDto;
-import be.kdg.team11.readmodel.controller.dto.game.PlayerProfileDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerNavBarDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
 import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithDrawEvent;
 import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithWinnerEvent;
 import be.kdg.team11.sharedkernel.events.player.PlayerChangedFavoriteGameEvent;
@@ -20,6 +21,7 @@ public interface PlayerModelService {
     void project(LobbyEndedWithWinnerEvent event);
     void project(LobbyEndedWithDrawEvent event);
 
-    Optional<PlayerModelDto> findByPlayerId(UUID playerId);
+    PlayerOpponentDto getOpponent(UUID playerId);
     PlayerProfileDto getPlayerProfile(UUID playerId);
+    PlayerNavBarDto getPlayerNavBar(UUID playerId);
 }

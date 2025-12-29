@@ -1,7 +1,9 @@
 package be.kdg.team11.readmodel.service.player;
 
-import be.kdg.team11.readmodel.controller.dto.PlayerModelDto;
-import be.kdg.team11.readmodel.controller.dto.game.PlayerProfileDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerNavBarDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
+import be.kdg.team11.readmodel.models.GameModel;
 import be.kdg.team11.readmodel.models.LobbyModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.repository.GameModelRepository;
@@ -211,9 +213,11 @@ public class PlayerModelServiceImpl implements PlayerModelService {
 
 
     @Override
-    public Optional<PlayerModelDto> findByPlayerId(UUID playerId) {
+    public PlayerOpponentDto getOpponent(UUID playerId) {
+        PlayerModel playerModel = playerModelRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found: " + playerId));
 
-        return playerModelRepository.findById(playerId).map(playerModelMapper::toDto);
+        return playerModelMapper.toOpponentDto(playerModel);
     }
 
     @Override
@@ -224,13 +228,32 @@ public class PlayerModelServiceImpl implements PlayerModelService {
         List<LobbyModel> gameHistory = lobbyModelRepository
                 .findByPlayer1IdOrPlayer2IdOrderByFinishedAtDesc(playerId, playerId);
 
+        // Get favourite game info if it exists
         String favouriteGameName = null;
+        String favouriteGamePictureUrl = null;
         if (playerModel.getFavouriteGameId() != null) {
-            favouriteGameName = gameModelRepository.findById(playerModel.getFavouriteGameId())
-                    .map(game -> game.getName())
-                    .orElse(null);
+            GameModel game = gameModelRepository.findById(playerModel.getFavouriteGameId()).orElse(null);
+            if (game != null) {
+                favouriteGameName = game.getName();
+                favouriteGamePictureUrl = game.getPictureUrl();
+            }
         }
-        return playerModelMapper.toProfileDto(playerModel, gameHistory, favouriteGameName);
 
+        // Map lobbies to history DTOs
+        List<PlayerProfileDto.PlayerHistoryDto> historyDtos = gameHistory.stream()
+                .map(lobby -> playerModelMapper.toHistoryDto(lobby, playerId))
+                .toList();
+
+        return playerModelMapper.toProfileDto(playerModel, favouriteGameName, favouriteGamePictureUrl, historyDtos);
     }
+
+    @Override
+    public PlayerNavBarDto getPlayerNavBar(UUID playerId) {
+        PlayerModel playerModel = playerModelRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found: " + playerId));
+
+        return playerModelMapper.toNavBarDto(playerModel);
+    }
+
+
 }

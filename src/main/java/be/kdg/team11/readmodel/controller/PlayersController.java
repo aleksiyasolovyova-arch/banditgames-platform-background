@@ -1,17 +1,15 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.readmodel.controller.dto.FriendShipModelDto;
-import be.kdg.team11.readmodel.controller.dto.game.PlayerProfileDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerNavBarDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
 import be.kdg.team11.readmodel.service.player.PlayerModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,11 +21,38 @@ public class PlayersController {
         this.playerModelService = playerModelService;
     }
 
-    @GetMapping()
-    @PreAuthorize("isAuthenticated()")
+
+
+    //default exception handling for now. could be changed with custom ones
+    @GetMapping("/profile")
     public ResponseEntity<PlayerProfileDto> getPlayerProfile(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
-        PlayerProfileDto profile = playerModelService.getPlayerProfile(playerId);
-        return ResponseEntity.ok(profile);
+        try {
+            PlayerProfileDto profile = playerModelService.getPlayerProfile(playerId);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/opponent/{opponentId}")
+    public ResponseEntity<PlayerOpponentDto> getOpponent(@PathVariable UUID opponentId) {
+        try {
+            PlayerOpponentDto opponent = playerModelService.getOpponent(opponentId);
+            return ResponseEntity.ok(opponent);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/navbar")
+    public ResponseEntity<PlayerNavBarDto> getPlayerNavBar(@AuthenticationPrincipal Jwt token) {
+        UUID playerId = UUID.fromString(token.getSubject());
+        try {
+            PlayerNavBarDto navBar = playerModelService.getPlayerNavBar(playerId);
+            return ResponseEntity.ok(navBar);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -1,11 +1,15 @@
-package be.kdg.team11.readmodel.controller.dto.game;
+package be.kdg.team11.readmodel.controller.dto.player;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record PlayerStatisticsDto(
+public record PlayerOpponentDto(
+        UUID playerID,
+        String username,
+        String pictureUrl,
+        LocalDate joinedDate,
 
+        //statistics
         Integer totalGamesPlayed,
         Integer totalWins,
         Integer totalLosses,
@@ -24,6 +28,7 @@ public record PlayerStatisticsDto(
         Integer secondMoveGames,
         Integer secondMoveWins,
         Double secondMoveWinRatePercentage
+
 
 ) {
 }
