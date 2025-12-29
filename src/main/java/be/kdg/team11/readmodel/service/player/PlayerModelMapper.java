@@ -72,6 +72,7 @@ public class PlayerModelMapper {
                 lobby.getLobbyId(),
                 lobby.getGameId(),
                 lobby.getGameName(),
+                lobby.getGamePictureUrl(),
                 opponentId,
                 opponentUsername,
                 opponentPictureUrl,

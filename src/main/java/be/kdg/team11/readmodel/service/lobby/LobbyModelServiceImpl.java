@@ -31,7 +31,10 @@ public class LobbyModelServiceImpl implements LobbyModelService{
         LobbyModel lobby = new LobbyModel();
         lobby.setLobbyId(event.lobbyId());
         lobby.setGameId(event.gameId());
-        gameModelRepository.findById(event.gameId()).ifPresent(game -> lobby.setGameName(game.getName()));
+        gameModelRepository.findById(event.gameId()).ifPresent(game -> {
+            lobby.setGameName(game.getName());
+            lobby.setGamePictureUrl(game.getPictureUrl());
+        });
         lobby.setPlayer1Id(event.player1Id());
         lobby.setPlayer2Id(event.player2Id());
         PlayerModel player1 = playerModelRepository.findById(event.player1Id()).orElse(null);

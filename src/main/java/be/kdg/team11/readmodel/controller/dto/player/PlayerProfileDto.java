@@ -45,6 +45,7 @@ public record PlayerProfileDto(
             UUID lobbyId,
             UUID gameId,
             String gameName,
+            String pictureUrl,
             UUID opponentId,
             String opponentUsername,
             String opponentPictureUrl,

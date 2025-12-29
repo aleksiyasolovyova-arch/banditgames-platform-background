@@ -11,35 +11,35 @@ import java.util.UUID;
 @Table(name = "game", schema = "read_model_schema")
 public class GameModel {
     @Id
-    @Column(name = "game_id")
+    @Column()
     private UUID gameId;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "picture_url")
+    @Column()
     private String pictureUrl;
 
-    @Column(name = "game_url")
+    @Column()
     private String gameUrl;
 
-    @Column(name = "creator_name")
+    @Column()
     private String creatorName;
 
     @Column
     private boolean pending;
 
-    @Column(name = "playable_with_ai")
+    @Column()
     private boolean playableWithAI;
 
     // Timestamps
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column()
     private LocalDateTime updatedAt;
 
     @ElementCollection(fetch = FetchType.EAGER)

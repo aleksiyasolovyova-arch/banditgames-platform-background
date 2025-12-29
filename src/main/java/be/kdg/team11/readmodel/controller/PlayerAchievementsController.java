@@ -22,7 +22,7 @@ public class PlayerAchievementsController {
     }
 
     @GetMapping
-    @PreAuthorize("isAuthenthicated()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerAchievementsDto> getPlayerAchievements(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
         return ResponseEntity.ok(playerAchievementsService.getPlayerAchievements(playerId));

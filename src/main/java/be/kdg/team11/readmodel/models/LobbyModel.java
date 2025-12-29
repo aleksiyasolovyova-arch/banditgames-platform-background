@@ -12,59 +12,62 @@ import java.util.UUID;
 @Table(schema="read_model_schema", name="lobby")
 public class LobbyModel {
     @Id
-    @Column(name = "lobby_id")
+    @Column()
     private UUID lobbyId;
 
-    @Column(name = "game_id", nullable = false)
+    @Column(nullable = false)
     private UUID gameId;
 
-    @Column(name = "game_name", nullable = false)
+    @Column(nullable = false)
     private String gameName;
 
-    @Column(name = "player1_id", nullable = false)
+    @Column
+    private String gamePictureUrl;
+
+    @Column(nullable = false)
     private UUID player1Id;
 
-    @Column(name = "player2_id", nullable = false)
+    @Column(nullable = false)
     private UUID player2Id;
 
-    @Column(name = "player1_username")
+    @Column()
     private String player1Username;
 
-    @Column(name = "player2_username")
+    @Column()
     private String player2Username;
 
-    @Column(name = "player1_picture_url")
+    @Column()
     private String player1PictureUrl;
 
-    @Column(name = "player2_picture_url")
+    @Column()
     private String player2PictureUrl;
 
     // Participation status
-    @Column(name = "player1_status")
+    @Column()
     private String player1Status;
 
-    @Column(name = "player2_status")
+    @Column()
     private String player2Status;
 
     // Lobby type
-    @Column(name = "lobby_type")
+    @Column()
     private String lobbyType;
 
     // Result
-    @Column(name = "result")
+    @Column()
     private String result;
 
-    @Column(name = "winner_id")
+    @Column()
     private UUID winnerId;
 
     // Timestamps
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "started_at")
+    @Column()
     private LocalDateTime startedAt;
 
-    @Column(name = "finished_at")
+    @Column()
     private LocalDateTime finishedAt;
 
     public LobbyModel() {}
@@ -204,5 +207,12 @@ public class LobbyModel {
 
     public void setPlayer2PictureUrl(String player2PictureUrl) {
         this.player2PictureUrl = player2PictureUrl;
+    }
+
+    public String getGamePictureUrl() {
+        return gamePictureUrl;
+    }
+    public void setGamePictureUrl(String gamePictureUrl) {
+        this.gamePictureUrl = gamePictureUrl;
     }
 }

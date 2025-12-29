@@ -104,7 +104,7 @@ public class GameModelServiceImpl implements GameModelService {
                 .ifPresent(game -> {
                     game.setPictureUrl(event.newPictureUrl());
                     game.setGameUrl(event.newGameUrl());
-                    game.setUpdatedAt(LocalDateTime.now());
+                    game.setUpdatedAt(event.eventPit());
                     gameModelRepository.save(game);
                 });
     }

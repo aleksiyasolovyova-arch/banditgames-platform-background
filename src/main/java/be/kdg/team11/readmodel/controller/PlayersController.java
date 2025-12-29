@@ -21,10 +21,9 @@ public class PlayersController {
         this.playerModelService = playerModelService;
     }
 
-
-
     //default exception handling for now. could be changed with custom ones
     @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerProfileDto> getPlayerProfile(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
         try {
@@ -36,6 +35,7 @@ public class PlayersController {
     }
 
     @GetMapping("/opponent/{opponentId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerOpponentDto> getOpponent(@PathVariable UUID opponentId) {
         try {
             PlayerOpponentDto opponent = playerModelService.getOpponent(opponentId);
@@ -46,6 +46,7 @@ public class PlayersController {
     }
 
     @GetMapping("/navbar")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerNavBarDto> getPlayerNavBar(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
         try {
