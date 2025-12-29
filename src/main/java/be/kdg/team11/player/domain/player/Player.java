@@ -1,6 +1,6 @@
 package be.kdg.team11.player.domain.player;
 
-import be.kdg.team11.player.domain.player.exceptions.InvalidAchievementForPlayerException;
+import be.kdg.team11.player.domain.player.exceptions.InvalidPlatformAchievementForPlayerException;
 import be.kdg.team11.player.domain.player.exceptions.InvalidPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.util.*;
 /**
  * Aggregate Root for the Player subdomain.
- * Represents a player with their games, achievements, and profile information.
- * Manages the complete lifecycle: registration, game purchases, achievements.
+ * Represents a player with their games, gameAchievements, and profile information.
+ * Manages the complete lifecycle: registration, game purchases, gameAchievements.
  */
 public class Player {
     private static final String DEFAULT_PICTURE_URL="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg";
@@ -44,7 +44,7 @@ public class Player {
 
     /**
      * Factory method for creating a new player.
-     * Initial state: no games, no achievements.
+     * Initial state: no games, no gameAchievements.
      */
     public static Player create(PlayerId playerId, Username username) {
 
@@ -98,10 +98,10 @@ public class Player {
      * Player unlocks an achievement.
      * Throws InvalidAchievementForPlayerException if achievement operation fails.
      */
-    public void unlockAchievement(AchievementId achievementId) {
-        validatePlatformAchievementNotAlreadyUnlocked(achievementId);
+    public void unlockPlatformAchievement(PlatformAchievementId platformAchievementId) {
+        validatePlatformAchievementNotAlreadyUnlocked(platformAchievementId);
 
-        UnlockedPlatformAchievement achievement = UnlockedPlatformAchievement.now(achievementId);
+        UnlockedPlatformAchievement achievement = UnlockedPlatformAchievement.now(platformAchievementId);
         this.unlockedPlatformAchievements.add(achievement);
     }
 
@@ -123,14 +123,14 @@ public class Player {
     }
 
 
-    private void validatePlatformAchievementNotAlreadyUnlocked(AchievementId achievementId) {
+    private void validatePlatformAchievementNotAlreadyUnlocked(PlatformAchievementId platformAchievementId) {
         boolean alreadyUnlocked = unlockedPlatformAchievements.stream()
-                .anyMatch(ufa -> ufa.achievementId().equals(achievementId));
+                .anyMatch(ufa -> ufa.platformAchievementId().equals(platformAchievementId));
 
         if (alreadyUnlocked) {
-            throw new InvalidAchievementForPlayerException(
+            throw new InvalidPlatformAchievementForPlayerException(
                     String.format("Player %s already unlocked achievement %s",
-                            playerId.playerId(), achievementId.achievementId())
+                            playerId.playerId(), platformAchievementId.achievementId())
             );
         }
     }
@@ -142,7 +142,7 @@ public class Player {
                         uga.code().equals(achievementCode));
 
         if (alreadyUnlocked) {
-            throw new InvalidAchievementForPlayerException(
+            throw new InvalidPlatformAchievementForPlayerException(
                     String.format("Player %s already unlocked achievement %s in game %s",
                             playerId.playerId(), achievementCode, gameReference.gameId())
             );

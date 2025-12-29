@@ -1,7 +1,7 @@
 package be.kdg.team11.content.adapter.out.mapper;
 
 import be.kdg.team11.content.adapter.out.jpa.PlayerStatisticsJpaEntity;
-import be.kdg.team11.content.domain.achievement.AchievementId;
+import be.kdg.team11.content.domain.platformachievement.PlatformAchievementId;
 import be.kdg.team11.content.domain.projections.PlayerStatistics;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class PlayerStatisticsJpaMapper {
                 entity.getTotalFriends(),
                 entity.getBestRecordTime(),
                 entity.getUnlockedAchievements().stream().map(
-                        AchievementId::of
+                        PlatformAchievementId::of
                 ).toList()
         );
     }
@@ -27,7 +27,7 @@ public class PlayerStatisticsJpaMapper {
         entity.setTotalWins(playerStatistics.getTotalWins());
         entity.setTotalFriends(playerStatistics.getTotalFriends());
         entity.setBestRecordTime(playerStatistics.getBestRecordTime());
-        entity.setUnlockedAchievements(playerStatistics.getUnlockedAchievements().stream().map(AchievementId::achievementId).toList());
+        entity.setUnlockedAchievements(playerStatistics.getUnlockedPlatformAchievements().stream().map(PlatformAchievementId::achievementId).toList());
         return entity;
     }
 }

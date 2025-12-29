@@ -38,7 +38,7 @@ public class GamesModelController {
      * - registrationState (String): Game review state (PENDING, PASSED, FAILED)
      * - rules (List<RuleDto>): List of game rules
      *   - description (String): Rule description
-     * - achievements (List<GameAchievementDto>): List of game-specific achievements
+     * - gameAchievements (List<GameAchievementDto>): List of game-specific gameAchievements
      *   - code (String): Achievement code
      *   - description (String): Achievement description
      * - playableWithAI (boolean): Whether the game can be played with an AI

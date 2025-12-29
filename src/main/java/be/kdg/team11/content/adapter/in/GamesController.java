@@ -53,7 +53,7 @@ public class GamesController {
      * - gameCreatorName (String, required): Creator name (1-100 characters, cannot be blank)
      * - rules (List<RuleRequest>, required): At least one game rule must be provided
      *   - RuleRequest.description (String): Rule description (1-255 characters, cannot be blank)
-     * - achievements (List<GameAchievementRequest>, required): At least one achievement must be provided
+     * - gameAchievements (List<GameAchievementRequest>, required): At least one achievement must be provided
      *   - GameAchievementRequest.code (String): Achievement code (1-100 characters, cannot be blank)
      *   - GameAchievementRequest.description (String): Achievement description (1-500 characters, cannot be blank)
      * - playableWithAI (boolean, required): Whether the game can be played with an AI opponent
@@ -67,12 +67,12 @@ public class GamesController {
      * - gameCreatorName (String): Creator name (echoed from request)
      * - registrationState (String): Current registration state (e.g., "PENDING", "ACCEPTED", "REJECTED")
      * - rules (List<RuleDto>): List of game rules with descriptions
-     * - achievements (List<GameAchievementDto>): List of linked achievements with codes and descriptions
+     * - gameAchievements (List<GameAchievementDto>): List of linked gameAchievements with codes and descriptions
      * - playableWithAI (boolean): Whether the game can be played with an AI opponent (echoed from request)
      *
      * HTTP Status Codes:
      * - 201 Created: Game successfully registered with generated ID
-     * - 400 Bad Request: Validation failed (e.g., missing rules/achievements, invalid URLs, text too long/short)
+     * - 400 Bad Request: Validation failed (e.g., missing rules/gameAchievements, invalid URLs, text too long/short)
      * - 403 Forbidden: User lacks ADMIN role required for this operation
      * - 500 Internal Server Error: Unexpected server error during game registration
      *  */
@@ -107,7 +107,7 @@ public class GamesController {
      * - gameCreatorName (String): Name of the game creator
      * - registrationState (String): Current registration state of the game
      * - rules (List<RuleDto>): List of game rules with descriptions
-     * - achievements (List<GameAchievementDto>): List of associated achievements (code and description)
+     * - gameAchievements (List<GameAchievementDto>): List of associated gameAchievements (code and description)
      * - playableWithAI (boolean): Whether the game supports AI opponent mode
      *
      * HTTP Status Codes:

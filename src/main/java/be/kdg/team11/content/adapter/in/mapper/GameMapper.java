@@ -23,7 +23,7 @@ public class GameMapper {
                 request.rules().stream()
                         .map(RegisterGameRequest.RuleRequest::description)
                         .toList(),
-                request.achievements().stream()
+                request.gameAchievements().stream()
                         .map(achievementReq -> new RegisterGameCommand.GameAchievementCommand(
                                 achievementReq.code(),
                                 achievementReq.description()

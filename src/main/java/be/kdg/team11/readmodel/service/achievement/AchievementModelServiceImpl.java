@@ -5,7 +5,7 @@ import be.kdg.team11.readmodel.models.AchievementModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.GameModelRepository;
 import be.kdg.team11.readmodel.repository.UnlockedAchievementModelRepository;
-import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
+import be.kdg.team11.sharedkernel.events.achievement.PlatformAchievementCreatedEvent;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class AchievementModelServiceImpl implements AchievementModelService{
     }
 
     @Override
-    public void project(AchievementCreatedEvent event) {
+    public void project(PlatformAchievementCreatedEvent event) {
 
         AchievementModel achievement = new AchievementModel();
         achievement.setAchievementId(event.achievementId());

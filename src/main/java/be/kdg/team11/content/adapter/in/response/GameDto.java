@@ -12,7 +12,7 @@ public record GameDto(
         String gameCreatorName,
         String registrationState,
         List<RuleDto> rules,
-        List<GameAchievementDto> achievements,
+        List<GameAchievementDto> gameAchievements,
         boolean playableWithAI
 ) {
     public record RuleDto(

@@ -1,8 +1,8 @@
 package be.kdg.team11.content.adapter.in.exceptions;
 
-import be.kdg.team11.content.domain.achievement.exeptions.AchievementNotFoundException;
-import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementException;
-import be.kdg.team11.content.domain.achievement.exeptions.InvalidAchievementTypeException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.PlatformAchievementNotFoundException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementTypeException;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
@@ -79,33 +79,33 @@ public class ContentExceptionHandler {
      * Handles achievement not found errors
      * Returns 404 Not Found
      */
-    @ExceptionHandler(AchievementNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleAchievementNotFound(AchievementNotFoundException ex) {
+    @ExceptionHandler(PlatformAchievementNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePlatformAchievementNotFound(PlatformAchievementNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse("ACHIEVEMENT_NOT_FOUND", ex.getMessage()));
+                .body(new ErrorResponse("PLATFORM_ACHIEVEMENT_NOT_FOUND", ex.getMessage()));
     }
 
     /**
      * Handles invalid achievement data (null/empty fields, length violations)
      * Returns 400 Bad Request
      */
-    @ExceptionHandler(InvalidAchievementException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidAchievement(InvalidAchievementException ex) {
+    @ExceptionHandler(InvalidPlatformAchievementException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPlatformAchievement(InvalidPlatformAchievementException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse("INVALID_ACHIEVEMENT_DATA", ex.getMessage()));
+                .body(new ErrorResponse("INVALID_PLATFORM_ACHIEVEMENT_DATA", ex.getMessage()));
     }
 
     /**
      * Handles invalid achievement type
      * Returns 400 Bad Request
      */
-    @ExceptionHandler(InvalidAchievementTypeException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidAchievementType(InvalidAchievementTypeException ex) {
+    @ExceptionHandler(InvalidPlatformAchievementTypeException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPlatformAchievementType(InvalidPlatformAchievementTypeException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse("INVALID_ACHIEVEMENT_TYPE", ex.getMessage()));
+                .body(new ErrorResponse("INVALID_PLATFORM_ACHIEVEMENT_TYPE", ex.getMessage()));
     }
 
 

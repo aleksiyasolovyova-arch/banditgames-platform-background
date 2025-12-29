@@ -1,7 +1,7 @@
 package be.kdg.team11.readmodel.eventlisteners;
 
 import be.kdg.team11.readmodel.service.achievement.AchievementModelService;
-import be.kdg.team11.sharedkernel.events.achievement.AchievementCreatedEvent;
+import be.kdg.team11.sharedkernel.events.achievement.PlatformAchievementCreatedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,8 @@ public class AchievementEventListener {
         this.achievementModelService = achievementModelService;
     }
 
-    @EventListener(AchievementCreatedEvent.class)
-    public void achievementCreated(AchievementCreatedEvent event) {
+    @EventListener(PlatformAchievementCreatedEvent.class)
+    public void achievementCreated(PlatformAchievementCreatedEvent event) {
         achievementModelService.project(event);
     }
 

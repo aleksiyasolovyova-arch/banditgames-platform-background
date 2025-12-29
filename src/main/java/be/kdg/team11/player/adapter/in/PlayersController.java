@@ -51,8 +51,8 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedAchievements (Set<UnlockedAchievementDto>): Platform-wide achievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific achievements with unlock timestamps
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Platform-wide gameAchievements with unlock timestamps
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific gameAchievements with unlock timestamps
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 201 Created: Player successfully created
@@ -82,8 +82,8 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Updated profile picture URL
      * - joinedDate (LocalDate): Date player joined the platform
-     * - unlockedAchievements (Set<UnlockedAchievementDto>): Set of unlocked platform achievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game achievements (gameId, code, unlock timestamp)
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Set of unlocked platform gameAchievements with unlock timestamps
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game gameAchievements (gameId, code, unlock timestamp)
      * - favoriteGameId (UUID): ID of the player's favorite game
      *
      * HTTP Status Codes:
@@ -118,8 +118,8 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedAchievements (Set<UnlockedAchievementDto>): Player's platform achievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully marked as favorite
@@ -149,8 +149,8 @@ public class PlayersController {
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedAchievements (Set<UnlockedAchievementDto>): Player's platform achievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully removed from favorites

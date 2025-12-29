@@ -24,8 +24,8 @@ public class PlayerMapper {
                 player.getPictureUrl(),
                 player.getJoinedDate(),
                 player.getUnlockedPlatformAchievements().stream()
-                        .map(achievement -> new PlayerDto.UnlockedAchievementDto(
-                                achievement.achievementId().achievementId(),
+                        .map(achievement -> new PlayerDto.UnlockedPlatformAchievementDto(
+                                achievement.platformAchievementId().achievementId(),
                                 achievement.unlockedAt()
                         ))
                         .collect(Collectors.toSet()),

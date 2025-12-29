@@ -3,14 +3,14 @@
 
 ### Variables
 @baseUrl = http://localhost:8080
-@achievementId = 650e8400-e29b-41d4-a716-446655440000
+@platformAchievementId = 650e8400-e29b-41d4-a716-446655440000
 
 ### ============================================================
 ### POST /achievements - Create Achievement
 ### ============================================================
 
-### 1.1 Success - Create achievement with valid data (201 Created)
-POST {{baseUrl}}/achievements
+### 1.1 Success - Create platformAchievement with valid data (201 Created)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -21,8 +21,8 @@ Content-Type: application/json
   "requiredValue": 1
 }
 
-### 1.2 Success - Create achievement with max required value (201 Created)
-POST {{baseUrl}}/achievements
+### 1.2 Success - Create platformAchievement with max required value (201 Created)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -33,8 +33,8 @@ Content-Type: application/json
   "requiredValue": 100
 }
 
-### 1.3 Bad Request - Empty achievement name (400 Bad Request)
-POST {{baseUrl}}/achievements
+### 1.3 Bad Request - Empty platformAchievement name (400 Bad Request)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -45,8 +45,8 @@ Content-Type: application/json
   "requiredValue": 1
 }
 
-### 1.4 Bad Request - Null achievement name (400 Bad Request)
-POST {{baseUrl}}/achievements
+### 1.4 Bad Request - Null platformAchievement name (400 Bad Request)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -58,11 +58,11 @@ Content-Type: application/json
 }
 
 ### 1.5 Bad Request - Achievement name exceeds 100 characters (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
-  "achievementName": "This is a very long achievement name that definitely exceeds one hundred characters and should fail the validation check because it is way too lengthy",
+  "achievementName": "This is a very long platformAchievement name that definitely exceeds one hundred characters and should fail the validation check because it is way too lengthy",
   "description": "Achieve your first victory in the game",
   "pictureUrl": "https://example.com/badges/first-victory.png",
   "achievementType": "WIN_COUNT",
@@ -70,7 +70,7 @@ Content-Type: application/json
 }
 
 ### 1.6 Bad Request - Empty description (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -82,7 +82,7 @@ Content-Type: application/json
 }
 
 ### 1.7 Bad Request - Null description (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 
 ### 1.8 Bad Request - Description exceeds 255 characters (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 
 ### 1.9 Bad Request - Empty picture URL (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -118,7 +118,7 @@ Content-Type: application/json
 }
 
 ### 1.10 Bad Request - Null picture URL (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -129,8 +129,8 @@ Content-Type: application/json
   "requiredValue": 1
 }
 
-### 1.11 Bad Request - Empty achievement type (400 Bad Request)
-POST {{baseUrl}}/achievements
+### 1.11 Bad Request - Empty platformAchievement type (400 Bad Request)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -141,8 +141,8 @@ Content-Type: application/json
   "requiredValue": 1
 }
 
-### 1.12 Bad Request - Null achievement type (400 Bad Request)
-POST {{baseUrl}}/achievements
+### 1.12 Bad Request - Null platformAchievement type (400 Bad Request)
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -154,7 +154,7 @@ Content-Type: application/json
 }
 
 ### 1.13 Bad Request - Required value below range (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -166,7 +166,7 @@ Content-Type: application/json
 }
 
 ### 1.14 Bad Request - Required value exceeds range (400 Bad Request)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -178,7 +178,7 @@ Content-Type: application/json
 }
 
 ### 1.15 Bad Request - Required value at boundary (max) (201 Created)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -190,7 +190,7 @@ Content-Type: application/json
 }
 
 ### 1.16 Bad Request - Zero required value (201 Created)
-POST {{baseUrl}}/achievements
+POST {{baseUrl}}/platform-achievements
 Content-Type: application/json
 
 {
@@ -202,6 +202,6 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/achievements/achievements
+GET http://localhost:8080/platform-achievements/achievements
 Content-Type: application/json
 
