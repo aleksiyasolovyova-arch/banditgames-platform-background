@@ -9,7 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface PlatformAchievementModelRepository extends JpaRepository<PlatformAchievementModel, UUID> {
-    List<PlatformAchievementModel> findByGameIdIsNull();
-    List<PlatformAchievementModel> findByGameId(UUID gameId);
-    List<PlatformAchievementModel> findByType(AchievementModelType type);
 }

@@ -3,7 +3,7 @@ package be.kdg.team11.readmodel.controller.dto.player;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record PlayerOpponentDto(
+public record PlayerModelOpponentDto(
         UUID playerID,
         String username,
         String pictureUrl,
@@ -30,5 +30,5 @@ public record PlayerOpponentDto(
         Double secondMoveWinRatePercentage
 
 
-) {
+) implements PlayerModelDto {
 }

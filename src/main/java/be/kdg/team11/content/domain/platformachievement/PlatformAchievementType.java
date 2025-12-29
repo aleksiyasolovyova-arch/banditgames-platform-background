@@ -1,4 +1,7 @@
 package be.kdg.team11.content.domain.platformachievement;
+
+import be.kdg.team11.content.domain.projections.PlayerStatistics;
+
 /**
  * Enum representing different types of gameAchievements a player can earn.
  * Each type defines specific criteria for achievement completion.
@@ -16,8 +19,8 @@ public enum PlatformAchievementType {
      */
     PLAY_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, long actualValue) {
-            return actualValue >= requiredValue;
+        public boolean isMetBy(long requiredValue, PlayerStatistics statistics) {
+            return statistics.getTotalGamesPlayed() >= requiredValue;
         }
     },
     /**
@@ -26,8 +29,8 @@ public enum PlatformAchievementType {
      */
     WIN_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, long actualValue) {
-            return actualValue >= requiredValue;
+        public boolean isMetBy(long requiredValue, PlayerStatistics statistics) {
+            return statistics.getTotalWins() >= requiredValue;
         }
     },
     /**
@@ -36,8 +39,8 @@ public enum PlatformAchievementType {
      */
     FRIEND_COUNT {
         @Override
-        public boolean isMetBy(long requiredValue, long actualValue) {
-            return actualValue >= requiredValue;
+        public boolean isMetBy(long requiredValue, PlayerStatistics statistics) {
+            return statistics.getTotalFriends() >= requiredValue;
         }
     },
     /**
@@ -47,8 +50,8 @@ public enum PlatformAchievementType {
      */
     RECORD_TIME {
         @Override
-        public boolean isMetBy(long requiredValue, long actualValue) {
-            return actualValue <= requiredValue;
+        public boolean isMetBy(long requiredValue, PlayerStatistics statistics) {
+            return statistics.getBestRecordTime() <= requiredValue;
         }
     };
 
@@ -56,5 +59,5 @@ public enum PlatformAchievementType {
      * Determines if an achievement is met based on player statistics.
      * Each type implements its own criteria for achievement completion.
      */
-    public abstract boolean isMetBy(long requiredValue, long actualValue);
+    public abstract boolean isMetBy(long requiredValue, PlayerStatistics statistics);
 }

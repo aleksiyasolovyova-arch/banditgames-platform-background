@@ -9,6 +9,7 @@ import be.kdg.team11.content.port.out.LoadPlatformAchievementPort;
 import be.kdg.team11.content.port.out.SavePlatformAchievementPort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -33,5 +34,18 @@ public class PlatformAchievementJpaAdapter implements SavePlatformAchievementPor
     public Optional<PlatformAchievement> loadBy(PlatformAchievementId platformAchievementId) {
         return platformAchievementJpaRepository.findById(platformAchievementId.achievementId())
                 .map(platformAchievementJpaMapper::toDomain);
+    }
+
+    @Override
+    public List<PlatformAchievement> loadAllExcept(List<PlatformAchievementId> platFormAchievementIds) {
+        return platformAchievementJpaRepository.findAllExcluding(
+                platFormAchievementIds
+                        .stream()
+                        .map(PlatformAchievementId::achievementId)
+                        .toList()
+                )
+                .stream()
+                .map(platformAchievementJpaMapper::toDomain)
+                .toList();
     }
 }

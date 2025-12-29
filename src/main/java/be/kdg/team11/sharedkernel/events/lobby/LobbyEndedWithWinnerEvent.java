@@ -8,15 +8,21 @@ import java.util.UUID;
 public record LobbyEndedWithWinnerEvent(
         UUID lobbyId,
         UUID winnerId,
-        String newStatus,
+        UUID player1Id,
+        UUID player2Id,
+        long time,
         LocalDateTime eventPit
 ) implements DomainEvent {
     public LobbyEndedWithWinnerEvent(UUID lobbyId,
                                      UUID winnerId,
-                                     String newStatus) {
+                                     UUID player1Id,
+                                     UUID player2Id,
+                                     long time) {
         this(lobbyId,
                 winnerId,
-                newStatus,
+                player1Id,
+                player2Id,
+                time,
                 LocalDateTime.now());
     }
 }

@@ -2,6 +2,7 @@ package be.kdg.team11.content.domain.projections;
 
 
 import be.kdg.team11.content.domain.platformachievement.PlatformAchievementId;
+import be.kdg.team11.content.domain.projections.exceptions.PlayerStatisticsNotFoundException;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.achievement.PlatformAchievementUnlockedEvent;
 
@@ -49,6 +50,7 @@ public class PlayerStatistics{
     }
 
     public void addWin(){
+        totalGamesPlayed++;
         totalWins++;
     }
 
@@ -57,7 +59,9 @@ public class PlayerStatistics{
     }
 
     public void setBestRecordTime(long time){
-        bestRecordTime = time;
+        if (time < this.bestRecordTime){
+            bestRecordTime = time;
+        }
     }
 
     public UUID getPlayerId() {
@@ -86,5 +90,11 @@ public class PlayerStatistics{
 
     public List<DomainEvent> getEventStore() {
         return Collections.unmodifiableList(eventStore);
+    }
+
+    public static PlayerStatisticsNotFoundException notFound (UUID playerId){
+        return new PlayerStatisticsNotFoundException(
+                String.format("Player statistics not found for player with ID: %s",playerId)
+        );
     }
 }

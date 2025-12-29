@@ -7,13 +7,12 @@ import java.util.UUID;
 
 public record LobbyEndedWithDrawEvent(
         UUID lobbyId,
-        String newStatus,
+        UUID player1Id,
+        UUID player2Id,
+        long time,
         LocalDateTime eventPit
 )implements DomainEvent {
-    public LobbyEndedWithDrawEvent(UUID lobbyId,
-                                   String newStatus) {
-        this(lobbyId,
-                newStatus,
-                LocalDateTime.now());
+    public LobbyEndedWithDrawEvent(UUID lobbyId, UUID player1Id, UUID player2Id, long time) {
+        this(lobbyId, player1Id, player2Id, time, LocalDateTime.now());
     }
 }

@@ -9,6 +9,7 @@ import be.kdg.team11.sharedkernel.events.lobby.*;
 import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -257,7 +258,7 @@ import java.util.List;
  */
     public void end(PlayerId winnerId) {
         int winnerNumber = whichPlayer(winnerId);
-
+        PlayerId loserId = getOtherPlayerId(winnerId);
         if (!lobbyResult.equals(LobbyResult.DID_NOT_FINISH)) {
             throw InvalidLobbyStateException.invalidStateTransition(
                     lobbyResult.name(),
@@ -275,7 +276,9 @@ import java.util.List;
         LobbyEndedWithWinnerEvent event = new LobbyEndedWithWinnerEvent(
                 lobbyId.lobbyId(),
                 winnerId.playerId(),
-                status
+                slotPair.getFirst().getPlayerId().playerId(),
+                slotPair.getSecond().getPlayerId().playerId(),
+                ChronoUnit.SECONDS.between(startTime,endTime)
         );
         eventStore.add(event);
     }
@@ -298,7 +301,9 @@ import java.util.List;
 
         LobbyEndedWithDrawEvent event = new LobbyEndedWithDrawEvent(
                 lobbyId.lobbyId(),
-                "DRAW"
+                slotPair.getFirst().getPlayerId().playerId(),
+                slotPair.getSecond().getPlayerId().playerId(),
+                ChronoUnit.SECONDS.between(startTime,endTime)
         );
         eventStore.add(event);
     }
@@ -338,6 +343,12 @@ import java.util.List;
                 );
             }
         }
+    }
+
+    //TODO double check that this is ok and doesn't crash.
+
+    private PlayerId getOtherPlayerId (PlayerId current){
+        return slotPair.getFirst().getPlayerId().playerId().equals(current.playerId()) ? slotPair.getSecond().getPlayerId() : slotPair.getFirst().getPlayerId();
     }
 
     public LobbyId getLobbyId() {

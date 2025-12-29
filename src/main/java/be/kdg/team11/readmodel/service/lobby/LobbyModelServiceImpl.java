@@ -60,7 +60,6 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyEndedWithDrawEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
-                    lobby.setResult(event.newStatus());
                     lobby.setFinishedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });
@@ -71,7 +70,10 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyEndedWithWinnerEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
-                    lobby.setResult(event.newStatus());
+                    if (event.player1Id() == event.winnerId())
+                        lobby.setResult("PLAYER_1_WINNER");
+                    else
+                        lobby.setResult("PLAYER_2_WINNER");
                     lobby.setWinnerId(event.winnerId());
                     lobby.setFinishedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
@@ -82,6 +84,7 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyStartedEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
+                    lobby.setResult("DRAW");
                     lobby.setStartedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });

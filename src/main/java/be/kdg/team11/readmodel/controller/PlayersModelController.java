@@ -1,6 +1,7 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.readmodel.controller.dto.player.PlayerNavBarDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerModelDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerModelNavBarDto;
 import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
 import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
 import be.kdg.team11.readmodel.service.player.PlayerModelService;
@@ -14,10 +15,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/players")
-public class PlayersController {
+public class PlayersModelController {
     private final PlayerModelService playerModelService;
 
-    public PlayersController(PlayerModelService playerModelService) {
+    public PlayersModelController(PlayerModelService playerModelService) {
         this.playerModelService = playerModelService;
     }
 
@@ -47,13 +48,27 @@ public class PlayersController {
 
     @GetMapping("/navbar")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PlayerNavBarDto> getPlayerNavBar(@AuthenticationPrincipal Jwt token) {
+    public ResponseEntity<PlayerModelNavBarDto> getPlayerNavBar(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
         try {
-            PlayerNavBarDto navBar = playerModelService.getPlayerNavBar(playerId);
+            PlayerModelNavBarDto navBar = playerModelService.getPlayerNavBar(playerId);
             return ResponseEntity.ok(navBar);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<? extends PlayerModelDto> getPlayer(
+            @AuthenticationPrincipal Jwt token,
+            @RequestParam ){
+
+    }
+
+    public enum GetPlayerScope{
+        NAVBAR,
+        STATS,
+
     }
 }

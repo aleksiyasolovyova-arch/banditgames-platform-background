@@ -7,10 +7,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PlatformAchievementUnlockedEventListener {
+public class AchievementUnlockedListener {
     private final PlatformAchievementUnlockedProjector platformAchievementUnlockedProjector;
 
-    public PlatformAchievementUnlockedEventListener(PlatformAchievementUnlockedProjector platformAchievementUnlockedProjector) {
+    public AchievementUnlockedListener(PlatformAchievementUnlockedProjector platformAchievementUnlockedProjector) {
         this.platformAchievementUnlockedProjector = platformAchievementUnlockedProjector;
     }
 

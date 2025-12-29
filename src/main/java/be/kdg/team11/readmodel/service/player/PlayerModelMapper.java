@@ -1,6 +1,6 @@
 package be.kdg.team11.readmodel.service.player;
 
-import be.kdg.team11.readmodel.controller.dto.player.PlayerNavBarDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerModelNavBarDto;
 import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
 import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
 import be.kdg.team11.readmodel.models.LobbyModel;
@@ -111,8 +111,8 @@ public class PlayerModelMapper {
         );
     }
 
-    public PlayerNavBarDto toNavBarDto(PlayerModel player) {
-        return new PlayerNavBarDto(
+    public PlayerModelNavBarDto toNavBarDto(PlayerModel player) {
+        return new PlayerModelNavBarDto(
                 player.getPlayerId(),
                 player.getUsername(),
                 player.getPictureUrl()

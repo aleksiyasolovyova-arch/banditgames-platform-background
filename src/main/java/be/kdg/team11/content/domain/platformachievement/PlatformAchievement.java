@@ -1,6 +1,7 @@
 package be.kdg.team11.content.domain.platformachievement;
 
 import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementException;
+import be.kdg.team11.content.domain.projections.PlayerStatistics;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.achievement.PlatformAchievementCreatedEvent;
 
@@ -61,8 +62,8 @@ public class PlatformAchievement {
      * Evaluates if a player has met the criteria for this specific achievement.
      * Delegates to the achievement type to determine if the required value is met.
      */
-    public boolean isPlatformAchievementMet(long actualValue) {
-        return type.isMetBy(requiredValue, actualValue);
+    public boolean isMet(PlayerStatistics statistics) {
+        return type.isMetBy(requiredValue, statistics);
     }
 
 

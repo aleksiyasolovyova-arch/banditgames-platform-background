@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-//removed game stats dto because i read a few articles saying to keep dtos flat and simple and
-//avoid nested objects in them if possible
-public record PlayerProfileDto(
+public record PlayerModelProfileDto(
         UUID playerId,
         String username,
         String pictureUrl,
@@ -40,7 +38,7 @@ public record PlayerProfileDto(
         Double secondMoveWinRatePercentage,
 
         List<PlayerHistoryDto> games
-) {
+) implements PlayerModelDto {
     public record PlayerHistoryDto(
             UUID lobbyId,
             UUID gameId,
