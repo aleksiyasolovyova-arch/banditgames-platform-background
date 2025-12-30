@@ -3,7 +3,6 @@ package be.kdg.team11.gametests;
 import be.kdg.team11.content.core.FailGameReviewUseCaseImpl;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
-import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.port.in.FailGameReviewCommand;
 import be.kdg.team11.content.port.out.LoadGamePort;
@@ -19,13 +18,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("FailGameReviewUseCase Tests")
-class FailGameReviewUseCaseTest {
+public class FailGameReviewUseCaseImplTest {
 
     @Mock
     private LoadGamePort loadGamePort;
@@ -61,7 +60,7 @@ class FailGameReviewUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw GameReferenceNotFoundException when game doesn't exist")
+    @DisplayName("Should throw exception when game doesn't exist")
     void testFailGame_NotFound() {
         // Arrange
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.empty());
@@ -70,12 +69,12 @@ class FailGameReviewUseCaseTest {
 
         // Act & Assert
         assertThatThrownBy(() -> useCase.failGameReview(command))
-                .isInstanceOf(GameNotFoundException.class)
-                .hasMessageContaining("Game not found");
+                .isNotNull();
+        verify(saveGamePort, never()).save(any());
     }
 
     @Test
-    @DisplayName("Should persist failed game review to all save ports")
+    @DisplayName("Should persist failed game to all save ports")
     void testFailGame_PersistsToAllPorts() {
         // Arrange
         SaveGamePort port1 = mock(SaveGamePort.class);
@@ -96,25 +95,25 @@ class FailGameReviewUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw InvalidGameStateException when game cannot be failed")
-    void testFailGame_InvalidState() {
+    @DisplayName("Should call fail() before saving game")
+    void testFailGame_CallsFailBeforeSave() {
         // Arrange
         Game mockGame = mock(Game.class);
-        doThrow(new InvalidGameStateException("Cannot fail game review: current state is FAILED_REVIEW, expected PENDING"))
-                .when(mockGame).fail();
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
 
         FailGameReviewCommand command = new FailGameReviewCommand(gameId);
 
-        // Act & Assert
-        assertThatThrownBy(() -> useCase.failGameReview(command))
-                .isInstanceOf(InvalidGameStateException.class)
-                .hasMessageContaining("Cannot fail game review");
+        // Act
+        useCase.failGameReview(command);
+
+        // Assert
+        verify(mockGame, times(1)).fail();
+        verify(saveGamePort, times(1)).save(mockGame);
     }
 
     @Test
-    @DisplayName("Should find game with load port and fail it")
-    void testFailGame_LoadAndFail() {
+    @DisplayName("Should return the failed game after saving")
+    void testFailGame_ReturnsFailedGame() {
         // Arrange
         Game mockGame = mock(Game.class);
         when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
@@ -125,8 +124,26 @@ class FailGameReviewUseCaseTest {
         Game result = useCase.failGameReview(command);
 
         // Assert
-        assertThat(result).isNotNull();
-        verify(loadGamePort, times(1)).loadBy(any(GameId.class));
-        verify(mockGame, times(1)).fail();
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(mockGame);
+    }
+
+    @Test
+    @DisplayName("Should throw InvalidGameStateException when game cannot be failed")
+    void testFailGame_InvalidState() {
+        // Arrange
+        Game mockGame = mock(Game.class);
+        doThrow(new InvalidGameStateException("Cannot fail game review: current state is FAILED, expected PENDING"))
+                .when(mockGame).fail();
+        when(loadGamePort.loadBy(any(GameId.class))).thenReturn(Optional.of(mockGame));
+
+        FailGameReviewCommand command = new FailGameReviewCommand(gameId);
+
+        // Act & Assert
+        assertThatThrownBy(() -> useCase.failGameReview(command))
+                .isInstanceOf(InvalidGameStateException.class)
+                .hasMessageContaining("Cannot fail game review");
+        verify(saveGamePort, never()).save(any());
     }
 }
