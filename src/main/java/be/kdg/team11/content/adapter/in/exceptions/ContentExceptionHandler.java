@@ -1,12 +1,12 @@
 package be.kdg.team11.content.adapter.in.exceptions;
 
-import be.kdg.team11.content.domain.platformachievement.exeptions.PlatformAchievementNotFoundException;
-import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementException;
-import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementTypeException;
 import be.kdg.team11.content.domain.game.exeptions.GameNotFoundException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameUrlException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.InvalidPlatformAchievementTypeException;
+import be.kdg.team11.content.domain.platformachievement.exeptions.PlatformAchievementNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

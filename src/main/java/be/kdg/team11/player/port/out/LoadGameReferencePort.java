@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface LoadGameReferencePort {
     List<GameReference> loadAll();
+
     Optional<GameReference> loadBy(UUID gameId);
 }

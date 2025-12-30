@@ -40,20 +40,20 @@ public class LobbyEndedWithDrawProjectorImpl implements LobbyEndedWithDrawProjec
         List<PlatformAchievement> possiblePlatformAchievementsPlayer2 = loadPlatformAchievementPort.loadAllExcept(player2Statistics.getUnlockedPlatformAchievements());
         possiblePlatformAchievementsPlayer1.forEach(
                 platformAchievement -> {
-                    if (platformAchievement.isMet(player1Statistics)){
+                    if (platformAchievement.isMet(player1Statistics)) {
                         player2Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
                     }
                 }
         );
         possiblePlatformAchievementsPlayer2.forEach(
                 platformAchievement -> {
-                    if (platformAchievement.isMet(player2Statistics)){
+                    if (platformAchievement.isMet(player2Statistics)) {
                         player2Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
                     }
                 }
         );
         savePlayerStatisticsPorts.forEach(
-                port ->{
+                port -> {
                     port.save(player1Statistics);
                 }
         );

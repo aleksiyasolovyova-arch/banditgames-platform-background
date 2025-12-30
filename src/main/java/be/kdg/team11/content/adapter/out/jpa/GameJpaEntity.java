@@ -3,7 +3,6 @@ package be.kdg.team11.content.adapter.out.jpa;
 import be.kdg.team11.content.domain.game.GameReviewState;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

@@ -3,7 +3,6 @@ package be.kdg.team11.player.adapter.out.mapper;
 import be.kdg.team11.player.adapter.out.jpa.entity.LobbyJpaEntity;
 import be.kdg.team11.player.domain.lobby.Lobby;
 import be.kdg.team11.player.domain.lobby.LobbyId;
-import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.data.util.Pair;

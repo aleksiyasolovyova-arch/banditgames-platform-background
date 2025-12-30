@@ -13,7 +13,7 @@ public record PassedGameReviewEvent(
         String newReviewState
 ) implements DomainEvent {
     public PassedGameReviewEvent(
-            UUID gameId, String gameUrl ,String newReviewState
+            UUID gameId, String gameUrl, String newReviewState
     ) {
         this(
                 UUID.randomUUID(),

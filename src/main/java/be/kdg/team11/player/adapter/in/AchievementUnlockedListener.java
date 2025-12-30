@@ -15,7 +15,7 @@ public class AchievementUnlockedListener {
     }
 
     @EventListener(PlatformAchievementUnlockedEvent.class)
-    public void platformAchievementUnlocked(PlatformAchievementUnlockedEvent event){
-        platformAchievementUnlockedProjector.project(new PlatformAchievementUnlockedCommand(event.playerId(),event.achievementId(),event.eventPit()));
+    public void platformAchievementUnlocked(PlatformAchievementUnlockedEvent event) {
+        platformAchievementUnlockedProjector.project(new PlatformAchievementUnlockedCommand(event.playerId(), event.achievementId(), event.eventPit()));
     }
 }

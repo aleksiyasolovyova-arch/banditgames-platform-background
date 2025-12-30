@@ -2,7 +2,6 @@ package be.kdg.team11.player.core;
 
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
-import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.player.port.in.RemoveFavoriteGameCommand;
 import be.kdg.team11.player.port.in.RemoveFavoriteGamePort;
 import be.kdg.team11.player.port.out.LoadPlayerPort;

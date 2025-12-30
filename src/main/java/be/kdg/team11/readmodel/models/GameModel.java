@@ -59,8 +59,6 @@ public class GameModel {
     private List<GameAchievement> achievements = new ArrayList<>();
 
 
-
-
     public GameModel() {
     }
 
@@ -155,6 +153,7 @@ public class GameModel {
     public List<GameAchievement> getAchievements() {
         return achievements;
     }
+
     public void setAchievements(List<GameAchievement> achievements) {
         this.achievements = achievements;
     }

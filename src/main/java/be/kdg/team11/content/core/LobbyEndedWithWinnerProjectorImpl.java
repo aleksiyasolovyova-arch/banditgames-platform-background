@@ -30,7 +30,7 @@ public class LobbyEndedWithWinnerProjectorImpl implements LobbyEndedWithWinnerPr
         PlayerStatistics player1Statistics = loadPlayerStatisticsPort.loadBy(command.player1Id()).orElseThrow(() -> PlayerStatistics.notFound(command.player1Id()));
         PlayerStatistics player2Statistics = loadPlayerStatisticsPort.loadBy(command.player2Id()).orElseThrow(() -> PlayerStatistics.notFound(command.player2Id()));
 
-        if (command.winnerId() == command.player1Id()){
+        if (command.winnerId() == command.player1Id()) {
             player1Statistics.addWin();
             player2Statistics.addGamePlayed();
         } else {
@@ -45,20 +45,20 @@ public class LobbyEndedWithWinnerProjectorImpl implements LobbyEndedWithWinnerPr
         List<PlatformAchievement> possiblePlatformAchievementsPlayer2 = loadPlatformAchievementPort.loadAllExcept(player2Statistics.getUnlockedPlatformAchievements());
         possiblePlatformAchievementsPlayer1.forEach(
                 platformAchievement -> {
-                    if (platformAchievement.isMet(player1Statistics)){
+                    if (platformAchievement.isMet(player1Statistics)) {
                         player2Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
                     }
                 }
         );
         possiblePlatformAchievementsPlayer2.forEach(
                 platformAchievement -> {
-                    if (platformAchievement.isMet(player2Statistics)){
+                    if (platformAchievement.isMet(player2Statistics)) {
                         player2Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
                     }
                 }
         );
         savePlayerStatisticsPorts.forEach(
-                port ->{
+                port -> {
                     port.save(player1Statistics);
                 }
         );

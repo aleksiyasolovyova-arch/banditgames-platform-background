@@ -30,7 +30,7 @@ public class PlatformAchievementsController {
      * Creates a new achievement definition.
      * Endpoint: POST /gameAchievements
      * Required Role: ADMIN
-     *
+     * <p>
      * REQUEST BODY (CreateAchievementRequest):
      * - platformAchievementName (String, required): Name of the achievement (1-100 chars)
      * - description (String, required): Achievement description (5-500 chars)

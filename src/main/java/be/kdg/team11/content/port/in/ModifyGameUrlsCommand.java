@@ -6,4 +6,5 @@ public record ModifyGameUrlsCommand(
         UUID gameId,
         String pictureUrl,
         String gameUrl
-) {}
+) {
+}

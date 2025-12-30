@@ -3,7 +3,6 @@ package be.kdg.team11.player.adapter.in;
 import be.kdg.team11.player.adapter.in.mapper.PlayerMapper;
 import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
-import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
@@ -73,10 +72,10 @@ public class PlayersController {
      * Updates the current authenticated player's profile picture URL.
      * Endpoint: PUT /players
      * Required Authentication: Authenticated user (JWT token)
-     *
+     * <p>
      * REQUEST BODY (ChangePlayerPictureUrlRequest):
      * - pictureUrl (String, required): New profile picture URL (cannot be null or blank)
-     *
+     * <p>
      * RESPONSE BODY (PlayerDto):
      * - strangerUserName (UUID): Unique player identifier (extracted from JWT subject)
      * - username (String): Player username
@@ -85,7 +84,7 @@ public class PlayersController {
      * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Set of unlocked platform gameAchievements with unlock timestamps
      * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game gameAchievements (gameId, code, unlock timestamp)
      * - favoriteGameId (UUID): ID of the player's favorite game
-     *
+     * <p>
      * HTTP Status Codes:
      * - 200 OK: Profile picture successfully updated and player data returned
      * - 400 Bad Request: Validation failed (picture URL is null or blank)
@@ -98,7 +97,7 @@ public class PlayersController {
     public ResponseEntity<PlayerDto> changePlayerPictureUrl(
             @AuthenticationPrincipal Jwt token,
             @Valid @RequestBody ChangePlayerPictureUrlRequest request
-            ){
+    ) {
         Player updatedPlayer = changePlayerPictureUrlPort.changePictureUrl(
                 new ChangePlayerPictureUrlCommand(
                         UUID.fromString(token.getSubject()), request.pictureUrl()

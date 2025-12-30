@@ -1,12 +1,12 @@
 package be.kdg.team11.readmodel.service.achievements;
 
 import be.kdg.team11.readmodel.controller.dto.AchievementsDto;
-import be.kdg.team11.readmodel.models.PlatformAchievementModel;
-import be.kdg.team11.readmodel.models.GameModel;
 import be.kdg.team11.readmodel.models.AchievementModel;
-import be.kdg.team11.readmodel.repository.PlatformAchievementModelRepository;
-import be.kdg.team11.readmodel.repository.GameModelRepository;
+import be.kdg.team11.readmodel.models.GameModel;
+import be.kdg.team11.readmodel.models.PlatformAchievementModel;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
+import be.kdg.team11.readmodel.repository.GameModelRepository;
+import be.kdg.team11.readmodel.repository.PlatformAchievementModelRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

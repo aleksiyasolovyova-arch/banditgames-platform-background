@@ -13,12 +13,18 @@ import java.util.UUID;
 
 public interface PlayerModelService {
     void project(PlayerCreatedEvent event);
+
     void project(PlayerChangedPictureUrlEvent event);
+
     void project(PlayerChangedFavoriteGameEvent event);
+
     void project(PlayerRemovedFavoriteGameEvent event);
+
     void project(LobbyEndedWithWinnerEvent event);
+
     void project(LobbyEndedWithDrawEvent event);
 
     PlayerModelProfileDto getPlayerProfile(UUID playerId);
+
     PlayerModelNavBarDto getPlayerNavBar(UUID playerId);
 }

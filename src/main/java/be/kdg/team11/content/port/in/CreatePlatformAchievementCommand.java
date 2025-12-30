@@ -6,4 +6,5 @@ public record CreatePlatformAchievementCommand(
         String pictureUrl,
         String type,
         long requiredValue
-) {}
+) {
+}

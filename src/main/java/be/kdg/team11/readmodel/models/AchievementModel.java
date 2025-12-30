@@ -29,7 +29,8 @@ public class AchievementModel {
     @Column(nullable = false)
     private LocalDateTime unlockedAt;
 
-    public AchievementModel() {}
+    public AchievementModel() {
+    }
 
     public UUID getId() {
         return id;

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerStatistics{
+public class PlayerStatistics {
     private final UUID playerId;
     List<PlatformAchievementId> unlockedPlatformAchievements = new ArrayList<>();
     private long totalGamesPlayed;
@@ -33,7 +33,7 @@ public class PlayerStatistics{
     public static PlayerStatistics create(
             UUID playerId
     ) {
-        return new PlayerStatistics(playerId,0,0,0,Long.MAX_VALUE, Collections.emptyList());
+        return new PlayerStatistics(playerId, 0, 0, 0, Long.MAX_VALUE, Collections.emptyList());
     }
 
     public void unlockPlatformAchievement(PlatformAchievementId platformAchievementId) {
@@ -45,21 +45,21 @@ public class PlayerStatistics{
         this.eventStore.add(event);
     }
 
-    public void addGamePlayed(){
+    public void addGamePlayed() {
         totalGamesPlayed++;
     }
 
-    public void addWin(){
+    public void addWin() {
         totalGamesPlayed++;
         totalWins++;
     }
 
-    public void addFriend(){
+    public void addFriend() {
         totalFriends++;
     }
 
-    public void setBestRecordTime(long time){
-        if (time < this.bestRecordTime){
+    public void setBestRecordTime(long time) {
+        if (time < this.bestRecordTime) {
             bestRecordTime = time;
         }
     }
@@ -92,9 +92,9 @@ public class PlayerStatistics{
         return Collections.unmodifiableList(eventStore);
     }
 
-    public static PlayerStatisticsNotFoundException notFound (UUID playerId){
+    public static PlayerStatisticsNotFoundException notFound(UUID playerId) {
         return new PlayerStatisticsNotFoundException(
-                String.format("Player statistics not found for player with ID: %s",playerId)
+                String.format("Player statistics not found for player with ID: %s", playerId)
         );
     }
 }

@@ -1,4 +1,5 @@
 package be.kdg.team11.player.adapter.in.exceptions;
+
 import be.kdg.team11.player.domain.friendship.exceptions.FriendRequestAlreadyExistsException;
 import be.kdg.team11.player.domain.friendship.exceptions.FriendshipNotFoundException;
 import be.kdg.team11.player.domain.friendship.exceptions.InvalidFriendshipException;

@@ -1,6 +1,7 @@
 package be.kdg.team11.content.domain.platformachievement;
 
 import be.kdg.team11.content.domain.platformachievement.exeptions.PlatformAchievementNotFoundException;
+
 import java.util.UUID;
 
 public record PlatformAchievementId(

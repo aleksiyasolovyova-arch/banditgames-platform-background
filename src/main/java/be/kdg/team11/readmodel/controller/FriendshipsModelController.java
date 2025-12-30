@@ -24,7 +24,7 @@ public class FriendshipsModelController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-        public ResponseEntity<List<FriendShipModelDto>> getFriendships(@AuthenticationPrincipal Jwt token) {
+    public ResponseEntity<List<FriendShipModelDto>> getFriendships(@AuthenticationPrincipal Jwt token) {
         UUID playerId = UUID.fromString(token.getSubject());
         List<FriendShipModelDto> friendships = friendshipModelService.getPlayerFriendships(playerId);
         return ResponseEntity.ok(friendships);

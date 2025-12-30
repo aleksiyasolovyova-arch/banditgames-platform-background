@@ -7,4 +7,5 @@ public record RequestFriendshipRequest(
         @NotNull(message = "Recipient username cannot be null")
         @NotEmpty(message = "Recipient username cannot be empty")
         String recipientUsername
-) {}
+) {
+}

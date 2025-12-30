@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(schema="read_model_schema", name="lobby")
+@Table(schema = "read_model_schema", name = "lobby")
 public class LobbyModel {
     @Id
     @Column()
@@ -70,7 +70,8 @@ public class LobbyModel {
     @Column()
     private LocalDateTime finishedAt;
 
-    public LobbyModel() {}
+    public LobbyModel() {
+    }
 
     public UUID getLobbyId() {
         return lobbyId;
@@ -212,6 +213,7 @@ public class LobbyModel {
     public String getGamePictureUrl() {
         return gamePictureUrl;
     }
+
     public void setGamePictureUrl(String gamePictureUrl) {
         this.gamePictureUrl = gamePictureUrl;
     }

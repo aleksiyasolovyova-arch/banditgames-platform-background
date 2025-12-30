@@ -7,5 +7,5 @@ public record FriendshipDto(
         UUID requesterId,
         UUID recipientId,
         String state
-){
+) {
 }

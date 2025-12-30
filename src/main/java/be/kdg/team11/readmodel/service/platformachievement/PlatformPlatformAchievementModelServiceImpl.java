@@ -2,14 +2,14 @@ package be.kdg.team11.readmodel.service.platformachievement;
 
 import be.kdg.team11.readmodel.controller.dto.PlatformAchievementDto;
 import be.kdg.team11.readmodel.models.PlatformAchievementModel;
-import be.kdg.team11.readmodel.repository.PlatformAchievementModelRepository;
-import be.kdg.team11.readmodel.repository.GameModelRepository;
 import be.kdg.team11.readmodel.repository.AchievementModelRepository;
+import be.kdg.team11.readmodel.repository.GameModelRepository;
+import be.kdg.team11.readmodel.repository.PlatformAchievementModelRepository;
 import be.kdg.team11.sharedkernel.events.achievement.PlatformAchievementCreatedEvent;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @Transactional
@@ -18,11 +18,12 @@ public class PlatformPlatformAchievementModelServiceImpl implements PlatformAchi
     private final AchievementModelRepository achievementModelRepository;
     private final PlatformAchievementModelMapper platformAchievementModelMapper;
     private final GameModelRepository gameModelRepository;
+
     public PlatformPlatformAchievementModelServiceImpl(PlatformAchievementModelRepository platformAchievementModelRepository,
                                                        AchievementModelRepository achievementModelRepository,
                                                        PlatformAchievementModelMapper platformAchievementModelMapper,
                                                        GameModelRepository gameModelRepository
-                                       ) {
+    ) {
         this.platformAchievementModelRepository = platformAchievementModelRepository;
         this.achievementModelRepository = achievementModelRepository;
         this.platformAchievementModelMapper = platformAchievementModelMapper;

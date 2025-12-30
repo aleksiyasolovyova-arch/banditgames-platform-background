@@ -1,13 +1,13 @@
 package be.kdg.team11.content.core;
 
-import be.kdg.team11.content.port.out.SaveGamePort;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 import be.kdg.team11.content.domain.game.Game;
 import be.kdg.team11.content.domain.game.GameId;
 import be.kdg.team11.content.port.in.FailGameReviewCommand;
 import be.kdg.team11.content.port.in.FailGameReviewPort;
 import be.kdg.team11.content.port.out.LoadGamePort;
+import be.kdg.team11.content.port.out.SaveGamePort;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

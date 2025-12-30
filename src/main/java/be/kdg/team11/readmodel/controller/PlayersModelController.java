@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -23,7 +26,7 @@ public class PlayersModelController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<? extends PlayerModelDto> getPlayer(
             @AuthenticationPrincipal Jwt token,
-            @RequestParam GetPlayerScope scope){
+            @RequestParam GetPlayerScope scope) {
         UUID playerId = UUID.fromString(token.getSubject());
         try {
             PlayerModelDto dto = switch (scope) {
@@ -36,7 +39,7 @@ public class PlayersModelController {
         }
     }
 
-    public enum GetPlayerScope{
+    public enum GetPlayerScope {
         NAVBAR,
         PROFILE,
     }

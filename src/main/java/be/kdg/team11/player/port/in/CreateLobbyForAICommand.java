@@ -4,7 +4,7 @@ import be.kdg.team11.player.domain.player.PlayerId;
 
 import java.util.UUID;
 
-public record CreateLobbyForStrangerCommand(
-        PlayerId playerId, UUID gameId, String strangerUserName
+public record CreateLobbyForAICommand(
+        PlayerId playerId, UUID gameId
 ) {
 }

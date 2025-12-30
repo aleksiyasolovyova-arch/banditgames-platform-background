@@ -1,6 +1,5 @@
 package be.kdg.team11.content.adapter.out.jpa;
 
-import be.kdg.team11.content.domain.platformachievement.PlatformAchievementType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,8 @@ import java.util.UUID;
 @Repository
 public interface PlatformAchievementJpaRepository extends JpaRepository<PlatformAchievementJpaEntity, UUID> {
     @Query("""
-    SELECT DISTINCT p FROM PlatformAchievementJpaEntity p
-    WHERE p.platformAchievementId NOT IN :platformAchievementIds
-    """)
+            SELECT DISTINCT p FROM PlatformAchievementJpaEntity p
+            WHERE p.platformAchievementId NOT IN :platformAchievementIds
+            """)
     List<PlatformAchievementJpaEntity> findAllExcluding(List<UUID> platformAchievementIds);
 }

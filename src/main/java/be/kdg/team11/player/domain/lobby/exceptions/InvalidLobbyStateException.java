@@ -1,6 +1,6 @@
 package be.kdg.team11.player.domain.lobby.exceptions;
 
-public class InvalidLobbyStateException extends LobbyException{
+public class InvalidLobbyStateException extends LobbyException {
     public InvalidLobbyStateException(String message) {
         super(message);
     }

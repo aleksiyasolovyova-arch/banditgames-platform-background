@@ -39,10 +39,10 @@ public class PlatformAchievementJpaAdapter implements SavePlatformAchievementPor
     @Override
     public List<PlatformAchievement> loadAllExcept(List<PlatformAchievementId> platFormAchievementIds) {
         return platformAchievementJpaRepository.findAllExcluding(
-                platFormAchievementIds
-                        .stream()
-                        .map(PlatformAchievementId::achievementId)
-                        .toList()
+                        platFormAchievementIds
+                                .stream()
+                                .map(PlatformAchievementId::achievementId)
+                                .toList()
                 )
                 .stream()
                 .map(platformAchievementJpaMapper::toDomain)

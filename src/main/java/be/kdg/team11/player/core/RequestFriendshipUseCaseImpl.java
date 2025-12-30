@@ -11,8 +11,8 @@ import be.kdg.team11.player.port.out.FriendshipExistsPort;
 import be.kdg.team11.player.port.out.LoadPlayerPort;
 import be.kdg.team11.player.port.out.SaveFriendshipPort;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class RequestFriendshipUseCaseImpl implements RequestFriendshipPort {
 
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(requesterId, recipient.getPlayerId());
 
-        if(friendshipExistsPort.exists(playerIdPair)){
-           throw FriendshipId.alreadyExists();
+        if (friendshipExistsPort.exists(playerIdPair)) {
+            throw FriendshipId.alreadyExists();
         }
 
         Friendship friendship = Friendship.create(playerIdPair);

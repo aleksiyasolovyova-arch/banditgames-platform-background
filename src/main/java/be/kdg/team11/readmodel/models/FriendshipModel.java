@@ -1,6 +1,9 @@
 package be.kdg.team11.readmodel.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,7 +41,8 @@ public class FriendshipModel {
     @Column
     private LocalDateTime acceptedAt;
 
-    public FriendshipModel() {}
+    public FriendshipModel() {
+    }
 
     public UUID getFriendshipId() {
         return friendshipId;

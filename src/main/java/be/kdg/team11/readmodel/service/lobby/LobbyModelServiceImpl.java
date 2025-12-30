@@ -14,10 +14,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class LobbyModelServiceImpl implements LobbyModelService{
+public class LobbyModelServiceImpl implements LobbyModelService {
     private final LobbyModelRepository lobbyModelRepository;
     private final PlayerModelRepository playerModelRepository;
     private final GameModelRepository gameModelRepository;
+
     public LobbyModelServiceImpl(LobbyModelRepository lobbyModelRepository,
                                  PlayerModelRepository playerModelRepository,
                                  GameModelRepository gameModelRepository) {

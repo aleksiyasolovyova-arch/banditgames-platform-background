@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class FriendshipModelServiceImpl implements FriendshipModelService{
+public class FriendshipModelServiceImpl implements FriendshipModelService {
     private final FriendshipModelRepository friendshipModelRepository;
     private final PlayerModelRepository playerModelRepository;
     private final FriendshipModelMapper friendshipModelMapper;
@@ -77,7 +77,7 @@ public class FriendshipModelServiceImpl implements FriendshipModelService{
     @Override
     public List<FriendShipModelDto> getPlayerFriendships(UUID playerId) {
         return friendshipModelRepository.findFriendshipsByPlayerIdWhereStateFriendsOrRequested(playerId).stream()
-                .map(friendship -> friendshipModelMapper.toFriendDto(friendship,playerId))
+                .map(friendship -> friendshipModelMapper.toFriendDto(friendship, playerId))
                 .sorted(Comparator.comparing(FriendShipModelDto::username))
                 .toList();
     }

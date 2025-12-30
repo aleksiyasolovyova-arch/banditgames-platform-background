@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface LoadPlatformAchievementPort {
     Optional<PlatformAchievement> loadBy(PlatformAchievementId platformAchievementId);
+
     List<PlatformAchievement> loadAllExcept(List<PlatformAchievementId> platFormAchievementIds);
 }

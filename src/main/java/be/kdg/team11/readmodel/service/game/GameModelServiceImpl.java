@@ -11,7 +11,6 @@ import be.kdg.team11.sharedkernel.events.game.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +43,6 @@ public class GameModelServiceImpl implements GameModelService {
         game.setPending(true);
         game.setPlayableWithAI(event.playableWithAI());
         game.setCreatedAt(event.eventPit());
-
 
 
         if (event.rules() != null && !event.rules().isEmpty()) {

@@ -1,13 +1,16 @@
 package be.kdg.team11.player.domain.lobby;
+
 import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyException;
 import be.kdg.team11.player.domain.lobby.exceptions.InvalidLobbyStateException;
 import be.kdg.team11.player.domain.lobby.exceptions.PlayerNotInLobbyException;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
-import be.kdg.team11.sharedkernel.events.lobby.*;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyCreatedEvent;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithDrawEvent;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyEndedWithWinnerEvent;
+import be.kdg.team11.sharedkernel.events.lobby.LobbyStartedEvent;
 import org.springframework.data.util.Pair;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -19,7 +22,7 @@ import java.util.List;
  * Represents a game lobby session between two players.
  * Manages the complete lifecycle: creation, player acceptance/rejection, game start/end.
  */
- public class Lobby {
+public class Lobby {
     private final LobbyId lobbyId;
     private final GameReference gameReference;
     private final Pair<PlayerId, PlayerId> playerIdPair;
@@ -47,9 +50,9 @@ import java.util.List;
 
     /**
      * The following 3 methods are for creating Game lobbies in specific use cases
-
+     * <p>
      * Creates a new lobby for random strangers.
-
+     * <p>
      * Initial State:
      * - Lobby: DID_NOT_START
      * - Player 1 Slot: PENDING (must accept/reject)
@@ -81,7 +84,7 @@ import java.util.List;
 
     /**
      * Creates a new lobby for friends playing together.
-
+     * <p>
      * Initial State:
      * - Lobby: DID_NOT_START
      * - Player 1 (requester) Slot: ACCEPTED (already confirmed)
@@ -113,7 +116,7 @@ import java.util.List;
 
     /**
      * Creates a new lobby for a player vs AI opponent.
-     *
+     * <p>
      * Initial State:
      * - Lobby: STARTS AUTOMATICALLY (no player confirmation needed)
      * - Player 1 Slot: ACCEPTED
@@ -153,7 +156,7 @@ import java.util.List;
      * Starts the game when both players have accepted.
      * Transitions lobby from waiting state to in-progress.
      * Can be called manually or automatically when both players accept.
-    */
+     */
 
     public void start() {
         if (!lobbyResult.equals(LobbyResult.DID_NOT_START)) {
@@ -173,10 +176,10 @@ import java.util.List;
         eventStore.add(event);
     }
 
-/**
- * Finishes the game with a winner.
- * Records that one player won the game.
- */
+    /**
+     * Finishes the game with a winner.
+     * Records that one player won the game.
+     */
     public void end(PlayerId winnerId) {
         int winnerNumber = whichPlayer(winnerId);
         if (!lobbyResult.equals(LobbyResult.DID_NOT_FINISH)) {
@@ -197,15 +200,15 @@ import java.util.List;
                 winnerId.playerId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
-                ChronoUnit.SECONDS.between(startTime,endTime)
+                ChronoUnit.SECONDS.between(startTime, endTime)
         );
         eventStore.add(event);
     }
 
-/**
- * Finishes the game in a draw.
- * Records that neither player won - game ended in tie.
- */
+    /**
+     * Finishes the game in a draw.
+     * Records that neither player won - game ended in tie.
+     */
     public void end() {
         if (!lobbyResult.equals(LobbyResult.DID_NOT_FINISH)) {
             throw InvalidLobbyStateException.invalidStateTransition(
@@ -222,12 +225,12 @@ import java.util.List;
                 lobbyId.lobbyId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
-                ChronoUnit.SECONDS.between(startTime,endTime)
+                ChronoUnit.SECONDS.between(startTime, endTime)
         );
         eventStore.add(event);
     }
 
-    public int whichPlayer (PlayerId playerId) {
+    public int whichPlayer(PlayerId playerId) {
         if (playerIdPair.getFirst().equals(playerId)) {
             return 1;
         } else if (playerIdPair.getSecond().equals(playerId)) {
@@ -260,8 +263,8 @@ import java.util.List;
         }
     }
 
-    public String getLink(){
-        return gameReference.gameUrl()+lobbyId.lobbyId();
+    public String getLink() {
+        return gameReference.gameUrl() + lobbyId.lobbyId();
     }
 
     public LobbyId getLobbyId() {

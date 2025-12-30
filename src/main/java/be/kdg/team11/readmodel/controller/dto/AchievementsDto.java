@@ -16,7 +16,8 @@ public record AchievementsDto(
             String type,
             long requiredValue,
             LocalDateTime unlockedAt
-    ) {}
+    ) {
+    }
 
     public record GameAchievementDto(
             UUID gameId,
@@ -25,6 +26,7 @@ public record AchievementsDto(
             String code,
             String description,
             LocalDateTime unlockedAt
-    ) {}
+    ) {
+    }
 }
 

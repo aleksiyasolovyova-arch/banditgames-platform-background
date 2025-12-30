@@ -11,7 +11,7 @@ public record LobbyEndedWithDrawEvent(
         UUID player2Id,
         long time,
         LocalDateTime eventPit
-)implements DomainEvent {
+) implements DomainEvent {
     public LobbyEndedWithDrawEvent(UUID lobbyId, UUID player1Id, UUID player2Id, long time) {
         this(lobbyId, player1Id, player2Id, time, LocalDateTime.now());
     }

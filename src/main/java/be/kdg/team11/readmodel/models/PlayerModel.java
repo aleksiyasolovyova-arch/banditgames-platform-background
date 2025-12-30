@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(schema="read_model_schema")
+@Table(schema = "read_model_schema")
 public class PlayerModel {
     @Id
     private UUID playerId;
@@ -64,7 +64,8 @@ public class PlayerModel {
     @Column(nullable = false)
     private Integer secondMoveGames = 0;
 
-    public PlayerModel() {}
+    public PlayerModel() {
+    }
 
     public UUID getPlayerId() {
         return playerId;

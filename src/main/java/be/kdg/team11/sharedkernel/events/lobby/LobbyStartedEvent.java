@@ -9,7 +9,7 @@ public record LobbyStartedEvent(
         UUID lobbyId,
         String newStatus,
         LocalDateTime eventPit
-)implements DomainEvent {
+) implements DomainEvent {
     public LobbyStartedEvent(UUID lobbyId,
                              String newStatus) {
         this(lobbyId,

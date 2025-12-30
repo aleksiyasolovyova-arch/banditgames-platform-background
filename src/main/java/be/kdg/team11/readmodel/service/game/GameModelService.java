@@ -11,12 +11,18 @@ import java.util.UUID;
 public interface GameModelService {
 
     void project(GameRegisteredEvent event);
+
     void project(PassedGameReviewEvent event);
+
     void project(FailedGameReviewEvent event);
+
     void project(GameToggledPlayableWithAIEvent event);
+
     void project(GameUrlsModifiedEvent event);
 
     List<AdminGameModelDto> getAllForAdmin();
+
     List<PlayerGameModelDto> getAllForPlayer(UUID playerId);
+
     List<PublicGameModelDto> getAllForPublic();
 }

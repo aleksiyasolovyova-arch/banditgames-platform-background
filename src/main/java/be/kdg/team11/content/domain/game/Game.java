@@ -2,7 +2,7 @@ package be.kdg.team11.content.domain.game;
 
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameDataException;
 import be.kdg.team11.content.domain.game.exeptions.InvalidGameStateException;
-import be.kdg.team11.sharedkernel.events.*;
+import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.game.*;
 
 import java.math.BigDecimal;
@@ -111,7 +111,7 @@ public class Game {
             );
         }
         this.reviewState = GameReviewState.PASSED;
-        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId(), this.gameUrl,GameReviewState.PASSED.name());
+        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId(), this.gameUrl, GameReviewState.PASSED.name());
 
         this.eventStore.add(event);
     }
@@ -165,7 +165,6 @@ public class Game {
             );
         }
     }
-
 
 
     public GameId getGameId() {

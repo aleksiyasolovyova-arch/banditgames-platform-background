@@ -20,13 +20,13 @@ public class LobbyEndedListener {
     }
 
     @EventListener(LobbyEndedWithDrawEvent.class)
-    public void lobbyEndedWithDraw(LobbyEndedWithDrawEvent event){
-        lobbyEndedWithDrawProjector.project(new LobbyEndedWithDrawCommand(event.lobbyId(),event.player1Id(),event.player2Id(),event.time(),event.eventPit()));
+    public void lobbyEndedWithDraw(LobbyEndedWithDrawEvent event) {
+        lobbyEndedWithDrawProjector.project(new LobbyEndedWithDrawCommand(event.lobbyId(), event.player1Id(), event.player2Id(), event.time(), event.eventPit()));
     }
 
     @EventListener(LobbyEndedWithWinnerEvent.class)
-    public void lobbyEndedWithWinner(LobbyEndedWithWinnerEvent event){
-        lobbyEndedWithWinnerProjector.project(new LobbyEndedWithWinnerCommand(event.lobbyId(),event.winnerId(),event.player1Id(),event.player2Id(),event.time(),event.eventPit()));
+    public void lobbyEndedWithWinner(LobbyEndedWithWinnerEvent event) {
+        lobbyEndedWithWinnerProjector.project(new LobbyEndedWithWinnerCommand(event.lobbyId(), event.winnerId(), event.player1Id(), event.player2Id(), event.time(), event.eventPit()));
 
     }
 }

@@ -1,7 +1,6 @@
 package be.kdg.team11.player.adapter.out;
 
 import be.kdg.team11.player.adapter.out.jpa.GameReferenceJpaRepository;
-import be.kdg.team11.player.adapter.out.jpa.entity.GameReferenceJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.GameReferenceJpaMapper;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.player.port.out.GameReferenceExistsPort;

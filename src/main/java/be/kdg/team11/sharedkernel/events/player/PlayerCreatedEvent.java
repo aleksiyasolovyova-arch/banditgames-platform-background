@@ -11,8 +11,8 @@ public record PlayerCreatedEvent(
         String pictureUrl,
         LocalDate joinedDate,
         LocalDate eventPit
-)implements DomainEvent {
-    public PlayerCreatedEvent(UUID playerId,String username,
+) implements DomainEvent {
+    public PlayerCreatedEvent(UUID playerId, String username,
                               String pictureUrl,
                               LocalDate joinedDate) {
         this(

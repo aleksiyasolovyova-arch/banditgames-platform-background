@@ -5,4 +5,5 @@ import java.util.UUID;
 public record GameReferenceCommand(
         UUID gameId,
         String gameUrl
-) {}
+) {
+}

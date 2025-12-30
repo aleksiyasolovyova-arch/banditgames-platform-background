@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PlatformAchievementModelService {
     void project(PlatformAchievementCreatedEvent event);
+
     List<PlatformAchievementDto> getAll();
 }

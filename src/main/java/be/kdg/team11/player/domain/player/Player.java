@@ -4,17 +4,21 @@ import be.kdg.team11.player.domain.player.exceptions.InvalidPlatformAchievementF
 import be.kdg.team11.player.domain.player.exceptions.InvalidPlayerException;
 import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
-import be.kdg.team11.sharedkernel.events.player.*;
+import be.kdg.team11.sharedkernel.events.player.PlayerChangedFavoriteGameEvent;
+import be.kdg.team11.sharedkernel.events.player.PlayerChangedPictureUrlEvent;
+import be.kdg.team11.sharedkernel.events.player.PlayerCreatedEvent;
+import be.kdg.team11.sharedkernel.events.player.PlayerRemovedFavoriteGameEvent;
 
 import java.time.LocalDate;
 import java.util.*;
+
 /**
  * Aggregate Root for the Player subdomain.
  * Represents a player with their games, gameAchievements, and profile information.
  * Manages the complete lifecycle: registration, game purchases, gameAchievements.
  */
 public class Player {
-    private static final String DEFAULT_PICTURE_URL="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg";
+    private static final String DEFAULT_PICTURE_URL = "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg";
 
     private final PlayerId playerId;
     private final Username username;
@@ -26,11 +30,10 @@ public class Player {
     private final List<DomainEvent> eventStore = new ArrayList<>();
 
 
-
     /**
      * Private constructor for recreating player from persistent storage.
      */
-    public Player(PlayerId playerId,Username username,String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
+    public Player(PlayerId playerId, Username username, String pictureUrl, LocalDate joinedDate, Set<UnlockedPlatformAchievement> unlockedPlatformAchievements, Set<UnlockedGameAchievement> unlockedGameAchievements, GameReference favoriteGame) {
         validateJoinedDate(joinedDate);
 
         this.playerId = playerId;
@@ -57,15 +60,15 @@ public class Player {
                 Collections.emptySet(),
                 null);
 
-        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(),username.username(), DEFAULT_PICTURE_URL, player.joinedDate);
+        PlayerCreatedEvent event = new PlayerCreatedEvent(playerId.playerId(), username.username(), DEFAULT_PICTURE_URL, player.joinedDate);
         player.eventStore.add(event);
 
         return player;
     }
 
-    public void changePictureUrl(String pictureUrl){
+    public void changePictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
-        PlayerChangedPictureUrlEvent event = new PlayerChangedPictureUrlEvent(playerId.playerId(),pictureUrl);
+        PlayerChangedPictureUrlEvent event = new PlayerChangedPictureUrlEvent(playerId.playerId(), pictureUrl);
         this.eventStore.add(event);
     }
 
@@ -107,7 +110,7 @@ public class Player {
 
     /**
      * Player unlocks a game-specific achievement.
-    */
+     */
     public void unlockGameAchievement(GameReference gameReference, String achievementCode) {
         validateGameAchievementNotAlreadyUnlocked(gameReference, achievementCode);
 
@@ -176,6 +179,7 @@ public class Player {
     public Set<UnlockedGameAchievement> getUnlockedGameAchievements() {
         return Collections.unmodifiableSet(unlockedGameAchievements);
     }
+
     public List<DomainEvent> getEventStore() {
         return Collections.unmodifiableList(eventStore);
     }

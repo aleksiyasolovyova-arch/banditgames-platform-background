@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/platform-achievements")
 public class PlatformAchievementsModelController {
     private final PlatformAchievementModelService platformAchievementModelService;
+
     public PlatformAchievementsModelController(PlatformAchievementModelService platformAchievementModelService) {
         this.platformAchievementModelService = platformAchievementModelService;
     }

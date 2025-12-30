@@ -3,7 +3,6 @@ package be.kdg.team11.player.core;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.domain.player.Username;
-import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.player.port.in.CreatePlayerCommand;
 import be.kdg.team11.player.port.in.CreatePlayerPort;
 import be.kdg.team11.player.port.out.LoadGameReferencePort;
