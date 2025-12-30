@@ -1,8 +1,7 @@
 package be.kdg.team11.readmodel.service.player;
 
 import be.kdg.team11.readmodel.controller.dto.player.PlayerModelNavBarDto;
-import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
-import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerModelProfileDto;
 import be.kdg.team11.readmodel.models.LobbyModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
 import org.springframework.stereotype.Component;
@@ -14,13 +13,13 @@ import java.util.UUID;
 @Component
 public class PlayerModelMapper {
 
-    public PlayerProfileDto toProfileDto(
+    public PlayerModelProfileDto toProfileDto(
             PlayerModel player,
             String favouriteGameName,
             String favouriteGamePictureUrl,
-            List<PlayerProfileDto.PlayerHistoryDto> gameHistory) {
+            List<PlayerModelProfileDto.PlayerHistoryDto> gameHistory) {
 
-        return new PlayerProfileDto(
+        return new PlayerModelProfileDto(
                 player.getPlayerId(),
                 player.getUsername(),
                 player.getPictureUrl(),
@@ -54,7 +53,7 @@ public class PlayerModelMapper {
         );
     }
 
-    public PlayerProfileDto.PlayerHistoryDto toHistoryDto(LobbyModel lobby, UUID playerId) {
+    public PlayerModelProfileDto.PlayerHistoryDto toHistoryDto(LobbyModel lobby, UUID playerId) {
         // Determine if this player was player1 or player2
         boolean isPlayer1 = playerId.equals(lobby.getPlayer1Id());
 
@@ -68,7 +67,7 @@ public class PlayerModelMapper {
         // Calculate duration
         int durationMinutes = calculateLobbyDuration(lobby);
 
-        return new PlayerProfileDto.PlayerHistoryDto(
+        return new PlayerModelProfileDto.PlayerHistoryDto(
                 lobby.getLobbyId(),
                 lobby.getGameId(),
                 lobby.getGameName(),
@@ -83,33 +82,6 @@ public class PlayerModelMapper {
         );
     }
 
-    public PlayerOpponentDto toOpponentDto(PlayerModel player) {
-        return new PlayerOpponentDto(
-                player.getPlayerId(),
-                player.getUsername(),
-                player.getPictureUrl(),
-                player.getJoinedDate(),
-
-                player.getTotalGamesPlayed(),
-                player.getTotalWins(),
-                player.getTotalLosses(),
-                player.getTotalDraws(),
-                calculateWinRate(player),
-
-                player.getTotalPlaytimeMinutes(),
-                calculateTotalHours(player),
-
-                player.getLongestWinningStreak(),
-                player.getCurrentWinningStreak(),
-
-                player.getFirstMoveGames(),
-                player.getFirstMoveWins(),
-                calculateFirstMoveWinRate(player),
-                player.getSecondMoveGames(),
-                player.getSecondMoveWins(),
-                calculateSecondMoveWinRate(player)
-        );
-    }
 
     public PlayerModelNavBarDto toNavBarDto(PlayerModel player) {
         return new PlayerModelNavBarDto(

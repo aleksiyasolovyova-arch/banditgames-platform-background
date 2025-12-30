@@ -16,6 +16,6 @@ public class GameReferenceEventListener {
 
     @EventListener(PassedGameReviewEvent.class)
     public void gameReviewPassed(PassedGameReviewEvent event){
-        gameReferenceProjector.project(new GameReferenceCommand(event.gameId()));
+        gameReferenceProjector.project(new GameReferenceCommand(event.gameId(),event.gameUrl()));
     }
 }

@@ -16,5 +16,5 @@ public interface FriendshipModelRepository extends JpaRepository<FriendshipModel
     WHERE ( f.recipientId = :playerId and ( f.state = "FRIENDS" or f.state = "REQUESTED" ) ) or
           ( f.requesterId = :playerId and f.state = "FRIENDS" )
     """)
-    List<FriendshipModel> findFriendshipsByPlayerIdWhereStateFriendsOrRequested(@Param("playerId") UUID playerId);
+    List<FriendshipModel> findFriendshipsByPlayerIdWhereStateFriendsOrRequested(@Param("strangerUserName") UUID playerId);
 }

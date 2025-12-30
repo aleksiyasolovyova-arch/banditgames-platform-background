@@ -47,7 +47,7 @@ public class PlayersController {
      * - username (String, required): Player username (1-50 chars)
      * - pictureUrl (String, required): URL to player profile picture
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
@@ -78,7 +78,7 @@ public class PlayersController {
      * - pictureUrl (String, required): New profile picture URL (cannot be null or blank)
      *
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier (extracted from JWT subject)
+     * - strangerUserName (UUID): Unique player identifier (extracted from JWT subject)
      * - username (String): Player username
      * - pictureUrl (String): Updated profile picture URL
      * - joinedDate (LocalDate): Date player joined the platform
@@ -112,9 +112,9 @@ public class PlayersController {
      * FULL PATH: /players/change-favorite-game/{gameId} (POST)
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to mark as favorite
-     * JWT TOKEN: Extracts playerId from authenticated user
+     * JWT TOKEN: Extracts strangerUserName from authenticated user
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
@@ -143,9 +143,9 @@ public class PlayersController {
     /**
      * Player removes a game from favorites.
      * FULL PATH: /players/removeFavorite-game (POST)
-     * JWT TOKEN: Extracts playerId from authenticated user
+     * JWT TOKEN: Extracts strangerUserName from authenticated user
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined

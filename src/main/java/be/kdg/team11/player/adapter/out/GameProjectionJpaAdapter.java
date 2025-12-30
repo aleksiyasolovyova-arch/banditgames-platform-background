@@ -10,6 +10,8 @@ import be.kdg.team11.player.port.out.SaveGameReferencePort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGameReferencePort, LoadGameReferencePort {
@@ -38,5 +40,11 @@ public class GameProjectionJpaAdapter implements GameReferenceExistsPort, SaveGa
                 .stream()
                 .map(gameReferenceJpaMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<GameReference> loadBy(UUID gameId) {
+        return gameReferenceJpaRepository.findById(gameId)
+                .map(gameReferenceJpaMapper::toDomain);
     }
 }

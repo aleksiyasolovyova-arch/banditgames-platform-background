@@ -1,8 +1,7 @@
 package be.kdg.team11.readmodel.service.player;
 
 import be.kdg.team11.readmodel.controller.dto.player.PlayerModelNavBarDto;
-import be.kdg.team11.readmodel.controller.dto.player.PlayerOpponentDto;
-import be.kdg.team11.readmodel.controller.dto.player.PlayerProfileDto;
+import be.kdg.team11.readmodel.controller.dto.player.PlayerModelProfileDto;
 import be.kdg.team11.readmodel.models.GameModel;
 import be.kdg.team11.readmodel.models.LobbyModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
@@ -211,17 +210,8 @@ public class PlayerModelServiceImpl implements PlayerModelService {
         }
     }
 
-
     @Override
-    public PlayerOpponentDto getOpponent(UUID playerId) {
-        PlayerModel playerModel = playerModelRepository.findById(playerId)
-                .orElseThrow(() -> new RuntimeException("Player not found: " + playerId));
-
-        return playerModelMapper.toOpponentDto(playerModel);
-    }
-
-    @Override
-    public PlayerProfileDto getPlayerProfile(UUID playerId) {
+    public PlayerModelProfileDto getPlayerProfile(UUID playerId) {
         PlayerModel playerModel = playerModelRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Player not found: " + playerId));
 
@@ -240,7 +230,7 @@ public class PlayerModelServiceImpl implements PlayerModelService {
         }
 
         // Map lobbies to history DTOs
-        List<PlayerProfileDto.PlayerHistoryDto> historyDtos = gameHistory.stream()
+        List<PlayerModelProfileDto.PlayerHistoryDto> historyDtos = gameHistory.stream()
                 .map(lobby -> playerModelMapper.toHistoryDto(lobby, playerId))
                 .toList();
 

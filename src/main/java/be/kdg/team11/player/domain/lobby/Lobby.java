@@ -7,6 +7,7 @@ import be.kdg.team11.player.domain.projections.GameReference;
 import be.kdg.team11.sharedkernel.events.DomainEvent;
 import be.kdg.team11.sharedkernel.events.lobby.*;
 import org.springframework.data.util.Pair;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -21,7 +22,7 @@ import java.util.List;
  public class Lobby {
     private final LobbyId lobbyId;
     private final GameReference gameReference;
-    private final Pair<Slot, Slot> slotPair;
+    private final Pair<PlayerId, PlayerId> playerIdPair;
     private LobbyResult lobbyResult;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -32,12 +33,12 @@ import java.util.List;
      * All parameters must be valid - no event publishing here.
      * Used by repositories to load lobbies from database.
      */
-    public Lobby(LobbyId lobbyId, GameReference gameReference, Pair<Slot, Slot> slotPair, LobbyResult lobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
+    public Lobby(LobbyId lobbyId, GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair, LobbyResult lobbyResult, LocalDateTime startTime, LocalDateTime endTime) {
         validateTimeConsistency(lobbyResult, startTime, endTime);
 
         this.lobbyId = lobbyId;
         this.gameReference = gameReference;
-        this.slotPair = slotPair;
+        this.playerIdPair = playerIdPair;
         this.lobbyResult = lobbyResult;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -59,7 +60,7 @@ import java.util.List;
 
         Lobby lobby = new Lobby(LobbyId.create(),
                 gameReference,
-                Pair.of(Slot.pending(playerIdPair.getFirst()), Slot.pending(playerIdPair.getSecond())),
+                playerIdPair,
                 LobbyResult.DID_NOT_START,
                 LocalDateTime.now(),
                 null);
@@ -69,8 +70,6 @@ import java.util.List;
                 gameReference.gameId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
-                ParticipationStatus.PENDING.name(),
-                ParticipationStatus.PENDING.name(),
                 "STRANGERS",
                 "DID_NOT_START"
         );
@@ -94,7 +93,7 @@ import java.util.List;
         Lobby lobby = new Lobby(
                 LobbyId.create(),
                 gameReference,
-                Pair.of(Slot.accepted(playerIdPair.getFirst()), Slot.pending(playerIdPair.getSecond())),
+                playerIdPair,
                 LobbyResult.DID_NOT_START,
                 LocalDateTime.now(),
                 null);
@@ -104,8 +103,6 @@ import java.util.List;
                 gameReference.gameId(),
                 playerIdPair.getFirst().playerId(),
                 playerIdPair.getSecond().playerId(),
-                ParticipationStatus.ACCEPTED.name(),
-                ParticipationStatus.PENDING.name(),
                 "FRIENDS",
                 "DID_NOT_START"
         );
@@ -132,7 +129,7 @@ import java.util.List;
         Lobby lobby = new Lobby(
                 LobbyId.create(),
                 gameReference,
-                Pair.of(Slot.accepted(playerIdPair.getFirst()), Slot.accepted(playerIdPair.getSecond())),
+                playerIdPair,
                 LobbyResult.DID_NOT_START,
                 LocalDateTime.now(),
                 null
@@ -141,84 +138,14 @@ import java.util.List;
         LobbyCreatedEvent createdEvent = new LobbyCreatedEvent(
                 lobby.lobbyId.lobbyId(),
                 gameReference.gameId(),
-                lobby.getSlotPair().getFirst().getPlayerId().playerId(),
-                lobby.getSlotPair().getSecond().getPlayerId().playerId(),
-                ParticipationStatus.ACCEPTED.name(),
-                ParticipationStatus.ACCEPTED.name(),
+                lobby.getPlayerIdPair().getFirst().playerId(),
+                lobby.getPlayerIdPair().getSecond().playerId(),
                 "AI",
                 "DID_NOT_START"
         );
         lobby.eventStore.add(createdEvent);
 
-
-
-        lobby.start();
         return lobby;
-    }
-
-    /**
-     * The following two methods are for changing the participation status of a player inside a slot
-     * Accepts a pending participation slot for a player.
-     * Allows a player to confirm they want to participate.
-     * If both players then accept, the lobby automatically starts the game.
-     */
-
-    public void acceptBy(PlayerId playerId) {
-        int playerNumber = whichPlayer(playerId);  // Throws PlayerNotInLobbyException
-
-        Slot playerSlot = playerNumber == 1
-                ? slotPair.getFirst()
-                : slotPair.getSecond();
-
-        if (!playerSlot.isPending()) {
-            throw InvalidLobbyStateException.invalidStateTransition(
-                    playerSlot.getParticipationStatus().name(),
-                    "PENDING",
-                    "accept slot"
-            );
-        }
-        playerSlot.accept();
-
-        // Publish event
-        LobbyAcceptedEvent event = new LobbyAcceptedEvent(
-                lobbyId.lobbyId(),
-                playerId.playerId(),
-                "ACCEPTED"
-        );
-        eventStore.add(event);
-
-        if (bothPlayersAccepted() && lobbyResult.equals(LobbyResult.DID_NOT_START)) {
-            start();
-        }
-    }
-
-    /**
-     * Rejects a pending participation slot for a player.
-     * Allows a player to decline participation.
-     * Typically ends the lobby session.
-     */
-    public void rejectBy(PlayerId playerId) {
-        int playerNumber = whichPlayer(playerId);
-        Slot playerSlot = playerNumber == 1
-                ? slotPair.getFirst()
-                : slotPair.getSecond();
-
-        if (!playerSlot.isPending()) {
-            throw InvalidLobbyStateException.invalidStateTransition(
-                    playerSlot.getParticipationStatus().name(),
-                    "PENDING",
-                    "reject slot"
-            );
-        }
-        playerSlot.reject();
-
-        // Publish event
-        LobbyRejectedEvent event = new LobbyRejectedEvent(
-                lobbyId.lobbyId(),
-                playerId.playerId(),
-                "REJECTED"
-        );
-        eventStore.add(event);
     }
 
     /**
@@ -234,12 +161,6 @@ import java.util.List;
                     lobbyResult.name(),
                     "DID_NOT_START",
                     "start lobby"
-            );
-        }
-
-        if (!bothPlayersAccepted()) {
-            throw new IllegalArgumentException(
-                    "Cannot start lobby: both players must accept before starting"
             );
         }
         this.lobbyResult = LobbyResult.DID_NOT_FINISH;
@@ -258,7 +179,6 @@ import java.util.List;
  */
     public void end(PlayerId winnerId) {
         int winnerNumber = whichPlayer(winnerId);
-        PlayerId loserId = getOtherPlayerId(winnerId);
         if (!lobbyResult.equals(LobbyResult.DID_NOT_FINISH)) {
             throw InvalidLobbyStateException.invalidStateTransition(
                     lobbyResult.name(),
@@ -267,7 +187,6 @@ import java.util.List;
             );
         }
 
-        String status = winnerNumber == 1 ? "PLAYER_1_WINNER" : "PLAYER_2_WINNER";
         this.lobbyResult = winnerNumber == 1
                 ? LobbyResult.PLAYER_1_WINNER
                 : LobbyResult.PLAYER_2_WINNER;
@@ -276,8 +195,8 @@ import java.util.List;
         LobbyEndedWithWinnerEvent event = new LobbyEndedWithWinnerEvent(
                 lobbyId.lobbyId(),
                 winnerId.playerId(),
-                slotPair.getFirst().getPlayerId().playerId(),
-                slotPair.getSecond().getPlayerId().playerId(),
+                playerIdPair.getFirst().playerId(),
+                playerIdPair.getSecond().playerId(),
                 ChronoUnit.SECONDS.between(startTime,endTime)
         );
         eventStore.add(event);
@@ -301,29 +220,25 @@ import java.util.List;
 
         LobbyEndedWithDrawEvent event = new LobbyEndedWithDrawEvent(
                 lobbyId.lobbyId(),
-                slotPair.getFirst().getPlayerId().playerId(),
-                slotPair.getSecond().getPlayerId().playerId(),
+                playerIdPair.getFirst().playerId(),
+                playerIdPair.getSecond().playerId(),
                 ChronoUnit.SECONDS.between(startTime,endTime)
         );
         eventStore.add(event);
     }
 
     public int whichPlayer (PlayerId playerId) {
-        if (slotPair.getFirst().getPlayerId().equals(playerId)) {
+        if (playerIdPair.getFirst().equals(playerId)) {
             return 1;
-        } else if (slotPair.getSecond().getPlayerId().equals(playerId)) {
+        } else if (playerIdPair.getSecond().equals(playerId)) {
             return 2;
         } else {
             throw new PlayerNotInLobbyException("Player " + playerId + " is not participant in this lobby!");
         }
     }
 
-    public boolean bothPlayersAccepted() {
-        return slotPair.getFirst().isAccepted() && slotPair.getSecond().isAccepted();
-    }
-
     public boolean isAgainstAi() {
-        return slotPair.getSecond().getPlayerId().isAI();
+        return playerIdPair.getSecond().isAI();
     }
 
 
@@ -345,10 +260,8 @@ import java.util.List;
         }
     }
 
-    //TODO double check that this is ok and doesn't crash.
-
-    private PlayerId getOtherPlayerId (PlayerId current){
-        return slotPair.getFirst().getPlayerId().playerId().equals(current.playerId()) ? slotPair.getSecond().getPlayerId() : slotPair.getFirst().getPlayerId();
+    public String getLink(){
+        return gameReference.gameUrl()+lobbyId.lobbyId();
     }
 
     public LobbyId getLobbyId() {
@@ -359,8 +272,8 @@ import java.util.List;
         return gameReference;
     }
 
-    public Pair<Slot, Slot> getSlotPair() {
-        return Pair.of(slotPair.getFirst(), slotPair.getSecond());
+    public Pair<PlayerId, PlayerId> getPlayerIdPair() {
+        return Pair.of(playerIdPair.getFirst(), playerIdPair.getSecond());
     }
 
     public LobbyResult getLobbyResult() {

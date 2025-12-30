@@ -1,6 +1,5 @@
 package be.kdg.team11.player.adapter.out.jpa.entity;
 
-import be.kdg.team11.player.adapter.out.jpa.embeddable.SlotJpaEmbeddable;
 import be.kdg.team11.player.domain.lobby.LobbyResult;
 import jakarta.persistence.*;
 
@@ -16,19 +15,11 @@ public class LobbyJpaEntity {
     @Column(nullable = false)
     private UUID gameReference;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "playerId", column = @Column(name = "slot1_player_id")),
-            @AttributeOverride(name = "participationStatus", column = @Column(name = "slot1_participation_status"))
-    })
-    private SlotJpaEmbeddable slot1;
+    @Column(nullable = false)
+    private UUID player1Id;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "playerId", column = @Column(name = "slot2_player_id")),
-            @AttributeOverride(name = "participationStatus", column = @Column(name = "slot2_participation_status"))
-    })
-    private SlotJpaEmbeddable slot2;
+    @Column(nullable = false)
+    private UUID player2Id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -59,20 +50,20 @@ public class LobbyJpaEntity {
         this.gameReference = gameReference;
     }
 
-    public SlotJpaEmbeddable getSlot1() {
-        return slot1;
+    public UUID getPlayer1Id() {
+        return player1Id;
     }
 
-    public void setSlot1(SlotJpaEmbeddable slot1) {
-        this.slot1 = slot1;
+    public void setPlayer1Id(UUID player1Id) {
+        this.player1Id = player1Id;
     }
 
-    public SlotJpaEmbeddable getSlot2() {
-        return slot2;
+    public UUID getPlayer2Id() {
+        return player2Id;
     }
 
-    public void setSlot2(SlotJpaEmbeddable slot2) {
-        this.slot2 = slot2;
+    public void setPlayer2Id(UUID player2Id) {
+        this.player2Id = player2Id;
     }
 
     public LobbyResult getLobbyResult() {

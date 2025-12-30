@@ -20,7 +20,7 @@ public class GameReferenceProjectorImpl implements GameReferenceProjector {
 
     @Override
     public void project(GameReferenceCommand gameReferenceCommand) {
-        GameReference gameReference = GameReference.of(gameReferenceCommand.gameId());
+        GameReference gameReference = GameReference.of(gameReferenceCommand.gameId(),gameReferenceCommand.gameUrl());
         if (gameReferenceExistsPort.exists(gameReference)){
             throw GameReference.alreadyExists(gameReference.gameId());
         }

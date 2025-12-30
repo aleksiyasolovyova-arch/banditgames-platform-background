@@ -111,7 +111,7 @@ public class Game {
             );
         }
         this.reviewState = GameReviewState.PASSED;
-        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId(), GameReviewState.PASSED.name());
+        PassedGameReviewEvent event = new PassedGameReviewEvent(this.gameId.gameId(), this.gameUrl,GameReviewState.PASSED.name());
 
         this.eventStore.add(event);
     }

@@ -6,10 +6,11 @@ import be.kdg.team11.player.domain.projections.exceptions.GameReferenceNotFoundE
 import java.util.UUID;
 
 public record GameReference(
-        UUID gameId
+        UUID gameId,
+        String gameUrl
 ) {
-    public static GameReference of (UUID gameId){
-        return new GameReference(gameId);
+    public static GameReference of (UUID gameId,String gameUrl){
+        return new GameReference(gameId,gameUrl);
     }
     public static GameReferenceAlreadyExistsException alreadyExists(UUID gameId){
         return new GameReferenceAlreadyExistsException(
