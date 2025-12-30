@@ -44,7 +44,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result = useCase.createPlatformAchievement(command);
+        PlatformAchievement result = useCase.create(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -73,7 +73,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        useCase.createPlatformAchievement(command);
+        useCase.create(command);
 
         // Assert
         verify(port1, times(1)).save(any(PlatformAchievement.class));
@@ -93,7 +93,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result = useCase.createPlatformAchievement(command);
+        PlatformAchievement result = useCase.create(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -114,7 +114,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result = useCase.createPlatformAchievement(command);
+        PlatformAchievement result = useCase.create(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -135,7 +135,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result = useCase.createPlatformAchievement(command);
+        PlatformAchievement result = useCase.create(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -155,7 +155,7 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result = useCase.createPlatformAchievement(command);
+        PlatformAchievement result = useCase.create(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -185,8 +185,8 @@ class CreatePlatformAchievementUseCaseTest {
         );
 
         // Act
-        PlatformAchievement result1 = useCase.createPlatformAchievement(command1);
-        PlatformAchievement result2 = useCase.createPlatformAchievement(command2);
+        PlatformAchievement result1 = useCase.create(command1);
+        PlatformAchievement result2 = useCase.create(command2);
 
         // Assert
         assertThat(result1.getAchievementId()).isNotEqualTo(result2.getAchievementId());

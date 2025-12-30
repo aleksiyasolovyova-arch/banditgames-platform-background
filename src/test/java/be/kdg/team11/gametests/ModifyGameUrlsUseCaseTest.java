@@ -55,7 +55,7 @@ class ModifyGameUrlsUseCaseTest {
         );
 
         // Act
-        Game result = useCase.modifyGameUrls(command);
+        Game result = useCase.modify(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -75,7 +75,7 @@ class ModifyGameUrlsUseCaseTest {
         );
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.modifyGameUrls(command))
+        assertThatThrownBy(() -> useCase.modify(command))
                 .isInstanceOf(GameNotFoundException.class)
                 .hasMessageContaining("Game not found");
     }
@@ -98,7 +98,7 @@ class ModifyGameUrlsUseCaseTest {
         );
 
         // Act
-        useCase.modifyGameUrls(command);
+        useCase.modify(command);
 
         // Assert
         verify(port1, times(1)).save(mockGame);
@@ -122,7 +122,7 @@ class ModifyGameUrlsUseCaseTest {
         );
 
         // Act
-        Game result = useCase.modifyGameUrls(command);
+        Game result = useCase.modify(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -142,7 +142,7 @@ class ModifyGameUrlsUseCaseTest {
         );
 
         // Act
-        useCase.modifyGameUrls(command);
+        useCase.modify(command);
 
         // Assert
         verify(loadGamePort, times(1)).loadBy(any(GameId.class));

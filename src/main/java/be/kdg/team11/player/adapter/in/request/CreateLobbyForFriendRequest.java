@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record CreateLobbyForFriendRequest(
-        @NotNull
+        @NotNull(message = "Game ID cannot be null")
         UUID gameId,
-        @NotNull
+        @NotNull(message = "Friend ID cannot be null")
         UUID friendId
 ) {
 }

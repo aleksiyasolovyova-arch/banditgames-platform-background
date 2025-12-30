@@ -157,16 +157,6 @@ public class Game {
     }
 
 
-    private static void validateGamePrice(BigDecimal price) {
-
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidGameDataException(
-                    "Game price cannot be negative, received: " + price
-            );
-        }
-    }
-
-
     public GameId getGameId() {
         return gameId;
     }

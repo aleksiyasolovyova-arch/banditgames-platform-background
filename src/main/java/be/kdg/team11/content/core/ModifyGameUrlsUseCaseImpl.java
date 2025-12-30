@@ -24,7 +24,7 @@ public class ModifyGameUrlsUseCaseImpl implements ModifyGameUrlsPort {
     }
 
     @Override
-    public Game modifyGameUrls(ModifyGameUrlsCommand command) {
+    public Game modify(ModifyGameUrlsCommand command) {
         GameId gameId = GameId.of(command.gameId());
         Game game = loadGamePort.loadBy(gameId)
                 .orElseThrow(() -> GameId.notFound(gameId));

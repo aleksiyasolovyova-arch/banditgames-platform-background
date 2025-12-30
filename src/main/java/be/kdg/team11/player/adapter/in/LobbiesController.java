@@ -29,6 +29,19 @@ public class LobbiesController {
     private final CreateLobbyForAIPort createLobbyForAIPort;
     private final CreateLobbyForFriendPort createLobbyForFriendPort;
 
+    /**
+     * RESPONSE BODY (LobbyDto):
+     * - lobbyId (UUID): Unique identifier for the created lobby
+     * - gameReference (UUID): ID of the game associated with this lobby
+     * - player1Id (UUID): ID of the player who created the lobby (the authenticated user)
+     * - player2Id (UUID): ID of the invited stranger player
+     * - startTime (LocalDateTime): Timestamp when the game session started (null if not started)
+     * - endTime (LocalDateTime): Timestamp when the game session ended (null if ongoing)
+     * - lobbyResult (String): Result of the game session (e.g., "PLAYER1_WON", "PLAYER2_WON", "DRAW")
+     * - link (String): Shareable link or reference for the lobby
+     */
+
+
     public LobbiesController(LobbyMapper lobbyMapper, CreateLobbyForStrangerPort createLobbyForStrangerPort, CreateLobbyForAIPort createLobbyForAIPort, CreateLobbyForFriendPort createLobbyForFriendPort) {
         this.lobbyMapper = lobbyMapper;
         this.createLobbyForStrangerPort = createLobbyForStrangerPort;
@@ -36,6 +49,21 @@ public class LobbiesController {
         this.createLobbyForFriendPort = createLobbyForFriendPort;
     }
 
+    /**
+     * Creates a lobby for a game with a stranger (player not in user's friend list).
+     * Endpoint: POST /lobbies/stranger
+     * <p>
+     * REQUEST BODY (CreateLobbyForStrangerRequest):
+     * - gameId (UUID, required): ID of the game to create the lobby for (must be non-null) [file:9]
+     * - strangerUserName (String, required): Username of the stranger player to invite to the lobby (must be non-blank) [file:9]
+     * <p>
+     * RESPONSE BODY (LobbyDto)
+     * <p>
+     * HTTP Status Codes:
+     * - 201 Created: Lobby successfully created for stranger
+     * - 400 Bad Request: Validation failed (e.g., invalid or missing fields, game ID or username invalid)
+     * - 500 Internal Server Error: Unexpected server error during lobby creation
+     */
     @PostMapping("/stranger")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LobbyDto> createLobbyForStranger(
@@ -53,6 +81,21 @@ public class LobbiesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
+    /**
+     * Creates a lobby for a game with an AI opponent.
+     * Endpoint: POST /lobbies/ai
+     * <p>
+     * REQUEST BODY (CreateLobbyForAIRequest):
+     * - gameId (UUID, required): ID of the game to create the lobby for (must be non-null)
+     * <p>
+     * RESPONSE BODY (LobbyDto)
+     * <p>
+     * HTTP Status Codes:
+     * - 201 Created: Lobby successfully created for AI opponent
+     * - 400 Bad Request: Validation failed (e.g., invalid or missing game ID, or game does not support AI)
+     * - 500 Internal Server Error: Unexpected server error during lobby creation
+     */
     @PostMapping("/ai")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LobbyDto> createLobbyForAI(
@@ -69,6 +112,21 @@ public class LobbiesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Creates a lobby for a game with a friend from the user's friend list.
+     * Endpoint: POST /lobbies/friend
+     * <p>
+     * REQUEST BODY (CreateLobbyForFriendRequest):
+     * - gameId (UUID, required): ID of the game to create the lobby for (must be non-null)
+     * - friendId (UUID, required): ID of the friend player to invite to the lobby (must be non-null and must be in the authenticated user's friend list)
+     * <p>
+     * RESPONSE BODY (LobbyDto)
+     * <p>
+     * HTTP Status Codes:
+     * - 201 Created: Lobby successfully created for friend
+     * - 400 Bad Request: Validation failed (e.g., invalid or missing fields, specified friend is not in user's friend list, or game ID is invalid)
+     * - 500 Internal Server Error: Unexpected server error during lobby creation
+     */
     @PostMapping("/friend")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LobbyDto> createLobbyForFriend(

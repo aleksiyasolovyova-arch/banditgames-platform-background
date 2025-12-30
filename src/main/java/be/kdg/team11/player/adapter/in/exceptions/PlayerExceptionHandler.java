@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+//todo add lobby, player and projections exception handlers
 @ControllerAdvice
 public class PlayerExceptionHandler {
 

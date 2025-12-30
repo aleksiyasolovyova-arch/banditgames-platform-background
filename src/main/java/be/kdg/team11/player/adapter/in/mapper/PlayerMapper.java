@@ -9,13 +9,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class PlayerMapper {
-    public PlayerInfoDto toInfoResponse(Player player) {
-        return new PlayerInfoDto(
-                player.getPlayerId().playerId(),
-                player.getUsername().username(),
-                player.getPictureUrl()
-        );
-    }
 
     public PlayerDto toResponse(Player player) {
         return new PlayerDto(

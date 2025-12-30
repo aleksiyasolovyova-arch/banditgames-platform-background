@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record CreateLobbyForStrangerRequest(
-        @NotNull
+        @NotNull(message = "Game ID cannot be null")
         UUID gameId,
-        @NotBlank
+        @NotBlank(message = "Stranger username cannot be blank")
         String strangerUserName
 ) {
 }

@@ -9,7 +9,7 @@ public class GameAchievementEmbeddable {
     @Column(nullable = false, length = 100)
     private String code;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String description;
 
     public GameAchievementEmbeddable() {

@@ -51,7 +51,7 @@ class PassGameReviewUseCaseTest {
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.passGameReview(command);
+        Game result = useCase.pass(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -68,7 +68,7 @@ class PassGameReviewUseCaseTest {
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.passGameReview(command))
+        assertThatThrownBy(() -> useCase.pass(command))
                 .isInstanceOf(GameNotFoundException.class)
                 .hasMessageContaining("Game not found");
     }
@@ -87,7 +87,7 @@ class PassGameReviewUseCaseTest {
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        useCase.passGameReview(command);
+        useCase.pass(command);
 
         // Assert
         verify(port1, times(1)).save(mockGame);
@@ -108,7 +108,7 @@ class PassGameReviewUseCaseTest {
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act
-        Game result = useCase.passGameReview(command);
+        Game result = useCase.pass(command);
 
         // Assert
         assertThat(result).isNotNull();
@@ -128,7 +128,7 @@ class PassGameReviewUseCaseTest {
         PassGameReviewCommand command = new PassGameReviewCommand(gameId);
 
         // Act & Assert
-        assertThatThrownBy(() -> useCase.passGameReview(command))
+        assertThatThrownBy(() -> useCase.pass(command))
                 .isInstanceOf(InvalidGameStateException.class)
                 .hasMessageContaining("Cannot pass game review");
     }

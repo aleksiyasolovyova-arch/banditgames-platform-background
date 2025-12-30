@@ -21,7 +21,7 @@ public class CreatePlatformAchievementUseCaseImpl implements CreatePlatformAchie
     }
 
     @Override
-    public PlatformAchievement createPlatformAchievement(CreatePlatformAchievementCommand command) {
+    public PlatformAchievement create(CreatePlatformAchievementCommand command) {
         PlatformAchievementType type = PlatformAchievementType.valueOf(command.type());
 
         PlatformAchievement platformAchievement = PlatformAchievement.create(

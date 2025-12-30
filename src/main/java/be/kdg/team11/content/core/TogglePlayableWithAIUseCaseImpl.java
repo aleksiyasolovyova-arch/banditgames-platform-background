@@ -25,7 +25,7 @@ public class TogglePlayableWithAIUseCaseImpl implements TogglePlayableWithAIPort
     }
 
     @Override
-    public Game togglePlayableWithAI(TogglePlayableWithAICommand command) {
+    public Game toggle(TogglePlayableWithAICommand command) {
         GameId gameId = GameId.of(command.gameId());
         Game game = loadGamePort.loadBy(gameId)
                 .orElseThrow(() -> GameId.notFound(gameId));

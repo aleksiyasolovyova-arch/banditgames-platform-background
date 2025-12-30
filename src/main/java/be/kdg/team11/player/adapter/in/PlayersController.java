@@ -27,6 +27,24 @@ public class PlayersController {
     private final PlayerMapper playerMapper;
     private final ChangePlayerPictureUrlPort changePlayerPictureUrlPort;
 
+    /**
+     * RESPONSE BODY (PlayerDto)
+     * - playerId (UUID): Unique identifier for the created player (from JWT subject claim)
+     * - username (String): Username of the player (from JWT preferred_username claim)
+     * - pictureUrl (String): URL to the player's profile picture (initially null)
+     * - joinedDate (LocalDate): Date when the player joined the platform
+     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Set of platform-wide achievements unlocked by the player
+     *   - UnlockedPlatformAchievementDto.achievementId (UUID): ID of the unlocked platform achievement
+     *   - UnlockedPlatformAchievementDto.unlockedAt (LocalDateTime): Timestamp when the achievement was unlocked
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of game-specific achievements unlocked by the player
+     *   - UnlockedGameAchievementDto.gameId (UUID): ID of the game the achievement belongs to
+     *   - UnlockedGameAchievementDto.code (String): Code/identifier of the unlocked game achievement
+     *   - UnlockedGameAchievementDto.unlockedAt (LocalDateTime): Timestamp when the achievement was unlocked
+     * - favoriteGameId (UUID): ID of the player's favorite game (initially null)
+
+     */
+
+
     public PlayersController(CreatePlayerPort createPlayerPort,
                              ChangeFavouriteGamePort favoriteGamePort,
                              RemoveFavoriteGamePort unfavoriteGamePort,
@@ -40,23 +58,20 @@ public class PlayersController {
     }
 
     /**
-     * Creates a new player in the system.
-     * FULL PATH: /players (POST)
-     * REQUEST BODY (ChangePlayerPictureUrlRequest):
-     * - username (String, required): Player username (1-50 chars)
-     * - pictureUrl (String, required): URL to player profile picture
-     * RESPONSE BODY (PlayerDto):
-     * - strangerUserName (UUID): Unique player identifier
-     * - username (String): Player username
-     * - pictureUrl (String): Player profile picture URL
-     * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Platform-wide gameAchievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific gameAchievements with unlock timestamps
-     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
+     * Creates a new player profile for the authenticated user.
+     * Endpoint: POST /players
+     * Required Authentication: Yes (JWT token required)
+     * <p>
+     * REQUEST BODY: None
+     * Authentication is extracted from the JWT token (user ID and username)
+     * <p>
+     * RESPONSE BODY (PlayerDto)
+     * <p>
      * HTTP Status Codes:
-     * - 201 Created: Player successfully created
-     * - 400 Bad Request: Validation failed (invalid/missing fields)
-     * - 500 Internal Server Error: Unexpected server error
+     * - 201 Created: Player profile successfully created
+     * - 400 Bad Request: Player already exists or invalid token data
+     * - 401 Unauthorized: Missing or invalid JWT token
+     * - 500 Internal Server Error: Unexpected server error during player creation
      */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
@@ -107,24 +122,21 @@ public class PlayersController {
     }
 
     /**
-     * Player marks a game as favorite.
-     * FULL PATH: /players/change-favorite-game/{gameId} (POST)
-     * PATH PARAMETER:
-     * - gameId (UUID): ID of the game to mark as favorite
-     * JWT TOKEN: Extracts strangerUserName from authenticated user
-     * RESPONSE BODY (PlayerDto):
-     * - strangerUserName (UUID): Unique player identifier
-     * - username (String): Player username
-     * - pictureUrl (String): Player profile picture URL
-     * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
-     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
+     * Updates the authenticated player's profile picture URL.
+     * Endpoint: PUT /players
+     * Required Authentication: Authenticated user (JWT token)
+     * <p>
+     * REQUEST BODY (ChangePlayerPictureUrlRequest):
+     * - pictureUrl (String, required): New profile picture URL (must be non-null and non-blank)
+     * <p>
+     * RESPONSE BODY (PlayerDto)
+     * <p>
      * HTTP Status Codes:
-     * - 200 OK: Game successfully marked as favorite
-     * - 400 Bad Request: Invalid game ID format
-     * - 404 Not Found: Player or game with given ID doesn't exist
-     * - 500 Internal Server Error: Unexpected server error
+     * - 200 OK: Profile picture successfully updated and player data returned
+     * - 400 Bad Request: Validation failed (picture URL is null or blank)
+     * - 401 Unauthorized: JWT token is invalid, expired, or missing
+     * - 404 Not Found: Player with the given ID does not exist
+     * - 500 Internal Server Error: Unexpected server error during profile picture update
      */
     @PostMapping("/change-favorite-game/{gameId}")
     @PreAuthorize("isAuthenticated()")
@@ -140,22 +152,20 @@ public class PlayersController {
     }
 
     /**
-     * Player removes a game from favorites.
-     * FULL PATH: /players/removeFavorite-game (POST)
-     * JWT TOKEN: Extracts strangerUserName from authenticated user
-     * RESPONSE BODY (PlayerDto):
-     * - strangerUserName (UUID): Unique player identifier
-     * - username (String): Player username
-     * - pictureUrl (String): Player profile picture URL
-     * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
-     * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
+     * Player removes a game from their favorites.
+     * Endpoint: POST /players/removeFavorite-game
+     * Required Authentication: Authenticated user (JWT token)
+     * <p>
+     * REQUEST BODY: None
+     * Authentication is extracted from the JWT token (player ID)
+     * <p>
+     * RESPONSE BODY (PlayerDto)
+     * <p>
      * HTTP Status Codes:
-     * - 200 OK: Game successfully removed from favorites
-     * - 400 Bad Request: Invalid game ID format
-     * - 404 Not Found: Player or game with given ID doesn't exist
-     * - 500 Internal Server Error: Unexpected server error
+     * - 200 OK: Game successfully removed from favorites and updated player data returned
+     * - 401 Unauthorized: JWT token is invalid, expired, or missing
+     * - 404 Not Found: Player with the given ID does not exist
+     * - 500 Internal Server Error: Unexpected server error during favorite game removal
      */
     @PostMapping("/removeFavorite-game")
     @PreAuthorize("isAuthenticated()")

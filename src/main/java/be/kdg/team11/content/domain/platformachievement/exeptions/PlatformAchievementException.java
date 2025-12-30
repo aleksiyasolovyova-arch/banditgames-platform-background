@@ -8,8 +8,4 @@ public class PlatformAchievementException extends RuntimeException {
     public PlatformAchievementException(String message) {
         super(message);
     }
-
-    public PlatformAchievementException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

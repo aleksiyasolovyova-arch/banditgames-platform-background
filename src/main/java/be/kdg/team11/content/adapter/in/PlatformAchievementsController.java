@@ -27,36 +27,36 @@ public class PlatformAchievementsController {
     }
 
     /**
-     * Creates a new achievement definition.
+     * Creates a new platform-wide achievement definition.
      * Endpoint: POST /gameAchievements
      * Required Role: ADMIN
      * <p>
-     * REQUEST BODY (CreateAchievementRequest):
-     * - platformAchievementName (String, required): Name of the achievement (1-100 chars)
-     * - description (String, required): Achievement description (5-500 chars)
-     * - pictureUrl (String, required): URL to achievement badge/image
-     * - platformAchievementType (AchievementType, required): Type of achievement (enum)
-     * - requiredValue (long, required): Threshold value to unlock achievement (non-negative)
-     * -
-     * RESPONSE BODY (AchievementDto):
+     * REQUEST BODY (CreatePlatformAchievementRequest):
+     * - platformAchievementName (String, required): Name of the achievement (1-100 characters, not blank)
+     * - description (String, required): Achievement description (5-500 characters, not blank)
+     * - pictureUrl (String, required): URL to the achievement badge/image (must be a valid URL, not blank)
+     * - platformAchievementType (PlatformAchievementType, required): Type of achievement (enum)
+     * - requiredValue (long, required): Threshold value to unlock the achievement (non-null; must be a valid non-negative domain value)
+     * <p>
+     * RESPONSE BODY (PlatformAchievementDto):
      * - platformAchievementId (UUID): Unique identifier for the created achievement
      * - name (String): Achievement name
      * - description (String): Achievement description
-     * - pictureUrl (String): URL to achievement image
+     * - pictureUrl (String): URL to the achievement image
      * - platformAchievementType (String): Achievement type
-     * - requiredValue (long): Required value to unlock
-     * -
+     * - requiredValue (long): Required value to unlock the achievement
+     * <p>
      * HTTP Status Codes:
      * - 201 Created: Achievement successfully created
-     * - 400 Bad Request: Validation failed (invalid/missing fields)
+     * - 400 Bad Request: Validation failed (e.g., invalid or missing fields, invalid URL, or length constraints violated)
      * - 403 Forbidden: User lacks ADMIN role required for this operation
-     * - 500 Internal Server Error: Unexpected server error
+     * - 500 Internal Server Error: Unexpected server error during achievement creation
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PlatformAchievementDto> createPlatformAchievement(
             @Valid @RequestBody CreatePlatformAchievementRequest request) {
-        PlatformAchievement createdPlatformAchievement = createPlatformAchievementPort.createPlatformAchievement(
+        PlatformAchievement createdPlatformAchievement = createPlatformAchievementPort.create(
                 platformAchievementMapper.toCommand(request)
         );
         PlatformAchievementDto response = platformAchievementMapper.toResponse(createdPlatformAchievement);

@@ -25,6 +25,15 @@ public class FriendshipsController {
     private final EndFriendshipPort endFriendshipPort;
     private final FriendshipMapper friendshipMapper;
 
+    /**
+     * RESPONSE BODY (FriendshipDto):
+     * - friendshipId (UUID): Unique friendship identifier
+     * - requesterId (UUID): ID of the player who initiated the request
+     * - recipientId (UUID): ID of the player receiving the request
+     * - state (String): Current friendship state (e.g., "REQUESTED", "FRIENDS", "DECLINED", "ENDED")
+     */
+
+
     public FriendshipsController(
             RequestFriendshipPort requestFriendshipPort,
             BefriendPlayerPort befriendPlayerPort,
@@ -45,18 +54,14 @@ public class FriendshipsController {
      * FULL PATH: POST /friendships
      * <p>
      * REQUEST BODY (RequestFriendshipRequest):
-     * - recipientUsername (UUID, required): ID of the player to send the friendship request to
+     * - recipientUsername (String, required): Username of the player to send the friendship request to (must be non-null and non-empty)
      * <p>
-     * RESPONSE BODY (FriendshipDto):
-     * - friendshipId (UUID): Unique friendship identifier
-     * - requesterId (UUID): ID of the player who initiated the request
-     * - recipientUsername (UUID): ID of the player receiving the request
-     * - state (String): Current friendship state ("REQUESTED", "FRIENDS", "DECLINED", "ENDED")
+     * RESPONSE BODY (FriendshipDto)
      * <p>
      * HTTP Status Codes:
      * - 201 Created: Friendship request successfully created
-     * - 400 Bad Request: Validation failed (invalid/missing fields, or self-request)
-     * - 500 Internal Server Error: Unexpected server error
+     * - 400 Bad Request: Validation failed (e.g., invalid or missing fields, or self-request)
+     * - 500 Internal Server Error: Unexpected server error during friendship request creation
      */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
@@ -75,18 +80,17 @@ public class FriendshipsController {
     /**
      * Accepts a friendship request, transitioning it from REQUESTED to FRIENDS state.
      * FULL PATH: PUT /friendships/{friendshipId}/befriend
+     * <p>
      * PATH PARAMETER:
-     * - friendshipId (UUID): ID of the friendship to accept
-     * RESPONSE BODY (FriendshipDto):
-     * - friendshipId (UUID): Unique friendship identifier
-     * - requesterId (UUID): ID of the player who initiated the request
-     * - recipientUsername (UUID): ID of the player who accepted
-     * - state (String): Current friendship state ("FRIENDS")
+     * - friendshipId (UUID): ID of the friendship request to accept
+     * <p>
+     * RESPONSE BODY (FriendshipDto)
+     * <p>
      * HTTP Status Codes:
-     * - 200 OK: Friendship successfully accepted
-     * - 400 Bad Request: Invalid request or business rule violation
-     * - 404 Not Found: Friendship with given ID doesn't exist
-     * - 500 Internal Server Error: Unexpected server error
+     * - 200 OK: Friendship successfully accepted and transitioned to FRIENDS state
+     * - 400 Bad Request: Invalid request or business rule violation (e.g., friendship is not in REQUESTED state)
+     * - 404 Not Found: Friendship with the given ID does not exist
+     * - 500 Internal Server Error: Unexpected server error during friendship acceptance
      */
     @PutMapping("/{friendshipId}/befriend")
     @PreAuthorize("isAuthenticated()")
@@ -135,20 +139,19 @@ public class FriendshipsController {
     }
 
     /**
-     * Ends an active friendship, transitioning it from FRIENDS to ENDED state.
-     * FULL PATH: POST /friendships/{friendshipId}/end
+     * Declines a friendship request, transitioning it from REQUESTED to DECLINED state.
+     * FULL PATH: PUT /friendships/{friendshipId}/decline
+     * <p>
      * PATH PARAMETER:
-     * - friendshipId (UUID): ID of the friendship to end
-     * RESPONSE BODY (FriendshipDto):
-     * - friendshipId (UUID): Unique friendship identifier
-     * - requesterId (UUID): ID of the player who initiated the friendship
-     * - recipientUsername (UUID): ID of the other player
-     * - state (String): Current friendship state ("ENDED")
+     * - friendshipId (UUID): ID of the friendship request to decline
+     * <p>
+     * RESPONSE BODY (FriendshipDto)
+     * <p>
      * HTTP Status Codes:
-     * - 200 OK: Friendship successfully ended
-     * - 400 Bad Request: Invalid request or business rule violation (e.g., player not involved)
-     * - 404 Not Found: Friendship with given ID doesn't exist
-     * - 500 Internal Server Error: Unexpected server error
+     * - 200 OK: Friendship successfully declined and transitioned to DECLINED state
+     * - 400 Bad Request: Invalid request or business rule violation (e.g., friendship is not in REQUESTED state)
+     * - 404 Not Found: Friendship with the given ID does not exist
+     * - 500 Internal Server Error: Unexpected server error during friendship decline
      */
     @PostMapping("/{friendshipId}/end")
     @PreAuthorize("isAuthenticated()")
