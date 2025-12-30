@@ -27,12 +27,12 @@ public class PlayerJpaMapper {
         Set<UnlockedGameAchievement> unlockedGameAchievements =
                 entity.getUnlockedGameAchievements().stream()
                         .map(e -> new UnlockedGameAchievement(
-                                new GameReference(e.getGameReference()),
+                                new GameReference(e.getGameId(), e.getGameUrl()),
                                 e.getCode(),
                                 e.getUnlockedAt()
                         ))
                         .collect(Collectors.toSet());
-        GameReference favoriteGame = GameReference.of(entity.getFavoriteGameId());
+        GameReference favoriteGame = GameReference.of(entity.getFavoriteGameId(), entity.getFavoriteGameUrl());
 
         return new Player(
                 playerId,
@@ -69,7 +69,7 @@ public class PlayerJpaMapper {
                         .map(a -> {
                             UnlockedGameAchievementEmbeddable e =
                                     new UnlockedGameAchievementEmbeddable();
-                            e.setGameReference(a.gameReference().gameId());
+                            e.setGameId(a.gameReference().gameId());
                             e.setCode(a.code());
                             e.setUnlockedAt(a.unlockedAt());
                             return e;

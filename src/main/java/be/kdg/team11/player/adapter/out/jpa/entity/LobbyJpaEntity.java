@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+//todo add gameurl
 @Entity
 @Table(name = "lobby", schema = "player_schema")
 public class LobbyJpaEntity {
@@ -13,7 +14,10 @@ public class LobbyJpaEntity {
     private UUID lobbyId;
 
     @Column(nullable = false)
-    private UUID gameReference;
+    private UUID gameId;
+
+    @Column(nullable = false)
+    private String gameUrl;
 
     @Column(nullable = false)
     private UUID player1Id;
@@ -42,12 +46,12 @@ public class LobbyJpaEntity {
         this.lobbyId = lobbyId;
     }
 
-    public UUID getGameReference() {
-        return gameReference;
+    public UUID getGameId() {
+        return gameId;
     }
 
-    public void setGameReference(UUID gameReference) {
-        this.gameReference = gameReference;
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
     }
 
     public UUID getPlayer1Id() {
@@ -88,5 +92,12 @@ public class LobbyJpaEntity {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public String getGameUrl() {
+        return gameUrl;
+    }
+    public void setGameUrl(String gameUrl) {
+        this.gameUrl = gameUrl;
     }
 }

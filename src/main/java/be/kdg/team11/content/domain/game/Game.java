@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+//todo delete scheduler
 /**
  * Aggregate Root for the Game subdomain.
  * Represents a publishable game on the platform.

@@ -25,13 +25,12 @@ public class GameEventPortImpl implements GameEventPort {
     private final LoadLobbyPort loadLobbyPort;
     private final LoadPlayerPort loadPlayerPort;
     private final List<SaveLobbyPort> saveLobbyPorts;
-    private final List<SavePlayerPort> savePlayerPorts;
 
-    public GameEventPortImpl(LoadLobbyPort loadLobbyPort, LoadPlayerPort loadPlayerPort, List<SaveLobbyPort> saveLobbyPorts, List<SavePlayerPort> savePlayerPorts) {
+    public GameEventPortImpl(LoadLobbyPort loadLobbyPort, LoadPlayerPort loadPlayerPort, List<SaveLobbyPort> saveLobbyPorts) {
         this.loadLobbyPort = loadLobbyPort;
         this.loadPlayerPort = loadPlayerPort;
         this.saveLobbyPorts = saveLobbyPorts;
-        this.savePlayerPorts = savePlayerPorts;
+
     }
 
     @Override

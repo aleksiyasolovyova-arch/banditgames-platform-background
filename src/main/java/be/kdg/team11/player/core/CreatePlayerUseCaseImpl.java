@@ -16,24 +16,19 @@ import java.util.List;
 @Transactional
 public class CreatePlayerUseCaseImpl implements CreatePlayerPort {
     private final List<SavePlayerPort> savePlayerPorts;
-    private final LoadGameReferencePort loadGameReferencePort;
 
-    public CreatePlayerUseCaseImpl(List<SavePlayerPort> savePlayerPorts,
-                                   LoadGameReferencePort loadGameReferencePort) {
+    public CreatePlayerUseCaseImpl(List<SavePlayerPort> savePlayerPorts) {
         this.savePlayerPorts = savePlayerPorts;
-        this.loadGameReferencePort = loadGameReferencePort;
     }
 
     @Override
     public Player create(CreatePlayerCommand command) {
         PlayerId playerId = PlayerId.of(command.playerId());
         Username username = Username.of(command.username());
-        // Create the player (initially without games)
         Player player = Player.create(
                 playerId,
                 username
         );
-
 
         // Save player through all ports
         savePlayerPorts.forEach(savePlayerPort -> savePlayerPort.save(player));

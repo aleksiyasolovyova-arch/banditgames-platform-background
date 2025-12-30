@@ -35,6 +35,9 @@ public class PlayerJpaEntity {
     @Column
     private UUID favoriteGameId;
 
+    @Column
+    private String favoriteGameUrl;
+
     public PlayerJpaEntity() {
     }
 
@@ -92,6 +95,13 @@ public class PlayerJpaEntity {
 
     public void setFavoriteGameId(UUID favoriteGameId) {
         this.favoriteGameId = favoriteGameId;
+    }
+
+    public String getFavoriteGameUrl() {
+        return favoriteGameUrl;
+    }
+    public void setFavoriteGameUrl(String gameUrl) {
+        this.favoriteGameUrl = gameUrl;
     }
 
 }

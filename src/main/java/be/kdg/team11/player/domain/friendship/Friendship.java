@@ -12,7 +12,7 @@ import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//todo delete scheduler
 /**
  * Aggregate Root for the Friendship subdomain.
  * Represents a bidirectional friendship relationship between two players.
@@ -130,23 +130,6 @@ public class Friendship {
     }
 
 
-    /**
-     * Returns the other player involved in the friendship.
-     * Given one player ID, returns the other player in the pair.
-     */
-    public PlayerId getOtherPlayer(PlayerId playerId) {
-        if (playerIdPair.getFirst().equals(playerId)) {
-            return playerIdPair.getSecond();
-        }
-
-        if (playerIdPair.getSecond().equals(playerId)) {
-            return playerIdPair.getFirst();
-        }
-
-        throw new InvalidFriendshipException(
-                String.format("Player %s is not involved in this friendship", playerId.playerId())
-        );
-    }
 
     public boolean involvesPlayer(PlayerId playerId) {
         return playerIdPair.getFirst().equals(playerId) || playerIdPair.getSecond().equals(playerId);

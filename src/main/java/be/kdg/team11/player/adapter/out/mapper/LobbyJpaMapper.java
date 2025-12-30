@@ -15,7 +15,7 @@ public class LobbyJpaMapper {
         LobbyJpaEntity entity = new LobbyJpaEntity();
 
         entity.setLobbyId(lobby.getLobbyId().lobbyId());
-        entity.setGameReference(lobby.getGameReference().gameId());
+        entity.setGameId(lobby.getGameReference().gameId());
 
         entity.setPlayer1Id(lobby.getPlayerIdPair().getFirst().playerId());
         entity.setPlayer2Id(lobby.getPlayerIdPair().getSecond().playerId());
@@ -29,7 +29,7 @@ public class LobbyJpaMapper {
 
     public Lobby toDomain(LobbyJpaEntity entity) {
         LobbyId lobbyId = LobbyId.of(entity.getLobbyId());
-        GameReference gameReference = GameReference.of(entity.getGameReference());
+        GameReference gameReference = GameReference.of(entity.getGameId(), entity.getGameUrl());
         Pair<PlayerId, PlayerId> playerIdPair = Pair.of(PlayerId.of(entity.getPlayer1Id()), PlayerId.of(entity.getPlayer2Id()));
 
         return new Lobby(
