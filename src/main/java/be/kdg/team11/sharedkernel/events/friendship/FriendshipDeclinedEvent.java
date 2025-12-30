@@ -7,16 +7,16 @@ import java.util.UUID;
 
 public record FriendshipDeclinedEvent(
         UUID friendshipId,
-        UUID rejectedBy,
-        LocalDateTime eventPit,
-        String newState
+        UUID requesterId,
+        UUID recipientId,
+        LocalDateTime eventPit
 ) implements DomainEvent {
     public FriendshipDeclinedEvent(UUID friendshipId,
-                                   UUID rejectedBy,
-                                   String newState) {
+                                   UUID requesterId,
+                                   UUID recipientId) {
         this(friendshipId,
-                rejectedBy,
-                LocalDateTime.now(),
-                newState);
+                requesterId,
+                recipientId,
+                LocalDateTime.now());
     }
 }

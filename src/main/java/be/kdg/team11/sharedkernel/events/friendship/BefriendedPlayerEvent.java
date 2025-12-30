@@ -7,16 +7,17 @@ import java.util.UUID;
 
 public record BefriendedPlayerEvent(
         UUID friendshipId,
-        UUID acceptedBy,
-        LocalDateTime eventPit,
-        String newState
+        UUID requesterId,
+        UUID recipientId,
+        LocalDateTime eventPit
 ) implements DomainEvent {
     public BefriendedPlayerEvent(UUID friendshipId,
-                                 UUID acceptedBy,
-                                 String newState) {
+                                 UUID requesterId,
+                                 UUID recipientId
+                                 ) {
         this(friendshipId,
-                acceptedBy,
-                LocalDateTime.now(),
-                newState);
+                requesterId,
+                recipientId,
+                LocalDateTime.now());
     }
 }
