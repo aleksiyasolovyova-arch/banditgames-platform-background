@@ -46,7 +46,7 @@ public class LobbyEndedWithWinnerProjectorImpl implements LobbyEndedWithWinnerPr
         possiblePlatformAchievementsPlayer1.forEach(
                 platformAchievement -> {
                     if (platformAchievement.isMet(player1Statistics)) {
-                        player2Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
+                        player1Statistics.unlockPlatformAchievement(platformAchievement.getAchievementId());
                     }
                 }
         );

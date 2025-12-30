@@ -9,17 +9,14 @@ public record FriendshipCreatedEvent(
         UUID friendshipId,
         UUID requesterId,
         UUID recipientId,
-        String initialState,
         LocalDateTime eventPit
 ) implements DomainEvent {
     public FriendshipCreatedEvent(UUID friendshipId,
                                   UUID requesterId,
-                                  UUID recipientId,
-                                  String initialState) {
+                                  UUID recipientId) {
         this(friendshipId,
                 requesterId,
                 recipientId,
-                initialState,
                 LocalDateTime.now());
     }
 }
