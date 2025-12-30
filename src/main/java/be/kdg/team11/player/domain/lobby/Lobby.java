@@ -60,7 +60,8 @@ public class Lobby {
      */
     public static Lobby createForStrangers(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
 
-        Lobby lobby = new Lobby(LobbyId.create(),
+        Lobby lobby = new Lobby(
+                LobbyId.create(),
                 gameReference,
                 playerIdPair,
                 LobbyResult.DID_NOT_START,
@@ -122,12 +123,8 @@ public class Lobby {
      * - Player 2 (AI) Slot: ACCEPTED
      * - Game starts immediately
      */
-    public static Lobby createForAI(GameReference gameReference, PlayerId playerId) {
-        if (playerId == null) {
-            throw new InvalidLobbyException("Player ID cannot be null");
-        }
+    public static Lobby createForAI(GameReference gameReference, Pair<PlayerId, PlayerId> playerIdPair) {
 
-        Pair<PlayerId, PlayerId> playerIdPair = Pair.of(playerId, PlayerId.ai());
         Lobby lobby = new Lobby(
                 LobbyId.create(),
                 gameReference,
@@ -238,11 +235,6 @@ public class Lobby {
             throw new PlayerNotInLobbyException("Player " + playerId + " is not participant in this lobby!");
         }
     }
-
-    public boolean isAgainstAi() {
-        return playerIdPair.getSecond().isAI();
-    }
-
 
     private static void validateTimeConsistency(LobbyResult result, LocalDateTime startTime, LocalDateTime endTime) {
         if (!result.equals(LobbyResult.DID_NOT_START) && startTime == null) {
