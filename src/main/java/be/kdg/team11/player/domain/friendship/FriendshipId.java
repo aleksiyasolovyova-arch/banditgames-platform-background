@@ -16,6 +16,11 @@ public record FriendshipId(
         return new FriendshipId(friendshipId);
     }
 
+    public static FriendshipNotFoundException notFound() {
+        return new FriendshipNotFoundException(
+                "Friendship not found"
+        );
+    }
 
     public static FriendshipNotFoundException notFound(FriendshipId friendshipId) {
         return new FriendshipNotFoundException(

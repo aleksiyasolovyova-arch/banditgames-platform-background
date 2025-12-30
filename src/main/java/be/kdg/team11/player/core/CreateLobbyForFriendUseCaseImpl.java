@@ -29,8 +29,8 @@ public class CreateLobbyForFriendUseCaseImpl implements CreateLobbyForFriendPort
 
     @Override
     public Lobby create(CreateLobbyForFriendCommand command) {
-        if (friendshipExistsPort.exists(Pair.of(command.playerId(), command.friendId()))) {
-            throw FriendshipId.alreadyExists();
+        if (!friendshipExistsPort.exists(Pair.of(command.playerId(), command.friendId()))) {
+            throw FriendshipId.notFound();
         }
         GameReference gameReference = loadGameReferencePort.loadBy(command.gameId()).orElseThrow(() -> GameReference.notFound(command.gameId()));
         Lobby lobby = Lobby.createForFriends(
