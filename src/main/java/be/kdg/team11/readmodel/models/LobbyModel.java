@@ -42,15 +42,7 @@ public class LobbyModel {
     @Column()
     private String player2PictureUrl;
 
-    // Participation status
-    @Column()
-    private String player1Status;
-
-    @Column()
-    private String player2Status;
-
-    // Lobby type
-    @Column()
+    @Column
     private String lobbyType;
 
     // Result
@@ -103,27 +95,6 @@ public class LobbyModel {
 
     public void setPlayer2Id(UUID player2Id) {
         this.player2Id = player2Id;
-    }
-
-
-    public String getPlayer1Status() {
-        return player1Status;
-    }
-
-    public void setPlayer1Status(String player1Status) {
-        this.player1Status = player1Status;
-    }
-
-    public String getPlayer2Status() {
-        return player2Status;
-    }
-
-    public void setPlayer2Status(String player2Status) {
-        this.player2Status = player2Status;
-    }
-
-    public String getLobbyType() {
-        return lobbyType;
     }
 
     public void setLobbyType(String lobbyType) {

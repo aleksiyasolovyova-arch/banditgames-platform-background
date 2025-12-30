@@ -54,7 +54,6 @@ public class PlayerStatistics {
         totalWins++;
     }
 
-    //todo should that be added int the befriend use case of not used at all
     public void addFriend() {
         totalFriends++;
     }

@@ -48,8 +48,6 @@ public class LobbyModelServiceImpl implements LobbyModelService {
             lobby.setPlayer2Username(player2.getUsername());
             lobby.setPlayer2PictureUrl(player2.getPictureUrl());
         }
-        lobby.setPlayer1Status(event.player1Status());
-        lobby.setPlayer2Status(event.player2Status());
         lobby.setLobbyType(event.lobbyType());
         lobby.setResult("DID_NOT_START");
         lobby.setCreatedAt(event.eventPit());
@@ -61,6 +59,7 @@ public class LobbyModelServiceImpl implements LobbyModelService {
     public void project(LobbyEndedWithDrawEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
+                    lobby.setResult("DRAW");
                     lobby.setFinishedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });

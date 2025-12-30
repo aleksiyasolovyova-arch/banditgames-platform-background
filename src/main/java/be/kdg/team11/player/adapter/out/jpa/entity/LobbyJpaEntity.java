@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-//todo add gameurl
 @Entity
 @Table(name = "lobby", schema = "player_schema")
 public class LobbyJpaEntity {

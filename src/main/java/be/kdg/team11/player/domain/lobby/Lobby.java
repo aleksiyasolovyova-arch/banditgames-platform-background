@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-//todo delete scheduler
 /**
  * Aggregate Root for the Lobby subdomain.
  * Represents a game lobby session between two players.
