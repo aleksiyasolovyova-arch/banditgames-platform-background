@@ -13,8 +13,8 @@ import java.util.UUID;
 public interface FriendshipModelRepository extends JpaRepository<FriendshipModel, UUID> {
     @Query("""
             SELECT DISTINCT f FROM FriendshipModel f
-            WHERE ( f.recipientId = :playerId and ( f.state = "FRIENDS" or f.state = "REQUESTED" ) ) or
-                  ( f.requesterId = :playerId and f.state = "FRIENDS" )
+            WHERE ((f.state = "FRIENDS") and (f.requesterId = :playerId or f.recipientId = :playerId)) or 
+                    ( f.state = "REQUESTED" and f.recipientId = :playerId)
             """)
-    List<FriendshipModel> findFriendshipsByPlayerIdWhereStateFriendsOrRequested(@Param("strangerUserName") UUID playerId);
+    List<FriendshipModel> findFriendshipsByPlayerIdWhereStateFriendsOrRequested(@Param("playerId") UUID playerId);
 }
