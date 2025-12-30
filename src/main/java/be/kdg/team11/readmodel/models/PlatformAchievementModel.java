@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "achievement", schema = "read_model_schema")
+@Table(schema = "read_model_schema")
 public class PlatformAchievementModel {
     @Id
     private UUID achievementId;
@@ -28,9 +28,6 @@ public class PlatformAchievementModel {
 
     @Column(nullable = false)
     private long requiredValue;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     public PlatformAchievementModel() {
     }
@@ -59,10 +56,6 @@ public class PlatformAchievementModel {
         return requiredValue;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public void setAchievementId(UUID achievementId) {
         this.achievementId = achievementId;
     }
@@ -87,7 +80,4 @@ public class PlatformAchievementModel {
         this.requiredValue = requiredValue;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

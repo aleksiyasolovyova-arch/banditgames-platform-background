@@ -3,7 +3,9 @@ package be.kdg.team11.readmodel.controller;
 import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
 import be.kdg.team11.readmodel.service.game.GameModelService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +51,10 @@ public class GamesModelController {
     public ResponseEntity<List<? extends GameModelDto>> getGames(@AuthenticationPrincipal Jwt token) {
         List<? extends GameModelDto> gameDtoList;
         if (token != null) {
-            if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 gameDtoList = gameModelService.getAllForAdmin();
             } else {
                 UUID playerId = UUID.fromString(token.getSubject());

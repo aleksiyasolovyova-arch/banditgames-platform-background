@@ -7,15 +7,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQTopology {
 
-    public static final String EXCHANGE = "connect4.events";
-    public static final String GAME_CREATED_QUEUE = "game.created.queue";
-    public static final String GAME_FINISHED_QUEUE = "game.finished.queue";
-    public static final String ACHIEVEMENT_UNLOCKED_QUEUE = "achievement.unlocked.queue";
+    // Platform-wide exchange (shared by all games)
+    public static final String PLATFORM_EXCHANGE = "platform.events";
+
+    // Queues for this service
+    public static final String GAME_CREATED_QUEUE = "platform.game.created.queue";
+    public static final String GAME_FINISHED_QUEUE = "platform.game.finished.queue";
+    public static final String ACHIEVEMENT_UNLOCKED_QUEUE = "platform.achievement.unlocked.queue";
 
     @Bean
-    public TopicExchange connect4Exchange() {
+    public TopicExchange platformExchange() {
         return ExchangeBuilder
-                .topicExchange(EXCHANGE)
+                .topicExchange(PLATFORM_EXCHANGE)
                 .durable(true)
                 .build();
     }
@@ -42,26 +45,26 @@ public class RabbitMQTopology {
     }
 
     @Bean
-    public Binding gameCreatedBinding(Queue gameCreatedQueue, TopicExchange connect4Exchange) {
+    public Binding gameCreatedBinding(Queue gameCreatedQueue, TopicExchange platformExchange) {
         return BindingBuilder
                 .bind(gameCreatedQueue)
-                .to(connect4Exchange)
-                .with("game.created");
+                .to(platformExchange)
+                .with("*.game.created");  // Matches connect4.game.created, chess.game.created, etc.
     }
 
     @Bean
-    public Binding gameFinishedBinding(Queue gameFinishedQueue, TopicExchange connect4Exchange) {
+    public Binding gameFinishedBinding(Queue gameFinishedQueue, TopicExchange platformExchange) {
         return BindingBuilder
                 .bind(gameFinishedQueue)
-                .to(connect4Exchange)
-                .with("game.finished");
+                .to(platformExchange)
+                .with("*.game.finished");
     }
 
     @Bean
-    public Binding achievementUnlockedBinding(Queue achievementUnlockedQueue, TopicExchange connect4Exchange) {
+    public Binding achievementUnlockedBinding(Queue achievementUnlockedQueue, TopicExchange platformExchange) {
         return BindingBuilder
                 .bind(achievementUnlockedQueue)
-                .to(connect4Exchange)
-                .with("achievement.unlocked");
+                .to(platformExchange)
+                .with("*.achievement.unlocked");
     }
 }

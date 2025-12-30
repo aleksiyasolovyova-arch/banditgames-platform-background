@@ -14,17 +14,17 @@ public class FriendshipModelMapper {
             return new FriendShipModelDto(
                     friendship.getFriendshipId(),
                     friendship.getState().equals("FRIENDS"),
-                    friendship.getRequesterId(),
-                    friendship.getRequesterUsername(),
-                    friendship.getRequesterPictureUrl()
+                    friendship.getRecipientId(),
+                    friendship.getRecipientUsername(),
+                    friendship.getRecipientPictureUrl()
             );
         } else {
             return new FriendShipModelDto(
                     friendship.getFriendshipId(),
                     friendship.getState().equals("FRIENDS"),
-                    friendship.getRecipientId(),
-                    friendship.getRecipientUsername(),
-                    friendship.getRecipientPictureUrl()
+                    friendship.getRequesterId(),
+                    friendship.getRequesterUsername(),
+                    friendship.getRequesterPictureUrl()
             );
         }
 

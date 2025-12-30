@@ -27,7 +27,7 @@ public class PassGameReviewUseCaseImpl implements PassGameReviewPort {
     public Game pass(PassGameReviewCommand command) {
         GameId gameId = GameId.of(command.gameId());
         Game game = loadGamePort.loadBy(gameId).orElseThrow(() -> GameId.notFound(gameId));
-
+        game.pass();
         saveGamePorts.forEach(saveGamePort -> saveGamePort.save(game));
 
         return game;

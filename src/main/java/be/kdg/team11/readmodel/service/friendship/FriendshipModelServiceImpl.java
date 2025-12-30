@@ -36,8 +36,8 @@ public class FriendshipModelServiceImpl implements FriendshipModelService {
         FriendshipModel friendship = new FriendshipModel();
 
 
-        PlayerModel requester = playerModelRepository.findById(event.requesterId()).get();
-        PlayerModel recipient = playerModelRepository.findById(event.recipientId()).get();
+        PlayerModel requester = playerModelRepository.findById(event.requesterId()).orElseThrow(RuntimeException::new);
+        PlayerModel recipient = playerModelRepository.findById(event.recipientId()).orElseThrow(RuntimeException::new);
 
         friendship.setFriendshipId(event.friendshipId());
         friendship.setRequesterId(requester.getPlayerId());

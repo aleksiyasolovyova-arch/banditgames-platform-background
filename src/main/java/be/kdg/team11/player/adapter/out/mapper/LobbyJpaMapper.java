@@ -16,6 +16,7 @@ public class LobbyJpaMapper {
 
         entity.setLobbyId(lobby.getLobbyId().lobbyId());
         entity.setGameId(lobby.getGameReference().gameId());
+        entity.setGameUrl(lobby.getGameReference().gameUrl());
 
         entity.setPlayer1Id(lobby.getPlayerIdPair().getFirst().playerId());
         entity.setPlayer2Id(lobby.getPlayerIdPair().getSecond().playerId());

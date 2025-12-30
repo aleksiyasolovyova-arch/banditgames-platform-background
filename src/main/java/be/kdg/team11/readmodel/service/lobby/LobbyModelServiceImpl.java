@@ -84,7 +84,7 @@ public class LobbyModelServiceImpl implements LobbyModelService {
     public void project(LobbyStartedEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
-                    lobby.setResult("DRAW");
+                    lobby.setResult("DID_NOT_FINISH");
                     lobby.setStartedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });
