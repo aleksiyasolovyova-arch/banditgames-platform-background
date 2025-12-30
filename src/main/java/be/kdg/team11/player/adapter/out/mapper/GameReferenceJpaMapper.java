@@ -7,14 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameReferenceJpaMapper {
     public GameReference toDomain(GameReferenceJpaEntity entity) {
-        return new GameReference(
-                entity.getGameId()
+        return GameReference.of(
+                entity.getGameId(),
+                entity.getGameUrl()
         );
     }
 
     public GameReferenceJpaEntity toJpaEntity(GameReference gameReference) {
         GameReferenceJpaEntity entity = new GameReferenceJpaEntity();
         entity.setGameId(gameReference.gameId());
+        entity.setGameUrl(gameReference.gameUrl());
         return entity;
     }
 }

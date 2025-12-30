@@ -3,14 +3,11 @@ package be.kdg.team11.player.adapter.out;
 import be.kdg.team11.player.adapter.out.jpa.PlayerJpaRepository;
 import be.kdg.team11.player.adapter.out.jpa.entity.PlayerJpaEntity;
 import be.kdg.team11.player.adapter.out.mapper.PlayerJpaMapper;
-import be.kdg.team11.player.domain.friendship.Friendship;
-import be.kdg.team11.player.domain.friendship.FriendshipId;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.port.out.LoadPlayerPort;
 import be.kdg.team11.player.port.out.SavePlayerPort;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 

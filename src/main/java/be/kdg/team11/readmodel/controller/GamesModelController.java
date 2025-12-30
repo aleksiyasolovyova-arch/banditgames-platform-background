@@ -1,11 +1,7 @@
 package be.kdg.team11.readmodel.controller;
 
-import be.kdg.team11.content.adapter.in.response.GameDto;
-import be.kdg.team11.readmodel.service.game.GameModelMapper;
 import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
-import be.kdg.team11.readmodel.models.PlayerModel;
 import be.kdg.team11.readmodel.service.game.GameModelService;
-import be.kdg.team11.readmodel.service.player.PlayerModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -37,10 +33,10 @@ public class GamesModelController {
      * - gameCreatorName (String): Name of the game creator
      * - registrationState (String): Game review state (PENDING, PASSED, FAILED)
      * - rules (List<RuleDto>): List of game rules
-     *   - description (String): Rule description
-     * - achievements (List<GameAchievementDto>): List of game-specific achievements
-     *   - code (String): Achievement code
-     *   - description (String): Achievement description
+     * - description (String): Rule description
+     * - gameAchievements (List<GameAchievementDto>): List of game-specific gameAchievements
+     * - code (String): Achievement code
+     * - description (String): Achievement description
      * - playableWithAI (boolean): Whether the game can be played with an AI
      * - isFavourite (boolean): If a player has this game as their favourite
      * - isPending (boolean): If the game passed the review or is still awaiting review from the admin
@@ -50,10 +46,10 @@ public class GamesModelController {
      */
 
     @GetMapping
-    public ResponseEntity<List<? extends GameModelDto>> getGames(@AuthenticationPrincipal Jwt token){
+    public ResponseEntity<List<? extends GameModelDto>> getGames(@AuthenticationPrincipal Jwt token) {
         List<? extends GameModelDto> gameDtoList;
-        if (token != null){
-            if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")){
+        if (token != null) {
+            if (token.getClaimAsStringList("authorities") != null && token.getClaimAsStringList("authorities").contains("ROLE_ADMIN")) {
                 gameDtoList = gameModelService.getAllForAdmin();
             } else {
                 UUID playerId = UUID.fromString(token.getSubject());

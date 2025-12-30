@@ -1,21 +1,16 @@
 package be.kdg.team11.readmodel.service.game;
 
 import be.kdg.team11.readmodel.controller.dto.game.AdminGameModelDto;
-import be.kdg.team11.readmodel.controller.dto.game.GameModelDto;
 import be.kdg.team11.readmodel.controller.dto.game.PlayerGameModelDto;
 import be.kdg.team11.readmodel.controller.dto.game.PublicGameModelDto;
-import be.kdg.team11.readmodel.models.AchievementModel;
-import be.kdg.team11.readmodel.models.AchievementModelType;
 import be.kdg.team11.readmodel.models.GameModel;
 import be.kdg.team11.readmodel.models.PlayerModel;
-import be.kdg.team11.readmodel.repository.AchievementModelRepository;
 import be.kdg.team11.readmodel.repository.GameModelRepository;
 import be.kdg.team11.readmodel.repository.PlayerModelRepository;
 import be.kdg.team11.sharedkernel.events.game.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,16 +20,13 @@ import java.util.UUID;
 public class GameModelServiceImpl implements GameModelService {
     private final GameModelRepository gameModelRepository;
     private final PlayerModelRepository playerModelRepository;
-    private final AchievementModelRepository achievementModelRepository;
     private final GameModelMapper gameModelMapper;
 
     public GameModelServiceImpl(GameModelRepository gameModelRepository,
                                 PlayerModelRepository playerModelRepository,
-                                AchievementModelRepository achievementModelRepository,
                                 GameModelMapper gameModelMapper) {
         this.gameModelRepository = gameModelRepository;
         this.playerModelRepository = playerModelRepository;
-        this.achievementModelRepository = achievementModelRepository;
         this.gameModelMapper = gameModelMapper;
     }
 
@@ -53,7 +45,6 @@ public class GameModelServiceImpl implements GameModelService {
         game.setCreatedAt(event.eventPit());
 
 
-
         if (event.rules() != null && !event.rules().isEmpty()) {
             List<GameModel.GameRule> rules = new ArrayList<>();
             event.rules().forEach(ruleData -> {
@@ -66,21 +57,7 @@ public class GameModelServiceImpl implements GameModelService {
         }
 
         if (event.achievements() != null && !event.achievements().isEmpty()) {
-            event.achievements().forEach(achievementData -> {
-                AchievementModel achievement = new AchievementModel();
-                achievement.setDescription(achievementData.description());
-                achievement.setType(AchievementModelType.GAME);
-                // Link to game
-                achievement.setGameId(event.gameId());
-                achievement.setAchievementCode(achievementData.code());
-                achievement.setGameName(event.name());
-
-                achievement.setCreatedAt(event.eventPit());
-
-                achievementModelRepository.save(achievement);
-            });
             List<GameModel.GameAchievement> gameAchievements = new ArrayList<>();
-
             event.achievements().forEach(achievementData -> {
                 GameModel.GameAchievement gameAchievement = new GameModel.GameAchievement();
                 gameAchievement.setCode(achievementData.code());
@@ -125,7 +102,7 @@ public class GameModelServiceImpl implements GameModelService {
                 .ifPresent(game -> {
                     game.setPictureUrl(event.newPictureUrl());
                     game.setGameUrl(event.newGameUrl());
-                    game.setUpdatedAt(LocalDateTime.now());
+                    game.setUpdatedAt(event.eventPit());
                     gameModelRepository.save(game);
                 });
     }

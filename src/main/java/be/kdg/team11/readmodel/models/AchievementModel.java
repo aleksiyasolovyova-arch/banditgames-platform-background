@@ -1,105 +1,75 @@
 package be.kdg.team11.readmodel.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "achievement", schema = "read_model_schema")
+@Table(schema = "read_model_schema")
 public class AchievementModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "achievement_id")
-    private UUID achievementIdPK;
+    private UUID id;
 
-    @Column(name = "description")
-    private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "achievement_type", nullable = false)
-    private AchievementModelType type;
+    @Column(nullable = false)
+    private UUID playerId;
 
     @Column
-    private UUID platformAchievementId;
+    private UUID achievementId;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "picture_url")
-    private String pictureUrl;
-
-    // Value required to unlock achievement (null for game achievements)
-    @Column(name = "required_value")
-    private Long requiredValue;
-
-    // Game reference (null for platform achievements)
-    @Column(name = "game_id")
+    @Column
     private UUID gameId;
 
-    // Game achievement code (null for platform achievements)
-    @Column(name = "achievement_code")
-    private String achievementCode;
+    @Column
+    private String gameAchievementCode;
 
-    // Denormalized game name for easier querying
-    @Column(name = "game_name")
-    private String gameName;
+    @Column(nullable = false)
+    private LocalDateTime unlockedAt;
 
-    // Timestamps
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    // Constructors
-    public AchievementModel() {}
-
-
-
-    public UUID getPlatformAchievementId() {
-        return platformAchievementId;
+    public AchievementModel() {
     }
 
-    public void setPlatformAchievementId(UUID platformAchievementId) {
-        this.platformAchievementId = platformAchievementId;
+    public UUID getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public UUID getPlayerId() {
+        return playerId;
     }
 
-    public String getDescription() {
-        return description;
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public UUID getAchievementId() {
+        return achievementId;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public void setAchievementId(UUID achievementId) {
+        this.achievementId = achievementId;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public LocalDateTime getUnlockedAt() {
+        return unlockedAt;
     }
 
-    public AchievementModelType getType() {
-        return type;
+    public void setUnlockedAt(LocalDateTime unlockedAt) {
+        this.unlockedAt = unlockedAt;
     }
 
-    public void setType(AchievementModelType type) {
-        this.type = type;
+    public String getGameAchievementCode() {
+        return gameAchievementCode;
     }
 
-    public Long getRequiredValue() {
-        return requiredValue;
-    }
-
-    public void setRequiredValue(Long requiredValue) {
-        this.requiredValue = requiredValue;
+    public void setGameAchievementCode(String gameAchievementCode) {
+        this.gameAchievementCode = gameAchievementCode;
     }
 
     public UUID getGameId() {
@@ -108,33 +78,5 @@ public class AchievementModel {
 
     public void setGameId(UUID gameId) {
         this.gameId = gameId;
-    }
-
-    public String getAchievementCode() {
-        return achievementCode;
-    }
-
-    public void setAchievementCode(String achievementCode) {
-        this.achievementCode = achievementCode;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public UUID getAchievementIdPK() {
-        return achievementIdPK;
     }
 }

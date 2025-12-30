@@ -3,7 +3,6 @@ package be.kdg.team11.player.adapter.in;
 import be.kdg.team11.player.adapter.in.mapper.PlayerMapper;
 import be.kdg.team11.player.adapter.in.request.ChangePlayerPictureUrlRequest;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
-import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
 import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
@@ -47,12 +46,12 @@ public class PlayersController {
      * - username (String, required): Player username (1-50 chars)
      * - pictureUrl (String, required): URL to player profile picture
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Platform-wide achievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific achievements with unlock timestamps
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Platform-wide gameAchievements with unlock timestamps
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Game-specific gameAchievements with unlock timestamps
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 201 Created: Player successfully created
@@ -73,19 +72,19 @@ public class PlayersController {
      * Updates the current authenticated player's profile picture URL.
      * Endpoint: PUT /players
      * Required Authentication: Authenticated user (JWT token)
-     *
+     * <p>
      * REQUEST BODY (ChangePlayerPictureUrlRequest):
      * - pictureUrl (String, required): New profile picture URL (cannot be null or blank)
-     *
+     * <p>
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier (extracted from JWT subject)
+     * - strangerUserName (UUID): Unique player identifier (extracted from JWT subject)
      * - username (String): Player username
      * - pictureUrl (String): Updated profile picture URL
      * - joinedDate (LocalDate): Date player joined the platform
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Set of unlocked platform achievements with unlock timestamps
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game achievements (gameId, code, unlock timestamp)
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Set of unlocked platform gameAchievements with unlock timestamps
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Set of unlocked game gameAchievements (gameId, code, unlock timestamp)
      * - favoriteGameId (UUID): ID of the player's favorite game
-     *
+     * <p>
      * HTTP Status Codes:
      * - 200 OK: Profile picture successfully updated and player data returned
      * - 400 Bad Request: Validation failed (picture URL is null or blank)
@@ -98,7 +97,7 @@ public class PlayersController {
     public ResponseEntity<PlayerDto> changePlayerPictureUrl(
             @AuthenticationPrincipal Jwt token,
             @Valid @RequestBody ChangePlayerPictureUrlRequest request
-            ){
+    ) {
         Player updatedPlayer = changePlayerPictureUrlPort.changePictureUrl(
                 new ChangePlayerPictureUrlCommand(
                         UUID.fromString(token.getSubject()), request.pictureUrl()
@@ -112,14 +111,14 @@ public class PlayersController {
      * FULL PATH: /players/change-favorite-game/{gameId} (POST)
      * PATH PARAMETER:
      * - gameId (UUID): ID of the game to mark as favorite
-     * JWT TOKEN: Extracts playerId from authenticated user
+     * JWT TOKEN: Extracts strangerUserName from authenticated user
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully marked as favorite
@@ -143,14 +142,14 @@ public class PlayersController {
     /**
      * Player removes a game from favorites.
      * FULL PATH: /players/removeFavorite-game (POST)
-     * JWT TOKEN: Extracts playerId from authenticated user
+     * JWT TOKEN: Extracts strangerUserName from authenticated user
      * RESPONSE BODY (PlayerDto):
-     * - playerId (UUID): Unique player identifier
+     * - strangerUserName (UUID): Unique player identifier
      * - username (String): Player username
      * - pictureUrl (String): Player profile picture URL
      * - joinedDate (LocalDate): Date player joined
-     * - unlockedPlatformAchievements (Set<UnlockedPlatformAchievementDto>): Player's platform achievements
-     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game achievements
+     * - unlockedPlatformAchievements (Set<UnlockedAchievementDto>): Player's platform gameAchievements
+     * - unlockedGameAchievements (Set<UnlockedGameAchievementDto>): Player's game gameAchievements
      * - favoriteGameId (UUID): Favourite game ID (null if no favorite games left)
      * HTTP Status Codes:
      * - 200 OK: Game successfully removed from favorites

@@ -151,7 +151,7 @@ class RegisterGameUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should register game with multiple achievements")
+    @DisplayName("Should register game with multiple gameAchievements")
     void testRegisterGame_MultipleAchievements() {
         // Arrange
         List<RegisterGameCommand.GameAchievementCommand> achievements = List.of(

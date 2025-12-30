@@ -1,10 +1,12 @@
 package be.kdg.team11.content.adapter.in.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public record RegisterGameRequest(
@@ -39,11 +41,11 @@ public record RegisterGameRequest(
 
         @NotEmpty(message = "At least one achievement must be provided")
         @Valid
-        List<GameAchievementRequest> achievements,
+        List<GameAchievementRequest> gameAchievements,
 
         @NotNull(message = "Playable with AI cannot be null")
         boolean playableWithAI
-        ) {
+) {
 
     public record RuleRequest(
             @NotNull(message = "Rule description cannot be null")

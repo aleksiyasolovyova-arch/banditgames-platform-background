@@ -11,7 +11,7 @@ public record FailedGameReviewEvent(
         UUID gameId,
         String newReviewStatus
 ) implements DomainEvent {
-    public FailedGameReviewEvent(UUID gameId,String newReviewStatus) {
+    public FailedGameReviewEvent(UUID gameId, String newReviewStatus) {
         this(
                 UUID.randomUUID(),
                 LocalDateTime.now(),

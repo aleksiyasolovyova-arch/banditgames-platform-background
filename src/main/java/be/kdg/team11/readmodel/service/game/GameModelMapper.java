@@ -23,11 +23,11 @@ public class GameModelMapper {
                         .map(rule -> new AdminGameModelDto.RuleDto(rule.getDescription()))
                         .collect(Collectors.toList()),
                 game.getAchievements().stream()
-                        .map(achievement -> new AdminGameModelDto.GameAchievementDto(achievement.getCode(),achievement.getDescription()))
+                        .map(achievement -> new AdminGameModelDto.GameAchievementDto(achievement.getCode(), achievement.getDescription()))
                         .collect(Collectors.toList()),
                 game.isPlayableWithAI(),
                 game.isPending()
-                );
+        );
     }
 
     public PlayerGameModelDto toPlayerGamesDto(GameModel game, UUID favouriteGameId) {

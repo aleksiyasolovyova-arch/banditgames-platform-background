@@ -13,15 +13,16 @@ import org.springframework.stereotype.Service;
 public class GameReferenceProjectorImpl implements GameReferenceProjector {
     private final SaveGameReferencePort saveGameReferencePort;
     private final GameReferenceExistsPort gameReferenceExistsPort;
-    public GameReferenceProjectorImpl(SaveGameReferencePort saveGameReferencePort, GameReferenceExistsPort gameReferenceExistsPort){
+
+    public GameReferenceProjectorImpl(SaveGameReferencePort saveGameReferencePort, GameReferenceExistsPort gameReferenceExistsPort) {
         this.saveGameReferencePort = saveGameReferencePort;
         this.gameReferenceExistsPort = gameReferenceExistsPort;
     }
 
     @Override
     public void project(GameReferenceCommand gameReferenceCommand) {
-        GameReference gameReference = GameReference.of(gameReferenceCommand.gameId());
-        if (gameReferenceExistsPort.exists(gameReference)){
+        GameReference gameReference = GameReference.of(gameReferenceCommand.gameId(), gameReferenceCommand.gameUrl());
+        if (gameReferenceExistsPort.exists(gameReference)) {
             throw GameReference.alreadyExists(gameReference.gameId());
         }
         saveGameReferencePort.save(gameReference);

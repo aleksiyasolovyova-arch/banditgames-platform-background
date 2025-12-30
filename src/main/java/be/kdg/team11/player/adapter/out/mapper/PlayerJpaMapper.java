@@ -19,7 +19,7 @@ public class PlayerJpaMapper {
         Set<UnlockedPlatformAchievement> unlockedPlatformAchievements =
                 entity.getUnlockedPlatformAchievements().stream()
                         .map(e -> new UnlockedPlatformAchievement(
-                                new AchievementId(e.getAchievementId()),
+                                new PlatformAchievementId(e.getAchievementId()),
                                 e.getUnlockedAt()
                         ))
                         .collect(Collectors.toSet());
@@ -57,7 +57,7 @@ public class PlayerJpaMapper {
                         .map(a -> {
                             UnlockedPlatformAchievementEmbeddable e =
                                     new UnlockedPlatformAchievementEmbeddable();
-                            e.setAchievementId(a.achievementId().achievementId());
+                            e.setAchievementId(a.platformAchievementId().achievementId());
                             e.setUnlockedAt(a.unlockedAt());
                             return e;
                         })

@@ -5,4 +5,5 @@ import java.util.UUID;
 public record BefriendPlayerCommand(
         UUID friendshipId,
         UUID recipientId
-) {}
+) {
+}

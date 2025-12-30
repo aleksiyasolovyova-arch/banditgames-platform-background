@@ -13,7 +13,7 @@ public record PlayerChangedPictureUrlEvent(
     public PlayerChangedPictureUrlEvent(
             UUID playerId,
             String pictureUrl
-    ){
+    ) {
         this(
                 playerId,
                 pictureUrl,

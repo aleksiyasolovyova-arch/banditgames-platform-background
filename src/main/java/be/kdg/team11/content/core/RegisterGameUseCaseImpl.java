@@ -26,7 +26,7 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
         List<Rule> rules = command.rules().stream()
                 .map(Rule::of)
                 .toList();
-        List<GameAchievement> achievements = command.achievements().stream()
+        List<GameAchievement> gameAchievements = command.gameAchievements().stream()
                 .map(achievement -> new GameAchievement(achievement.code(), achievement.description()))
                 .toList();
         Game game = Game.register(
@@ -36,7 +36,7 @@ public class RegisterGameUseCaseImpl implements RegisterGamePort {
                 command.gameUrl(),
                 command.gameCreatorName(),
                 rules,
-                achievements,
+                gameAchievements,
                 command.playableWithAI()
         );
 

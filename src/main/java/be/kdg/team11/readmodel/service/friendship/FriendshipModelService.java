@@ -11,8 +11,11 @@ import java.util.UUID;
 
 public interface FriendshipModelService {
     void project(BefriendedPlayerEvent event);
+
     void project(FriendshipEndEvent event);
+
     void project(FriendshipCreatedEvent event);
+
     void project(FriendshipDeclinedEvent event);
 
     List<FriendShipModelDto> getPlayerFriendships(UUID playerId);

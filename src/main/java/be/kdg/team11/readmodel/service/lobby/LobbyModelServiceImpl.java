@@ -14,10 +14,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class LobbyModelServiceImpl implements LobbyModelService{
+public class LobbyModelServiceImpl implements LobbyModelService {
     private final LobbyModelRepository lobbyModelRepository;
     private final PlayerModelRepository playerModelRepository;
     private final GameModelRepository gameModelRepository;
+
     public LobbyModelServiceImpl(LobbyModelRepository lobbyModelRepository,
                                  PlayerModelRepository playerModelRepository,
                                  GameModelRepository gameModelRepository) {
@@ -31,7 +32,10 @@ public class LobbyModelServiceImpl implements LobbyModelService{
         LobbyModel lobby = new LobbyModel();
         lobby.setLobbyId(event.lobbyId());
         lobby.setGameId(event.gameId());
-        gameModelRepository.findById(event.gameId()).ifPresent(game -> lobby.setGameName(game.getName()));
+        gameModelRepository.findById(event.gameId()).ifPresent(game -> {
+            lobby.setGameName(game.getName());
+            lobby.setGamePictureUrl(game.getPictureUrl());
+        });
         lobby.setPlayer1Id(event.player1Id());
         lobby.setPlayer2Id(event.player2Id());
         PlayerModel player1 = playerModelRepository.findById(event.player1Id()).orElse(null);
@@ -57,7 +61,6 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyEndedWithDrawEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
-                    lobby.setResult(event.newStatus());
                     lobby.setFinishedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });
@@ -68,7 +71,10 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyEndedWithWinnerEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
-                    lobby.setResult(event.newStatus());
+                    if (event.player1Id() == event.winnerId())
+                        lobby.setResult("PLAYER_1_WINNER");
+                    else
+                        lobby.setResult("PLAYER_2_WINNER");
                     lobby.setWinnerId(event.winnerId());
                     lobby.setFinishedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
@@ -79,6 +85,7 @@ public class LobbyModelServiceImpl implements LobbyModelService{
     public void project(LobbyStartedEvent event) {
         lobbyModelRepository.findById(event.lobbyId())
                 .ifPresent(lobby -> {
+                    lobby.setResult("DRAW");
                     lobby.setStartedAt(event.eventPit());
                     lobbyModelRepository.save(lobby);
                 });

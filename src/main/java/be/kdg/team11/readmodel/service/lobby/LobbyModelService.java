@@ -7,7 +7,10 @@ import be.kdg.team11.sharedkernel.events.lobby.LobbyStartedEvent;
 
 public interface LobbyModelService {
     void project(LobbyCreatedEvent event);
+
     void project(LobbyEndedWithDrawEvent event);
+
     void project(LobbyEndedWithWinnerEvent event);
+
     void project(LobbyStartedEvent event);
 }

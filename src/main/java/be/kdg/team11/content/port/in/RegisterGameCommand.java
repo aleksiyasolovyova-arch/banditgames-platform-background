@@ -1,6 +1,5 @@
 package be.kdg.team11.content.port.in;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public record RegisterGameCommand(
@@ -10,7 +9,7 @@ public record RegisterGameCommand(
         String gameUrl,
         String gameCreatorName,
         List<String> rules,
-        List<GameAchievementCommand> achievements,
+        List<GameAchievementCommand> gameAchievements,
         boolean playableWithAI
 ) {
     public record GameAchievementCommand(

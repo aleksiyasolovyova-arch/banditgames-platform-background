@@ -9,15 +9,17 @@ public record PassedGameReviewEvent(
         UUID uuid,
         LocalDateTime eventPit,
         UUID gameId,
+        String gameUrl,
         String newReviewState
 ) implements DomainEvent {
     public PassedGameReviewEvent(
-            UUID gameId, String newReviewState
+            UUID gameId, String gameUrl, String newReviewState
     ) {
         this(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 gameId,
+                gameUrl,
                 newReviewState
         );
     }

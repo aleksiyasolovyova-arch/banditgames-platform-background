@@ -4,7 +4,6 @@ import be.kdg.team11.player.adapter.in.mapper.FriendshipMapper;
 import be.kdg.team11.player.adapter.in.request.RequestFriendshipRequest;
 import be.kdg.team11.player.adapter.in.response.FriendshipDto;
 import be.kdg.team11.player.domain.friendship.Friendship;
-import be.kdg.team11.player.domain.player.PlayerId;
 import be.kdg.team11.player.port.in.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -41,20 +40,19 @@ public class FriendshipsController {
     }
 
 
-
     /**
      * Initiates a friendship request from the authenticated user to another player.
      * FULL PATH: POST /friendships
-
+     * <p>
      * REQUEST BODY (RequestFriendshipRequest):
      * - recipientUsername (UUID, required): ID of the player to send the friendship request to
-
+     * <p>
      * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
      * - recipientUsername (UUID): ID of the player receiving the request
      * - state (String): Current friendship state ("REQUESTED", "FRIENDS", "DECLINED", "ENDED")
-
+     * <p>
      * HTTP Status Codes:
      * - 201 Created: Friendship request successfully created
      * - 400 Bad Request: Validation failed (invalid/missing fields, or self-request)
@@ -79,7 +77,7 @@ public class FriendshipsController {
      * FULL PATH: PUT /friendships/{friendshipId}/befriend
      * PATH PARAMETER:
      * - friendshipId (UUID): ID of the friendship to accept
-    * RESPONSE BODY (FriendshipDto):
+     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
      * - recipientUsername (UUID): ID of the player who accepted
@@ -96,7 +94,7 @@ public class FriendshipsController {
             @NotNull @PathVariable UUID friendshipId,
             @AuthenticationPrincipal Jwt token
     ) {
-        UUID recipientId =UUID.fromString(token.getSubject());
+        UUID recipientId = UUID.fromString(token.getSubject());
 
         BefriendPlayerCommand command = friendshipMapper.toBefriendCommand(friendshipId, recipientId);
         Friendship acceptedFriendship = befriendPlayerPort.befriendPlayer(command);
@@ -109,7 +107,7 @@ public class FriendshipsController {
      * FULL PATH: PUT /friendships/{friendshipId}/decline
      * PATH PARAMETER:
      * - friendshipId (UUID): ID of the friendship to decline
-    * RESPONSE BODY (FriendshipDto):
+     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the request
      * - recipientUsername (UUID): ID of the player who declined
@@ -141,7 +139,7 @@ public class FriendshipsController {
      * FULL PATH: POST /friendships/{friendshipId}/end
      * PATH PARAMETER:
      * - friendshipId (UUID): ID of the friendship to end
-    * RESPONSE BODY (FriendshipDto):
+     * RESPONSE BODY (FriendshipDto):
      * - friendshipId (UUID): Unique friendship identifier
      * - requesterId (UUID): ID of the player who initiated the friendship
      * - recipientUsername (UUID): ID of the other player
@@ -155,8 +153,8 @@ public class FriendshipsController {
     @PostMapping("/{friendshipId}/end")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FriendshipDto> endFriendship(
-           @NotNull @PathVariable UUID friendshipId,
-           @AuthenticationPrincipal Jwt token
+            @NotNull @PathVariable UUID friendshipId,
+            @AuthenticationPrincipal Jwt token
     ) {
 
         UUID initiatedBy = UUID.fromString(token.getSubject());

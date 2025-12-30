@@ -89,8 +89,9 @@ public class PlayerJpaEntity {
     public UUID getFavoriteGameId() {
         return favoriteGameId;
     }
+
     public void setFavoriteGameId(UUID favoriteGameId) {
         this.favoriteGameId = favoriteGameId;
     }
 
-   }
+}

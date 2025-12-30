@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 public class GameReferenceEventListener {
     private final GameReferenceProjector gameReferenceProjector;
 
-    public GameReferenceEventListener(GameReferenceProjector gameReferenceProjector){
+    public GameReferenceEventListener(GameReferenceProjector gameReferenceProjector) {
         this.gameReferenceProjector = gameReferenceProjector;
     }
 
     @EventListener(PassedGameReviewEvent.class)
-    public void gameReviewPassed(PassedGameReviewEvent event){
-        gameReferenceProjector.project(new GameReferenceCommand(event.gameId()));
+    public void gameReviewPassed(PassedGameReviewEvent event) {
+        gameReferenceProjector.project(new GameReferenceCommand(event.gameId(), event.gameUrl()));
     }
 }

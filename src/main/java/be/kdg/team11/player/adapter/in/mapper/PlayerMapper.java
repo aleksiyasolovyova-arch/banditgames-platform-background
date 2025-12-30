@@ -3,14 +3,13 @@ package be.kdg.team11.player.adapter.in.mapper;
 import be.kdg.team11.player.adapter.in.response.PlayerDto;
 import be.kdg.team11.player.adapter.in.response.PlayerInfoDto;
 import be.kdg.team11.player.domain.player.Player;
-import be.kdg.team11.player.domain.projections.GameReference;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
 public class PlayerMapper {
-    public PlayerInfoDto toInfoResponse(Player player){
+    public PlayerInfoDto toInfoResponse(Player player) {
         return new PlayerInfoDto(
                 player.getPlayerId().playerId(),
                 player.getUsername().username(),
@@ -26,7 +25,7 @@ public class PlayerMapper {
                 player.getJoinedDate(),
                 player.getUnlockedPlatformAchievements().stream()
                         .map(achievement -> new PlayerDto.UnlockedPlatformAchievementDto(
-                                achievement.achievementId().achievementId(),
+                                achievement.platformAchievementId().achievementId(),
                                 achievement.unlockedAt()
                         ))
                         .collect(Collectors.toSet()),

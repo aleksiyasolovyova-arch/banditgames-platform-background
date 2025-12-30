@@ -6,20 +6,23 @@ import be.kdg.team11.player.domain.projections.exceptions.GameReferenceNotFoundE
 import java.util.UUID;
 
 public record GameReference(
-        UUID gameId
+        UUID gameId,
+        String gameUrl
 ) {
-    public static GameReference of (UUID gameId){
-        return new GameReference(gameId);
+    public static GameReference of(UUID gameId, String gameUrl) {
+        return new GameReference(gameId, gameUrl);
     }
-    public static GameReferenceAlreadyExistsException alreadyExists(UUID gameId){
+
+    public static GameReferenceAlreadyExistsException alreadyExists(UUID gameId) {
         return new GameReferenceAlreadyExistsException(
                 String.format("Cannot add the same gameId twice: %s", gameId)
         );
     }
-    public static GameReferenceNotFoundException notFound(UUID gameId){
+
+    public static GameReferenceNotFoundException notFound(UUID gameId) {
         return new GameReferenceNotFoundException(
                 String.format("Game not found with ID: %s", gameId)
         );
 
-}
+    }
 }

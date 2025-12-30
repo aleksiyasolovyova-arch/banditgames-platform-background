@@ -8,7 +8,7 @@ import java.util.UUID;
 public record PlayerRemovedFavoriteGameEvent(
         UUID playerId,
         LocalDate eventPit
-)implements DomainEvent {
+) implements DomainEvent {
     public PlayerRemovedFavoriteGameEvent(UUID playerId) {
         this(playerId,
                 LocalDate.now());
